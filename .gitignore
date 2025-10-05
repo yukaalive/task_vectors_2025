@@ -1,0 +1,6 @@
+task_vectors/JESC/raw.tar.gz
+task_vectors/21_icl_task_vectors/raw/raw
+*.tar.gz
+**/raw/raw
+task_vectors/JESC/raw.tar.gz
+task_vectors/21_icl_task_vectors/raw/raw
