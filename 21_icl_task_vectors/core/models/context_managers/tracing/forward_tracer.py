@@ -47,9 +47,12 @@ class ForwardTracer:
                         acts[i] = torch.zeros(final_shape)
                     else:
                         acts[i] = torch.cat(layer_acts, dim=0)
+                print("レイヤー数：",len(acts))
                 acts = torch.stack(acts).transpose(0, 1)
+                print("テストデータ数：",len(acts))
                 setattr(residual_stream, key, acts)
-
+                if key == "hidden":
+                    print("✅ forward_trace.residual_stream.hidden.shapeのサイズ:", acts.shape)
             if self._with_submodules:
                 self._forward_trace.attentions = torch.stack(self._forward_trace.attentions).transpose(0, 1)
             else:

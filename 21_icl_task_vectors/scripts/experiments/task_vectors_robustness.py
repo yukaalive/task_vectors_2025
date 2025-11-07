@@ -135,9 +135,10 @@ def create_histograms_plot(task_vectors):
     # save the figure, high dpi, without large margins
     save_path = os.path.join(FIGURES_DIR, f"task_vectors_histograms.png")
     plt.savefig(save_path, dpi=300, bbox_inches="tight")
+    return within_task_distances, between_task_distances
 
 
-def print_histograms_stats(task_vectors):
+def print_histograms_stats(task_vectors, within_task_distances, between_task_distances):
     table_data = {
         "Task": TASKS_TO_EVALUATE,
         "in_task_mean": within_task_distances.mean(axis=1),
@@ -176,14 +177,16 @@ def main():
     seed_everything(41)
     limit_gpus(range(0, 8))
 
-    model_type, model_variant = "llama", "7B"
+    model_type, model_variant = "youko", "8B"
     model, tokenizer = load_model_and_tokenizer(model_type, model_variant)
 
     task_vectors = create_task_vectors(model, tokenizer)
 
     create_tsne_plot(task_vectors)
-    create_histograms_plot(task_vectors)
-    print_histograms_stats(task_vectors)
+    # create_histograms_plot(task_vectors)
+    # print_histograms_stats(task_vectors)
+    within_task_distances, between_task_distances = create_histograms_plot(task_vectors)
+    print_histograms_stats(task_vectors, within_task_distances, between_task_distances)
 
 
 if __name__ == "__main__":

@@ -63,40 +63,8 @@ class TranslationTask(MappingTask):
         synonyms2 = self._get_synonyms(output2, output_lang)
         return len(set(synonyms1) & set(synonyms2)) > 0
     
-    # def evaluate_with_bleu(self, predictions: List[str], references: List[str]) -> Dict[str, float]:
-    #     """
-    #     Evaluate translations using BLEU score
-    #     
-    #     Args:
-    #         predictions: List of predicted translations
-    #         references: List of reference translations
-    #         
-    #     Returns:
-    #         Dictionary containing BLEU scores
-    #     """
-    #     # Calculate BLEU score
-    #     bleu_score = sacrebleu.corpus_bleu(predictions, [references])
-    #     
-    #     return {
-    #         "bleu": bleu_score.score,
-    #         "bleu_1": bleu_score.precisions[0],
-    #         "bleu_2": bleu_score.precisions[1] if len(bleu_score.precisions) > 1 else 0.0,
-    #         "bleu_3": bleu_score.precisions[2] if len(bleu_score.precisions) > 2 else 0.0,
-    #         "bleu_4": bleu_score.precisions[3] if len(bleu_score.precisions) > 3 else 0.0,
-    #     }
     
     def evaluate_with_comet(self, sources: List[str], predictions: List[str], references: List[str]) -> Dict[str, float]:
-        """
-        Evaluate translations using COMET score
-        
-        Args:
-            sources: List of source sentences
-            predictions: List of predicted translations
-            references: List of reference translations
-            
-        Returns:
-            Dictionary containing COMET scores
-        """
         # Prepare data for COMET
         comet_input = [
             {"src": src, "mt": pred, "ref": ref}
@@ -105,76 +73,16 @@ class TranslationTask(MappingTask):
         
         # Calculate COMET score
         comet_scores = self.comet_model.predict(comet_input, batch_size=8, gpus=0)
+        print(len(comet_scores))
         print("翻訳前",sources)
         print("予測",predictions)
         print("正解",references)
         print("スコア",comet_scores)
+        print("cometの平均スコア",sum(comet_scores.scores) / len(comet_scores.scores))
+        print(max(comet_scores))
+        print(min(comet_scores))
         return {
             "comet": sum(comet_scores.scores) / len(comet_scores.scores),
             "comet_scores": comet_scores.scores
         }
     
-    def comprehensive_evaluate(self, sources: List[str], predictions: List[str], references: List[str]) -> Dict[str, Any]:
-        """
-        Comprehensive evaluation using both BLEU and COMET
-        
-        Args:
-            sources: List of source sentences
-            predictions: List of predicted translations
-            references: List of reference translations
-            
-        Returns:
-            Dictionary containing all evaluation metrics
-        """
-        # Get language information
-        source_lang, target_lang = self.mapping_name.split("_")
-        
-        print(f"Evaluating {source_lang} -> {target_lang} translation")
-        # BLEU evaluation
-        # bleu_results = self.evaluate_with_bleu(predictions, references)
-        
-        # COMET evaluation
-        comet_results = self.evaluate_with_comet(sources, predictions, references)
-        
-        # Combine results
-        results = {
-            "language_pair": f"{source_lang}-{target_lang}",
-            "num_examples": len(predictions),
-            # **bleu_results,
-            **comet_results
-        }
-        
-        # print(f"BLEU Score: {bleu_results['bleu']:.4f}")
-        print(f"COMET Score: {comet_results['comet']:.4f}")
-        
-        return results
-    
-    def print_evaluation_details(self, sources: List[str], predictions: List[str], references: List[str], 
-                               results: Dict[str, Any], num_examples: int = 10):
-        """
-        Print detailed evaluation results with examples
-        """
-        print("\n" + "="*80)
-        print(f"TRANSLATION EVALUATION: {results['language_pair']}")
-        print("="*80)
-        
-        print(f"Overall Results:")
-        # print(f"  BLEU Score: {results['bleu']:.4f}")
-        print(f"  COMET Score: {results['comet']:.4f}")
-        print(f"  Total Examples: {results['num_examples']}")
-        
-        # print(f"\nDetailed BLEU Scores:")
-        # print(f"  BLEU-1: {results['bleu_1']:.4f}")
-        # print(f"  BLEU-2: {results['bleu_2']:.4f}")
-        # print(f"  BLEU-3: {results['bleu_3']:.4f}")
-        # print(f"  BLEU-4: {results['bleu_4']:.4f}")
-        
-        print("-" * 80)
-        for i in range(min(num_examples, len(predictions))):
-            comet_score = results['comet_scores'][i] if 'comet_scores' in results else 0
-            print(f"Example {i+1}:")
-            print(f"  Source:     {sources[i]}")
-            print(f"  Reference:  {references[i]}")
-            print(f"  Prediction: {predictions[i]}")
-            print(f"  COMET:      {comet_score:.4f}")
-            print()

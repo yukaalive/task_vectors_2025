@@ -163,8 +163,12 @@ def batch_generate(
         generate_ids.append(batch_ids)
 
     generate_ids = torch.cat(generate_ids, dim=0)
+    # print("generate_idsのshape：",generate_ids.shape)
+    # print("generate_ids：",generate_ids[0])
 
     new_ids = generate_ids[:, inputs[input_type].shape[1] :]
+    # print("new_ids：",new_ids.shape)
+    # print("new_ids：",new_ids[0])
 
     # outs = tokenizer.batch_decode(generate_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)
     # completions = [out[len(prompt) :] for out, prompt in zip(outs, prompts)]
@@ -177,6 +181,8 @@ def decode_predictions(
 ) -> List[str]:
     new_tokens = tokenizer.batch_decode(output_ids, skip_special_tokens=True)
     answers = [tokens.split(few_shot_format.example_separator)[0] for tokens in new_tokens]
+    # print("predictionsの配列shape：",len(answers))
+    # print("answersの中身3つ：",answers[0:3])
     return answers
 
 
@@ -191,6 +197,8 @@ def tokenize_datasets(
     format_dataset_kwargs: Optional[dict] = {},
 ) -> torch.Tensor:
     prompts = few_shot_format.format_datasets(datasets, **format_dataset_kwargs)
+    print("prompt[0]の中身:")
+    print(prompts[0])
     return tokenize_prompts(tokenizer, prompts)
 
 

@@ -1,8 +1,5 @@
-# This must be first
 from dotenv import load_dotenv
-
 load_dotenv(".env")
-
 import sys
 import os
 import pickle
@@ -35,18 +32,23 @@ def evaluate_task(model: PreTrainedModel, tokenizer: PreTrainedTokenizer, task_n
     task = get_task_by_name(tokenizer=tokenizer, task_name=task_name)
 
     # Evaluate baseline
+    print("===========↓Baeline↓===========")
     baseline_datasets = task.create_datasets(num_datasets=100, num_examples=0)
     predictions = run_icl(model, tokenizer, task, baseline_datasets, include_train=False)
     accuracies["baseline"] = calculate_accuracy_on_datasets(task, predictions, baseline_datasets)
-
+    print("===========↑Baeline↑===========")
+    print("\n\n")
     # Evaluate ICL and Task Vector
     # TODO: Change back to 400, 100
     # num_test_datasets, num_dev_datasets = 400, 100
+    print("===========↓Regular ICL↓===========")
     num_test_datasets, num_dev_datasets = 50, 50
     test_datasets = task.create_datasets(num_datasets=num_test_datasets, num_examples=num_examples)
     dev_datasets = task.create_datasets(num_datasets=num_dev_datasets, num_examples=num_examples)
-    
     icl_predictions = run_icl(model, tokenizer, task, test_datasets)
+    print("===========↑Regular ICL↑===========")
+    print("\n\n")
+    print("===========↓Task Vectors↓===========")
     tv_predictions, tv_dev_accuracy_by_layer, task_hiddens = run_task_vector(
         model,
         tokenizer,
@@ -55,70 +57,38 @@ def evaluate_task(model: PreTrainedModel, tokenizer: PreTrainedTokenizer, task_n
         dev_datasets,
         max_new_tokens=30,  # Task Vectorで複数トークン生成を有効化
     )
-    
     accuracies["tv_dev_by_layer"] = tv_dev_accuracy_by_layer
     accuracies["icl"] = calculate_accuracy_on_datasets(task, icl_predictions, test_datasets)
     accuracies["tv"] = calculate_accuracy_on_datasets(task, tv_predictions, test_datasets)
-    
+    print("===========↑Task Vectors↑===========")
     # Add COMET evaluation for translation tasks
     if task_name.startswith("translation_") and hasattr(task, 'evaluate_with_comet'):
-        print("\n--- COMET Evaluation ---")
-        
-        # DEBUG: Check actual Task Vector predictions
-        print("\n=== TASK VECTOR PREDICTIONS DEBUG ===")
-        print(f"TV predictions type: {type(tv_predictions)}, length: {len(tv_predictions)}")
-        for i in range(min(5, len(tv_predictions))):
-            print(f"TV[{i}]: '{tv_predictions[i]}' (type: {type(tv_predictions[i])}, len: {len(tv_predictions[i])})")
-        
         try:
             # Prepare data for COMET evaluation
             sources = [dataset.test_input for dataset in test_datasets]
             references = [dataset.test_output for dataset in test_datasets]
-            
-            print(f"\nCOMET Input Debug:")
-            print(f"Sources length: {len(sources)}")
-            print(f"ICL predictions length: {len(icl_predictions)}")
-            print(f"TV predictions length: {len(tv_predictions)}")
-            print(f"References length: {len(references)}")
-            
+
             # COMET evaluation for ICL predictions
             icl_comet_results = task.evaluate_with_comet(sources, icl_predictions, references)
             comet_results["icl_comet"] = icl_comet_results["comet"]
-            print(f"ICL COMET Score: {icl_comet_results['comet']:.4f}")
+            # print(f"ICL COMET Score: {icl_comet_results['comet']:.4f}")
             
-            # COMET evaluation for Task Vector predictions - check for issues
             print("\nEvaluating Task Vector with COMET...")
             tv_comet_results = task.evaluate_with_comet(sources, tv_predictions, references)
             comet_results["tv_comet"] = tv_comet_results["comet"]
-            print(f"Task Vector COMET Score: {tv_comet_results['comet']:.4f}")
             
             # Compare individual COMET scores
             if "comet_scores" in icl_comet_results and "comet_scores" in tv_comet_results:
-                print(f"\nFirst 3 individual COMET scores:")
+                # print(f"\nFirst 3 individual COMET scores:")
                 for i in range(min(3, len(icl_comet_results["comet_scores"]))):
                     icl_score = icl_comet_results["comet_scores"][i]
                     tv_score = tv_comet_results["comet_scores"][i]
-                    print(f"  Example {i+1}: ICL={icl_score:.4f}, TV={tv_score:.4f}")
+                    # print(f"  Example {i+1}: ICL={icl_score:.4f}, TV={tv_score:.4f}")
             
         except Exception as e:
-            print(f"COMET evaluation failed: {e}")
             import traceback
             traceback.print_exc()
     
-    # Display example predictions for ICL and Task Vector (corrected from baseline predictions)
-    for i in range(min(10, len(test_datasets))):
-        dataset = test_datasets[i]
-        icl_pred = icl_predictions[i]
-        tv_pred = tv_predictions[i]
-        correct_answer = dataset.test_output
-        
-        icl_correct = "〇" if icl_pred.strip().lower() == correct_answer.strip().lower() else "✗"
-        tv_correct = "〇" if tv_pred.strip().lower() == correct_answer.strip().lower() else "✗"
-        
-        print(f"  {i+1}. 入力: {dataset.test_input}")
-        print(f"     ICL予測: '{icl_pred}' | 正解: '{correct_answer}' {icl_correct}")
-        print(f"     TV予測:  '{tv_pred}' | 正解: '{correct_answer}' {tv_correct}")
-
     tv_ordered_tokens_by_layer = {}
     try:
         for layer_num in tv_dev_accuracy_by_layer.keys():
@@ -138,11 +108,11 @@ def run_main_experiment(
     model: Optional[PreTrainedModel] = None,
     tokenizer: Optional[PreTrainedTokenizer] = None,
 ) -> None:
-    print("Evaluating model:", model_type, model_variant)
-
+    # print("Evaluating model:", model_type, model_variant)
+    # 保存先パスを作成
     results_file = get_results_file_path(model_type, model_variant, experiment_id=experiment_id)
     os.makedirs(os.path.dirname(results_file), exist_ok=True)
-
+    # result_fileが既存にあれば読み込む
     if os.path.exists(results_file):
         with open(results_file, "rb") as f:
             results = pickle.load(f)
@@ -173,14 +143,13 @@ def run_main_experiment(
         tic = time.time()
         accuracies, comet_results, tv_ordered_tokens_by_layer = evaluate_task(model, tokenizer, task_name, num_examples)
 
-        print(f"Baseline Accuracy: {accuracies['baseline']:.2f}")
-        print(f"ICL Accuracy: {accuracies['icl']:.2f}")
-        print(f"Task Vector Accuracy: {accuracies['tv']:.2f}")
-        print(f"Dev Accuracy by layer: ", end="")
+        # print(f"Baseline Accuracy: {accuracies['baseline']:.2f}")
+        # print(f"ICL Accuracy: {accuracies['icl']:.2f}")
+        # print(f"Task Vector Accuracy: {accuracies['tv']:.2f}")
+        # print(f"Dev Accuracy by layer: ", end="")
         for layer, accuracy in accuracies["tv_dev_by_layer"].items():
             print(f"{layer}: {accuracy:.2f}, ", end="")
-        print()
-        print("Time:", time.time() - tic)
+
 
         results[task_name] = {
             "baseline_accuracy": accuracies["baseline"],

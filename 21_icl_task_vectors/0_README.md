@@ -1,3 +1,11 @@
+./run_script.sh experiments.main
+
+
+pip install transformers==4.37.0
+pip install unbabel-comet
+
+
+
 docker exec -it umezawa-icl_task_vectors bash
 
 

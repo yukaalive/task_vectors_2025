@@ -38,6 +38,7 @@ class Task(ABC):
         return [self.create_dataset(num_examples) for _ in range(num_datasets)]
 
     def create_dataset(self, num_examples: int, test_input: Optional[Any] = None) -> FewShotDataset:
+        # テスト用に1こデータを作成する
         if test_input is None:
             test_input = self.sample_inputs(1)[0]
         test_output = self.calc_test_output(test_input)

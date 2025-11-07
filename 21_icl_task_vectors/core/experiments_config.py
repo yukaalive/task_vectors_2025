@@ -5,11 +5,15 @@ TASKS_TO_EVALUATE = [
     # "knowledge_country_capital",
     # "algorithmic_next_letter",
     # Translation
+    "translation_en_ja_single",
+    "translation_ja_en_single",
     "translation_ja_en",
     "translation_en_ja",
     "translation_es_en",
     "translation_en_fr",
     "translation_en_es",
+
+
     # # Linguistic
     # "linguistic_present_simple_past_simple",
     # "linguistic_plural_singular",
@@ -28,15 +32,17 @@ TASKS_TO_EVALUATE = [
 
 
 MODELS_TO_EVALUATE = [
-    # ("gpt-2", "1.5B"),
-    ("swallow", "7B"),
+
+    # ("swallow", "7B"),
     ("pythia", "2.8B"),
-    ("llama", "7B"),
-    ("youko", "8B"),
+    # ("llama", "7B"),
+    # ("youko", "8B"),
+    # ("pythia", "6.9B"),
+    # ("llama", "13B"),
+    # ("pythia", "12B"),
+
+    # ("gpt-2", "1.5B"),
     #("gpt-j", "6B"),
-    ("pythia", "6.9B"),
-    ("llama", "13B"),
-    ("pythia", "12B"),
     # ("llama", "30B"),
     # ("mpt", "7B"), # error in ForwardTracer
     # ("falcon", "7B"), # error in past_key_values

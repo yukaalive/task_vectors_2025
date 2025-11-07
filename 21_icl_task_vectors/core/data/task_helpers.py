@@ -21,13 +21,23 @@ TASK_TYPE_TO_CLASS = {
 
 
 ALL_TASKS = {
+    # マルチトークン版（ja系のみ）
     "translation_ja_en": {
         "task_type": "translation",
-        "task_kwargs": {"mapping_type": "translation", "mapping_name": "ja_en", "allow_prefix": True},
+        "task_kwargs": {"mapping_type": "translation", "mapping_name": "ja_en_multi", "allow_prefix": True},
     },
     "translation_en_ja": {
         "task_type": "translation",
-        "task_kwargs": {"mapping_type": "translation", "mapping_name": "en_ja", "allow_prefix": True},
+        "task_kwargs": {"mapping_type": "translation", "mapping_name": "en_ja_multi", "allow_prefix": True},
+    },
+    # シングルトークン版
+    "translation_ja_en_single": {
+        "task_type": "translation",
+        "task_kwargs": {"mapping_type": "translation", "mapping_name": "ja_en_single", "allow_prefix": True},
+    },
+    "translation_en_ja_single": {
+        "task_type": "translation",
+        "task_kwargs": {"mapping_type": "translation", "mapping_name": "en_ja_single", "allow_prefix": True},
     },
     # Algorithmic
     "algorithmic_next_letter": {
@@ -74,30 +84,30 @@ ALL_TASKS = {
         "task_type": "token_operation",
         "task_kwargs": {"operation": "int_to_char", "input_space": list(string.digits[1:])},
     },
-    # Translation
+    # Translation（シングルトークン版 - ja以外）
     "translation_fr_en": {
         "task_type": "translation",
-        "task_kwargs": {"mapping_type": "translation", "mapping_name": "fr_en"},
+        "task_kwargs": {"mapping_type": "translation", "mapping_name": "fr_en_single", "allow_prefix": True},
     },
     "translation_it_en": {
         "task_type": "translation",
-        "task_kwargs": {"mapping_type": "translation", "mapping_name": "it_en"},
+        "task_kwargs": {"mapping_type": "translation", "mapping_name": "it_en_single", "allow_prefix": True},
     },
     "translation_es_en": {
         "task_type": "translation",
-        "task_kwargs": {"mapping_type": "translation", "mapping_name": "es_en"},
+        "task_kwargs": {"mapping_type": "translation", "mapping_name": "es_en_single", "allow_prefix": True},
     },
     "translation_en_fr": {
         "task_type": "translation",
-        "task_kwargs": {"mapping_type": "translation", "mapping_name": "en_fr"},
+        "task_kwargs": {"mapping_type": "translation", "mapping_name": "en_fr_single", "allow_prefix": True},
     },
     "translation_en_it": {
         "task_type": "translation",
-        "task_kwargs": {"mapping_type": "translation", "mapping_name": "en_it"},
+        "task_kwargs": {"mapping_type": "translation", "mapping_name": "en_it_single", "allow_prefix": True},
     },
     "translation_en_es": {
         "task_type": "translation",
-        "task_kwargs": {"mapping_type": "translation", "mapping_name": "en_es"},
+        "task_kwargs": {"mapping_type": "translation", "mapping_name": "en_es_single", "allow_prefix": True},
     },
     # Linguistic
     "linguistic_present_simple_gerund": {
@@ -147,18 +157,34 @@ ALL_TASKS = {
     # },
 }
 
-
+# task_typeをキーにして、TASK_TYPE_TO_CLASSからクラスを探し、task_kwargsを引数としてオブジェクト作る
 def get_task(task_type: str, task_kwargs: Dict[str, str], tokenizer: PreTrainedTokenizer) -> Task:
     task = TASK_TYPE_TO_CLASS[task_type](**task_kwargs, tokenizer=tokenizer)
     return task
 
-
+# task_nameというキーに対するのtask_type,task_kwargsを取り出す
 def get_task_by_name(tokenizer: PreTrainedTokenizer, task_name: str) -> Task:
     task_args = ALL_TASKS[task_name]
     task = get_task(task_args["task_type"], task_args["task_kwargs"], tokenizer)
     return task
 
-
 def get_all_tasks(tokenizer: PreTrainedTokenizer) -> Dict[str, Task]:
+    # ALL_TASKSの中からtask_nameを取り出してget_task_by_nameにわたす
     tasks = {task_name: get_task_by_name(tokenizer, task_name) for task_name in ALL_TASKS}
     return tasks
+
+
+
+# 以下のような辞書を作成している
+# task = TranslationTask(
+#     mapping_type="translation",
+#     mapping_name="ja_en",
+#     allow_prefix=True,
+#     tokenizer=tokenizer
+# )
+
+# tasks = {} 
+# for task_name in ALL_TASKS:
+#     task_object = get_task_by_name(tokenizer, task_name)
+#     tasks[task_name] = task_object
+# return tasks
