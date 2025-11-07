@@ -27,10 +27,12 @@ def run_icl(
     task: Task,
     test_datasets: List[FewShotDataset],
     include_train: bool = True,
+    generation_mode: str = "multi",
 ) -> List[str]:
     format_dataset_kwargs = {"include_train": include_train}
     inputs = tokenize_datasets(tokenizer, test_datasets, format_dataset_kwargs=format_dataset_kwargs)
-    new_ids = batch_generate(model, tokenizer, inputs=inputs, generate_kwargs={"max_new_tokens": 30})
+    max_new_tokens = 1 if generation_mode == "single" else 30
+    new_ids = batch_generate(model, tokenizer, inputs=inputs, generate_kwargs={"max_new_tokens": max_new_tokens})
     predictions = decode_predictions(new_ids, tokenizer)
     return predictions
 
@@ -43,7 +45,8 @@ def run_task_vector(
     dev_datasets: List[FewShotDataset],
     layers_to_test: Optional[Iterable[int]] = None,
     multi_context: bool = False,
-    max_new_tokens: int = 30 #★変更★//
+    generation_mode: str = "multi",
+    max_new_tokens: int = 30,
 ):
     dev_accuracy_by_layer = task_vector_accuracy_by_layer(
         model,
@@ -52,6 +55,7 @@ def run_task_vector(
         dev_datasets,
         layers_to_test=layers_to_test,
         multi_context=multi_context,
+        generation_mode=generation_mode,
     )
     best_intermediate_layer = int(max(dev_accuracy_by_layer, key=dev_accuracy_by_layer.get))
     print("ベストレイヤー：",best_intermediate_layer)
@@ -63,7 +67,8 @@ def run_task_vector(
         test_datasets,
         task_hiddens=task_hiddens,
         intermediate_layer=best_intermediate_layer,
-        max_new_tokens=max_new_tokens,  
+        generation_mode=generation_mode,
+        max_new_tokens=max_new_tokens,
     )
 
     return predictions, dev_accuracy_by_layer, task_hiddens
@@ -198,7 +203,36 @@ def get_task_hiddens(
 #     if return_task_hiddens:
 #         return answers, task_hiddens
 #     return answers
-def modulated_generate(
+def modulated_generate_single(
+    model: PreTrainedModel,
+    tokenizer: PreTrainedTokenizer,
+    task: Task,
+    test_datasets: List[FewShotDataset],
+    task_hiddens: torch.tensor,
+    intermediate_layer: Union[int, torch.Tensor],
+    past_key_values: Optional[Tuple[Tuple[torch.FloatTensor]]] = None,
+    return_task_hiddens: bool = False,
+    include_train: bool = False,
+) -> List[str]:
+    """Single token generation version (original implementation)"""
+    inputs = tokenize_datasets(tokenizer, test_datasets, format_dataset_kwargs={"include_train": include_train})
+
+    first_forward_outputs = modulated_forward(
+        model,
+        inputs=inputs,
+        task_hiddens=task_hiddens,
+        intermediate_layer=intermediate_layer,
+        past_key_values=past_key_values,
+    )
+    first_predicted_token_ids = first_forward_outputs.logits[:, -1].argmax(dim=-1).unsqueeze(-1)
+    answers = decode_predictions(first_predicted_token_ids, tokenizer)
+
+    if return_task_hiddens:
+        return answers, task_hiddens
+    return answers
+
+
+def modulated_generate_multi(
     model: PreTrainedModel,
     tokenizer: PreTrainedTokenizer,
     task: Task,
@@ -272,6 +306,55 @@ def modulated_generate(
         return answers, task_hiddens
     return answers
 
+
+def modulated_generate(
+    model: PreTrainedModel,
+    tokenizer: PreTrainedTokenizer,
+    task: Task,
+    test_datasets: List[FewShotDataset],
+    task_hiddens: torch.tensor,
+    intermediate_layer: Union[int, torch.Tensor],
+    past_key_values: Optional[Tuple[Tuple[torch.FloatTensor]]] = None,
+    return_task_hiddens: bool = False,
+    include_train: bool = False,
+    generation_mode: str = "multi",
+    max_new_tokens: int = 30,
+) -> List[str]:
+    """
+    Unified interface for modulated generation.
+
+    Args:
+        generation_mode: "single" for 1-token generation, "multi" for multi-token generation
+    """
+    if generation_mode == "single":
+        return modulated_generate_single(
+            model=model,
+            tokenizer=tokenizer,
+            task=task,
+            test_datasets=test_datasets,
+            task_hiddens=task_hiddens,
+            intermediate_layer=intermediate_layer,
+            past_key_values=past_key_values,
+            return_task_hiddens=return_task_hiddens,
+            include_train=include_train,
+        )
+    elif generation_mode == "multi":
+        return modulated_generate_multi(
+            model=model,
+            tokenizer=tokenizer,
+            task=task,
+            test_datasets=test_datasets,
+            task_hiddens=task_hiddens,
+            intermediate_layer=intermediate_layer,
+            past_key_values=past_key_values,
+            return_task_hiddens=return_task_hiddens,
+            include_train=include_train,
+            max_new_tokens=max_new_tokens,
+        )
+    else:
+        raise ValueError(f"Invalid generation_mode: {generation_mode}. Must be 'single' or 'multi'")
+
+
 def modulated_forward(
     model: PreTrainedModel,
     inputs: Dict,
@@ -338,6 +421,7 @@ def task_vector_accuracy_by_layer(
     datasets: List[FewShotDataset],
     layers_to_test: Optional[Iterable[int]] = None,
     multi_context: bool = False,
+    generation_mode: str = "multi",
 ) -> Dict[int, float]:
     if layers_to_test is None:
         num_layers = len(get_layers(model))
@@ -366,6 +450,7 @@ def task_vector_accuracy_by_layer(
             intermediate_layer=layer_num,
             task_hiddens=task_hiddens,
             past_key_values=past_key_values,
+            generation_mode=generation_mode,
         )
 
         accuracy = calculate_accuracy_on_datasets(task, answers, datasets)

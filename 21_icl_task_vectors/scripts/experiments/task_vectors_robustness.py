@@ -28,11 +28,14 @@ def create_task_vectors(model, tokenizer):
 
         task = get_task_by_name(tokenizer, task_name)
 
+        # Determine generation mode based on task name
+        generation_mode = "single" if "_single" in task_name else "multi"
+
         test_datasets = task.create_datasets(num_datasets=50, num_examples=num_examples)
         dev_datasets = task.create_datasets(num_datasets=50, num_examples=num_examples)
 
         dev_accuracy_by_layer = task_vector_accuracy_by_layer(
-            model, tokenizer, task, dev_datasets, layers_to_test=range(10, 20)
+            model, tokenizer, task, dev_datasets, layers_to_test=range(10, 20), generation_mode=generation_mode
         )
         best_intermediate_layer = int(max(dev_accuracy_by_layer, key=dev_accuracy_by_layer.get))
 

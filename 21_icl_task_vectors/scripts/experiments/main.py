@@ -31,10 +31,14 @@ def evaluate_task(model: PreTrainedModel, tokenizer: PreTrainedTokenizer, task_n
 
     task = get_task_by_name(tokenizer=tokenizer, task_name=task_name)
 
+    # Determine generation mode based on task name
+    generation_mode = "single" if "_single" in task_name else "multi"
+    print(f"Generation mode: {generation_mode}")
+
     # Evaluate baseline
     print("===========↓Baeline↓===========")
     baseline_datasets = task.create_datasets(num_datasets=100, num_examples=0)
-    predictions = run_icl(model, tokenizer, task, baseline_datasets, include_train=False)
+    predictions = run_icl(model, tokenizer, task, baseline_datasets, include_train=False, generation_mode=generation_mode)
     accuracies["baseline"] = calculate_accuracy_on_datasets(task, predictions, baseline_datasets)
     print("===========↑Baeline↑===========")
     print("\n\n")
@@ -45,7 +49,7 @@ def evaluate_task(model: PreTrainedModel, tokenizer: PreTrainedTokenizer, task_n
     num_test_datasets, num_dev_datasets = 50, 50
     test_datasets = task.create_datasets(num_datasets=num_test_datasets, num_examples=num_examples)
     dev_datasets = task.create_datasets(num_datasets=num_dev_datasets, num_examples=num_examples)
-    icl_predictions = run_icl(model, tokenizer, task, test_datasets)
+    icl_predictions = run_icl(model, tokenizer, task, test_datasets, generation_mode=generation_mode)
     print("===========↑Regular ICL↑===========")
     print("\n\n")
     print("===========↓Task Vectors↓===========")
@@ -55,6 +59,7 @@ def evaluate_task(model: PreTrainedModel, tokenizer: PreTrainedTokenizer, task_n
         task,
         test_datasets,
         dev_datasets,
+        generation_mode=generation_mode,
         max_new_tokens=30,  # Task Vectorで複数トークン生成を有効化
     )
     accuracies["tv_dev_by_layer"] = tv_dev_accuracy_by_layer

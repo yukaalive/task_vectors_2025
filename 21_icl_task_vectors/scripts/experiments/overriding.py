@@ -43,6 +43,9 @@ def run_overriding_experiment_on_task_pair(model, tokenizer, task_name, overridi
     task = get_task_by_name(tokenizer, task_name)
     overriding_task = get_task_by_name(tokenizer, overriding_task_name)
 
+    # Determine generation mode based on task name
+    generation_mode = "single" if "_single" in task_name else "multi"
+
     test_datasets = task.create_datasets(num_datasets=1000, num_examples=num_examples)
     overriding_datasets = overriding_task.create_datasets(num_datasets=100, num_examples=num_examples)
 
@@ -52,7 +55,7 @@ def run_overriding_experiment_on_task_pair(model, tokenizer, task_name, overridi
 
     assert len(test_datasets) == len(overriding_datasets)
 
-    icl_predictions = run_icl(model, tokenizer, task, test_datasets)
+    icl_predictions = run_icl(model, tokenizer, task, test_datasets, generation_mode=generation_mode)
     tv_predictions, tv_dev_accuracy_by_layer, task_hiddens = run_overriding_task_vector(
         model,
         tokenizer,
