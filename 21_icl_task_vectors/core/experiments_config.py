@@ -38,11 +38,11 @@ TASKS_TO_EVALUATE = [
 MODELS_TO_EVALUATE = [
     # ("llama", "30B"),
     ("swallow", "7B"),
-    ("pythia", "2.8B"),
+    # ("pythia", "2.8B"),
     ("llama", "7B"),
     ("youko", "8B"),
-    ("gpt-2", "1.5B"),
-    ("llama", "13B"),
+    # ("gpt-2", "1.5B"),
+    # ("llama", "13B"),
     # ("pythia", "6.9B"),
 
     # ("pythia", "12B"),

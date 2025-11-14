@@ -5,30 +5,50 @@ import numpy as np
 with open('/home/yukaalive/2025workspace/task_vectors/21_icl_task_vectors/outputs/results/main/camera_ready/swallow_7B.pkl', 'rb') as f:
     data = pickle.load(f)
 
-print("Keys in swallow_7B.pkl:")
-for key in data.keys():
-    print(f"  - {key}")
+print("=" * 70)
+print("ALL TASK NAMES IN swallow_7B.pkl:")
+print("=" * 70)
+for i, key in enumerate(data.keys(), 1):
+    print(f"{i:2}. {key}")
 
-print("\n" + "="*50)
+print("\n" + "=" * 70)
+print("CHECKING FOR JESC AND EASY TASKS:")
+print("=" * 70)
 
-# Check translation tasks
-for task_name in ['translation_ja_en', 'translation_en_ja']:
-    if task_name in data:
-        print(f"\n{task_name} metrics:")
-        for metric_name, metric_value in data[task_name].items():
-            if isinstance(metric_value, (int, float, np.integer, np.floating)):
-                print(f"  {metric_name}: {metric_value}")
-            elif isinstance(metric_value, np.ndarray):
-                print(f"  {metric_name}: ndarray with shape {metric_value.shape}")
-            else:
-                print(f"  {metric_name}: {type(metric_value)}")
+jesc_tasks = [k for k in data.keys() if 'jesc' in k.lower()]
+easy_tasks = [k for k in data.keys() if 'easy' in k.lower()]
+
+print(f"\nTasks with 'jesc': {len(jesc_tasks)}")
+for task in jesc_tasks:
+    print(f"  - {task}")
+
+print(f"\nTasks with 'easy': {len(easy_tasks)}")
+for task in easy_tasks:
+    print(f"  - {task}")
+
+print("\n" + "=" * 70)
+print("TESTING format_task_name FUNCTION:")
+print("=" * 70)
+
+def format_task_name(task_name):
+    """Format task name for display - add appropriate suffix for multi-token translation tasks"""
+    if not task_name.startswith('translation_'):
+        return task_name
+
+    # If it ends with _single, keep as is
+    if task_name.endswith('_single'):
+        return task_name
+
+    # Check if it already has jesc or easy suffix
+    if '_jesc' in task_name:
+        return task_name.replace('_jesc', '_jesc_multi')
+    elif '_easy' in task_name:
+        return task_name.replace('_easy', '_easy_multi')
     else:
-        print(f"\n{task_name}: NOT FOUND")
+        return task_name + '_multi'
 
-print("\n" + "="*50)
-print("\nAll other tasks:")
-for task_name in data.keys():
-    if task_name not in ['translation_ja_en', 'translation_en_ja']:
-        print(f"\n{task_name}:")
-        for metric_name in data[task_name].keys():
-            print(f"  - {metric_name}")
+print("\nApplying format_task_name to all tasks:")
+for task_name in sorted(data.keys()):
+    formatted = format_task_name(task_name)
+    changed = " ✓ CHANGED" if task_name != formatted else ""
+    print(f"{task_name:40} → {formatted}{changed}")

@@ -23,10 +23,28 @@ def load_results(results_dir):
     return results
 
 def format_task_name(task_name):
-    """Format task name for display - add _multi suffix if it's a translation task without _single"""
-    if task_name.startswith('translation_') and not task_name.endswith('_single'):
+    """Format task name for display - add appropriate suffix for multi-token translation tasks"""
+    if not task_name.startswith('translation_'):
+        return task_name
+
+    # If it ends with _single, keep as is
+    if task_name.endswith('_single'):
+        return task_name
+
+    # Check if it already has jesc or easy suffix
+    if '_jesc' in task_name:
+        # Replace _jesc with _jesc_multi (e.g., translation_ja_en_jesc -> translation_ja_en_jesc_multi)
+        return task_name.replace('_jesc', '_jesc_multi')
+    elif '_easy' in task_name:
+        # Replace _easy with _easy_multi (e.g., translation_ja_en_easy -> translation_ja_en_easy_multi)
+        return task_name.replace('_easy', '_easy_multi')
+    else:
+        # Add _multi for other multi-token tasks
         return task_name + '_multi'
-    return task_name
+
+def should_use_comet(task_name):
+    """Check if task should use COMET score (tasks with 'ja' in name)"""
+    return 'ja' in task_name.lower()
 
 def extract_metrics_to_dataframe(results):
     """Extract metrics into a pandas DataFrame"""
@@ -34,15 +52,24 @@ def extract_metrics_to_dataframe(results):
 
     for model_name, tasks_data in results.items():
         for task_name, metrics in tasks_data.items():
+            use_comet = should_use_comet(task_name)
+
+            # Select appropriate metric based on task type
+            if use_comet:
+                icl_metric = metrics.get('icl_comet', np.nan)
+                tv_metric = metrics.get('tv_comet', np.nan)
+            else:
+                icl_metric = metrics.get('icl_accuracy', np.nan)
+                tv_metric = metrics.get('tv_accuracy', np.nan)
+
             row = {
                 'model': model_name,
                 'task': task_name,
-                'task_display': format_task_name(task_name),  # Add display name
+                'task_display': format_task_name(task_name),
+                'use_comet': use_comet,
+                'icl_metric': icl_metric,
+                'tv_metric': tv_metric,
                 'baseline_accuracy': metrics.get('baseline_accuracy', np.nan),
-                'icl_accuracy': metrics.get('icl_accuracy', np.nan),
-                'tv_accuracy': metrics.get('tv_accuracy', np.nan),
-                'icl_comet': metrics.get('icl_comet', np.nan),
-                'tv_comet': metrics.get('tv_comet', np.nan),
                 'num_examples': metrics.get('num_examples', np.nan),
             }
             rows.append(row)
@@ -50,8 +77,8 @@ def extract_metrics_to_dataframe(results):
     df = pd.DataFrame(rows)
     return df
 
-def plot_accuracy_comparison(df, output_dir):
-    """Plot accuracy comparison: ICL vs Task Vector"""
+def plot_unified_comparison(df, output_dir):
+    """Plot unified comparison: ICL vs Task Vector (using COMET for ja tasks, accuracy for others)"""
     fig, axes = plt.subplots(2, 1, figsize=(14, 10))
 
     # Prepare data
@@ -66,23 +93,24 @@ def plot_accuracy_comparison(df, output_dir):
 
     for i, model in enumerate(models):
         model_data = df[df['model'] == model]
-        icl_acc = [model_data[model_data['task'] == task]['icl_accuracy'].values[0]
-                   if len(model_data[model_data['task'] == task]) > 0 else 0
-                   for task in tasks]
-        tv_acc = [model_data[model_data['task'] == task]['tv_accuracy'].values[0]
-                  if len(model_data[model_data['task'] == task]) > 0 else 0
-                  for task in tasks]
+        icl_values = [model_data[model_data['task'] == task]['icl_metric'].values[0]
+                      if len(model_data[model_data['task'] == task]) > 0 else 0
+                      for task in tasks]
+        tv_values = [model_data[model_data['task'] == task]['tv_metric'].values[0]
+                     if len(model_data[model_data['task'] == task]) > 0 else 0
+                     for task in tasks]
 
-        ax1.bar(x + i * width * 2 - width/2, icl_acc, width, label=f'{model} (ICL)', alpha=0.8)
-        ax1.bar(x + i * width * 2 + width/2, tv_acc, width, label=f'{model} (TV)', alpha=0.8, hatch='//')
+        ax1.bar(x + i * width * 2 - width/2, icl_values, width, label=f'{model} (ICL)', alpha=0.8)
+        ax1.bar(x + i * width * 2 + width/2, tv_values, width, label=f'{model} (TV)', alpha=0.8, hatch='//')
 
     ax1.set_xlabel('Task', fontsize=12, fontweight='bold')
-    ax1.set_ylabel('Exact Match Accuracy', fontsize=12, fontweight='bold')
-    ax1.set_title('Exact Match Accuracy: ICL vs Task Vector by Task', fontsize=14, fontweight='bold')
+    ax1.set_ylabel('Score (COMET for JA tasks, Accuracy for others)', fontsize=12, fontweight='bold')
+    ax1.set_title('Performance Comparison: ICL vs Task Vector by Task', fontsize=14, fontweight='bold')
     ax1.set_xticks(x + width * (len(models) - 1))
     ax1.set_xticklabels(task_display_names, rotation=45, ha='right')
     ax1.legend(loc='upper left', bbox_to_anchor=(1, 1))
     ax1.grid(axis='y', alpha=0.3)
+    ax1.set_ylim([0, 1])
 
     # Plot 2: Grouped bar chart by model
     ax2 = axes[1]
@@ -91,23 +119,24 @@ def plot_accuracy_comparison(df, output_dir):
 
     for i, (task, task_display) in enumerate(zip(tasks, task_display_names)):
         task_data = df[df['task'] == task]
-        icl_acc = [task_data[task_data['model'] == model]['icl_accuracy'].values[0]
-                   if len(task_data[task_data['model'] == model]) > 0 else 0
-                   for model in models]
-        tv_acc = [task_data[task_data['model'] == model]['tv_accuracy'].values[0]
-                  if len(task_data[task_data['model'] == model]) > 0 else 0
-                  for model in models]
+        icl_values = [task_data[task_data['model'] == model]['icl_metric'].values[0]
+                      if len(task_data[task_data['model'] == model]) > 0 else 0
+                      for model in models]
+        tv_values = [task_data[task_data['model'] == model]['tv_metric'].values[0]
+                     if len(task_data[task_data['model'] == model]) > 0 else 0
+                     for model in models]
 
-        ax2.bar(x + i * width * 2 - width/2, icl_acc, width, label=f'{task_display} (ICL)', alpha=0.8)
-        ax2.bar(x + i * width * 2 + width/2, tv_acc, width, label=f'{task_display} (TV)', alpha=0.8, hatch='//')
+        ax2.bar(x + i * width * 2 - width/2, icl_values, width, label=f'{task_display} (ICL)', alpha=0.8)
+        ax2.bar(x + i * width * 2 + width/2, tv_values, width, label=f'{task_display} (TV)', alpha=0.8, hatch='//')
 
     ax2.set_xlabel('Model', fontsize=12, fontweight='bold')
-    ax2.set_ylabel('Exact Match Accuracy', fontsize=12, fontweight='bold')
-    ax2.set_title('Exact Match Accuracy: ICL vs Task Vector by Model', fontsize=14, fontweight='bold')
+    ax2.set_ylabel('Score (COMET for JA tasks, Accuracy for others)', fontsize=12, fontweight='bold')
+    ax2.set_title('Performance Comparison: ICL vs Task Vector by Model', fontsize=14, fontweight='bold')
     ax2.set_xticks(x + width * (len(tasks) - 1))
     ax2.set_xticklabels(models, rotation=45, ha='right')
     ax2.legend(loc='upper left', bbox_to_anchor=(1, 1), ncol=2)
     ax2.grid(axis='y', alpha=0.3)
+    ax2.set_ylim([0, 1])
 
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, 'accuracy_comparison.png'), dpi=300, bbox_inches='tight')
@@ -228,20 +257,18 @@ def plot_heatmaps(df, output_dir):
 
 def save_summary_table(df, output_dir):
     """Save summary statistics as CSV and LaTeX"""
-    # Summary by task (using display names)
+    # Summary by task (using display names and unified metric)
     summary_by_task = df.groupby('task_display').agg({
-        'icl_accuracy': ['mean', 'std'],
-        'tv_accuracy': ['mean', 'std'],
-        'icl_comet': ['mean', 'std'],
-        'tv_comet': ['mean', 'std']
+        'icl_metric': ['mean', 'std'],
+        'tv_metric': ['mean', 'std'],
+        'baseline_accuracy': ['mean', 'std']
     }).round(4)
 
     # Summary by model
     summary_by_model = df.groupby('model').agg({
-        'icl_accuracy': ['mean', 'std'],
-        'tv_accuracy': ['mean', 'std'],
-        'icl_comet': ['mean', 'std'],
-        'tv_comet': ['mean', 'std']
+        'icl_metric': ['mean', 'std'],
+        'tv_metric': ['mean', 'std'],
+        'baseline_accuracy': ['mean', 'std']
     }).round(4)
 
     # Save to CSV
@@ -284,10 +311,8 @@ def main():
     print("Generating visualizations...")
     print("="*50)
 
-    # Generate plots
-    plot_accuracy_comparison(df, output_dir)
-    plot_comet_comparison(df, output_dir)
-    plot_heatmaps(df, output_dir)
+    # Generate unified plot (only one PNG output)
+    plot_unified_comparison(df, output_dir)
 
     # Save summary tables
     print("\nSaving summary tables...")

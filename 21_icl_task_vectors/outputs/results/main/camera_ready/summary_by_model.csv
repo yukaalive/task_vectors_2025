@@ -1,0 +1,5 @@
+,icl_metric,icl_metric,tv_metric,tv_metric,baseline_accuracy,baseline_accuracy
+,mean,std,mean,std,mean,std
+model,,,,,,
+pythia_2.8B,0.7697,0.0914,0.5959,0.1576,0.0,0.0
+swallow_7B,0.8223,0.0768,0.696,0.1414,0.0,0.0

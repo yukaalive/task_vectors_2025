@@ -92,7 +92,7 @@ def batch_forward(
     model: PreTrainedModel,
     inputs: Dict,
     forward_kwargs: Optional[Dict] = None,
-    batch_size: int = 100,
+    batch_size: int = 1000,
     show_progress: bool = False,
 ) -> CausalLMOutputWithPast:
     batch_size = batch_size or _auto_batch_size(model, inputs)
