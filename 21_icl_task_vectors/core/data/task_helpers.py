@@ -22,13 +22,31 @@ TASK_TYPE_TO_CLASS = {
 
 ALL_TASKS = {
     # マルチトークン版（ja系のみ）
-    "translation_ja_en": {
+    # "translation_ja_en": {
+    #     "task_type": "translation",
+    #     "task_kwargs": {"mapping_type": "translation", "mapping_name": "ja_en_multi", "allow_prefix": True},
+    # },
+    # "translation_en_ja": {
+    #     "task_type": "translation",
+    #     "task_kwargs": {"mapping_type": "translation", "mapping_name": "en_ja_multi", "allow_prefix": True},
+    # },
+    # マルチトークン版（JESC）
+    "translation_ja_en_jesc": {
         "task_type": "translation",
-        "task_kwargs": {"mapping_type": "translation", "mapping_name": "ja_en_multi", "allow_prefix": True},
+        "task_kwargs": {"mapping_type": "translation", "mapping_name": "ja_en_multi_jesc", "allow_prefix": True},
     },
-    "translation_en_ja": {
+    "translation_en_ja_jesc": {
         "task_type": "translation",
-        "task_kwargs": {"mapping_type": "translation", "mapping_name": "en_ja_multi", "allow_prefix": True},
+        "task_kwargs": {"mapping_type": "translation", "mapping_name": "en_ja_multi_jesc", "allow_prefix": True},
+    },
+    # マルチトークン版（Easy）
+    "translation_ja_en_easy": {
+        "task_type": "translation",
+        "task_kwargs": {"mapping_type": "translation", "mapping_name": "ja_en_multi_easy", "allow_prefix": True},
+    },
+    "translation_en_ja_easy": {
+        "task_type": "translation",
+        "task_kwargs": {"mapping_type": "translation", "mapping_name": "en_ja_multi_easy", "allow_prefix": True},
     },
     # シングルトークン版
     "translation_ja_en_single": {

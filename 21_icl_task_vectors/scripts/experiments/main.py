@@ -53,6 +53,8 @@ def evaluate_task(model: PreTrainedModel, tokenizer: PreTrainedTokenizer, task_n
     print("===========↑Regular ICL↑===========")
     print("\n\n")
     print("===========↓Task Vectors↓===========")
+    # Set max_new_tokens based on generation_mode
+    max_new_tokens = 1 if generation_mode == "single" else 30
     tv_predictions, tv_dev_accuracy_by_layer, task_hiddens = run_task_vector(
         model,
         tokenizer,
@@ -60,7 +62,7 @@ def evaluate_task(model: PreTrainedModel, tokenizer: PreTrainedTokenizer, task_n
         test_datasets,
         dev_datasets,
         generation_mode=generation_mode,
-        max_new_tokens=30,  # Task Vectorで複数トークン生成を有効化
+        max_new_tokens=max_new_tokens,
     )
     accuracies["tv_dev_by_layer"] = tv_dev_accuracy_by_layer
     accuracies["icl"] = calculate_accuracy_on_datasets(task, icl_predictions, test_datasets)
@@ -182,6 +184,7 @@ def main():
         # Calculate the experiment_id as the max experiment_id + 1
         experiment_id = get_new_experiment_id()
         for model_type, model_variant in MODELS_TO_EVALUATE:
+            print("💛💛💛",model_type,model_variant,"💛💛💛")
             run_main_experiment(model_type, model_variant, experiment_id=experiment_id)
     else:
         if len(sys.argv) == 2:

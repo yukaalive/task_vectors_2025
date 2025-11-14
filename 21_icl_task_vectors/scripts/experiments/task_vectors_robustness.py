@@ -1,8 +1,11 @@
+import os
+
+# Set GPU before importing anything else
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+
 from dotenv import load_dotenv
 
 load_dotenv(".env")
-
-import os
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -13,11 +16,26 @@ from sklearn.manifold import TSNE
 from tqdm.auto import tqdm
 
 from core.config import FIGURES_DIR
-from core.data.task_helpers import get_task_by_name
+from core.data.task_helpers import get_task_by_name, ALL_TASKS
 from core.models.llm_loading import load_model_and_tokenizer
 from core.task_vectors import get_task_hiddens, task_vector_accuracy_by_layer
 from core.utils.misc import limit_gpus, seed_everything
 from scripts.experiments.main import TASKS_TO_EVALUATE
+
+
+def get_display_name(task_name):
+    """Get display name based on mapping_name from JSON file"""
+    if task_name in ALL_TASKS:
+        task_config = ALL_TASKS[task_name]
+        if "task_kwargs" in task_config and "mapping_name" in task_config["task_kwargs"]:
+            mapping_name = task_config["task_kwargs"]["mapping_name"]
+            # Extract the suffix from mapping_name (e.g., "ja_en_multi" -> "_multi", "es_en_single" -> "_single")
+            if mapping_name.endswith("_multi"):
+                return f"{task_name}_multi"
+            elif mapping_name.endswith("_single"):
+                return f"{task_name}_single"
+    # Fallback: if _single is already in task_name, keep it; otherwise add _multi
+    return task_name if "_single" in task_name else f"{task_name}_multi"
 
 
 def create_task_vectors(model, tokenizer):
@@ -30,12 +48,14 @@ def create_task_vectors(model, tokenizer):
 
         # Determine generation mode based on task name
         generation_mode = "single" if "_single" in task_name else "multi"
+        max_new_tokens = 1 if generation_mode == "single" else 30
 
         test_datasets = task.create_datasets(num_datasets=50, num_examples=num_examples)
         dev_datasets = task.create_datasets(num_datasets=50, num_examples=num_examples)
 
         dev_accuracy_by_layer = task_vector_accuracy_by_layer(
-            model, tokenizer, task, dev_datasets, layers_to_test=range(10, 20), generation_mode=generation_mode
+            model, tokenizer, task, dev_datasets, layers_to_test=range(10, 20),
+            generation_mode=generation_mode, max_new_tokens=max_new_tokens
         )
         best_intermediate_layer = int(max(dev_accuracy_by_layer, key=dev_accuracy_by_layer.get))
 
@@ -55,7 +75,7 @@ def create_tsne_plot(task_vectors):
     task_vectors_2d = dim_reduction.fit_transform(all_task_vectors)
 
     color_by_task_type = False
-    show_names = False
+    show_names = True
 
     plt.figure(figsize=(5, 5))
 
@@ -79,8 +99,11 @@ def create_tsne_plot(task_vectors):
             xs = task_vectors_2d[i * 50 : (i + 1) * 50, 0]
             ys = task_vectors_2d[i * 50 : (i + 1) * 50, 1]
             x = np.mean(xs)
-            y = np.min(ys) - 0.1
-            plt.text(x, y, task_name, fontsize=12, ha="center", va="top")
+            y = np.mean(ys)
+            # Get display name based on JSON file mapping_name
+            display_name = get_display_name(task_name)
+            plt.text(x, y, display_name, fontsize=8, ha="center", va="center",
+                    bbox=dict(boxstyle='round,pad=0.3', facecolor='white', alpha=0.7))
 
     # save the plot
     name_suffix = "task_type" if color_by_task_type else "task_name"
@@ -90,14 +113,14 @@ def create_tsne_plot(task_vectors):
 
 def create_histograms_plot(task_vectors):
     # calculate task vectors distances - within task and between tasks
-
+    # 同タスク同士のコサイン類似度
     within_task_distances = torch.stack(
         [
             torch.tensor(cdist(task_vectors[task_name], task_vectors[task_name], metric="cosine").flatten())
             for task_name in task_vectors.keys()
         ]
     )
-
+    # 異なるタスク同士のコサイン類似度
     between_task_distances = torch.stack(
         [
             torch.cat(
@@ -120,7 +143,9 @@ def create_histograms_plot(task_vectors):
     for i, task_name in enumerate(task_vectors.keys()):
         axs[i].hist(within_task_distances[i], bins=50, alpha=0.5, label="Within task", density=True)
         axs[i].hist(between_task_distances[i], bins=50, alpha=0.5, label="Other tasks", density=True)
-        axs[i].set_title(task_name)
+        # Get display name based on JSON file mapping_name
+        display_name = get_display_name(task_name)
+        axs[i].set_title(display_name)
         axs[i].legend()
 
     # x label (only for the bottom row)
@@ -178,7 +203,7 @@ def print_histograms_stats(task_vectors, within_task_distances, between_task_dis
 
 def main():
     seed_everything(41)
-    limit_gpus(range(0, 8))
+    limit_gpus([1])  # Use GPU 1 (H100 NVL with more memory)
 
     model_type, model_variant = "youko", "8B"
     model, tokenizer = load_model_and_tokenizer(model_type, model_variant)

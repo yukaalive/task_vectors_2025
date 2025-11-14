@@ -106,7 +106,8 @@ def load_model(model_type: str, model_variant: str, load_to_cpu: bool = False):
 
     kwargs = CPU_KWARGS if load_to_cpu else GPU_KWARGS
 
-    kwargs["device_map"] = _create_device_map(model_path)
+    # Use auto device_map instead of custom one to respect CUDA_VISIBLE_DEVICES
+    kwargs["device_map"] = "auto"
 
     model = AutoModelForCausalLM.from_pretrained(model_path, **kwargs)
     model = model.eval()  # check if this is necessary

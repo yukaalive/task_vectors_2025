@@ -56,6 +56,7 @@ def run_task_vector(
         layers_to_test=layers_to_test,
         multi_context=multi_context,
         generation_mode=generation_mode,
+        max_new_tokens=max_new_tokens,
     )
     best_intermediate_layer = int(max(dev_accuracy_by_layer, key=dev_accuracy_by_layer.get))
     print("ベストレイヤー：",best_intermediate_layer)
@@ -134,13 +135,13 @@ def get_single_context_task_hiddens(
 
     # TODO: replace traced forward with a regular forward and rely on huggingface's saved hidden states
     outputs, forward_trace = traced_forward(model, inputs=inputs)
-    print("全体ベクトル（プロンプト＋テスト）:", forward_trace.residual_stream.hidden.shape) 
+    # print("全体ベクトル（プロンプト＋テスト）:", forward_trace.residual_stream.hidden.shape) 
     task_hiddens = forward_trace.residual_stream.hidden[:, :, -1, :]
-    print("抽出したタスクベクトル:", task_hiddens.shape) 
+    # print("抽出したタスクベクトル:", task_hiddens.shape) 
     task_hiddens_pre = forward_trace.residual_stream.hidden[:, :, -1, :]  
-    print("=== 平均前 (test_input ブレあり) ===")
-    print("shape:", task_hiddens_pre.shape)
-    print("layer0 の最初の10次元:", task_hiddens_pre[0, 0, :10])  # dataset0, layer0 例
+    # print("=== 平均前 (test_input ブレあり) ===")
+    # print("shape:", task_hiddens_pre.shape)
+    # print("layer0 の最初の10次元:", task_hiddens_pre[0, 0, :10])  # dataset0, layer0 例
 
 
     _, num_layers, hidden_size = task_hiddens.shape
@@ -422,6 +423,7 @@ def task_vector_accuracy_by_layer(
     layers_to_test: Optional[Iterable[int]] = None,
     multi_context: bool = False,
     generation_mode: str = "multi",
+    max_new_tokens: int = 30,
 ) -> Dict[int, float]:
     if layers_to_test is None:
         num_layers = len(get_layers(model))
@@ -451,6 +453,7 @@ def task_vector_accuracy_by_layer(
             task_hiddens=task_hiddens,
             past_key_values=past_key_values,
             generation_mode=generation_mode,
+            max_new_tokens=max_new_tokens,
         )
 
         accuracy = calculate_accuracy_on_datasets(task, answers, datasets)
