@@ -1,0 +1,7 @@
+,icl_accuracy,icl_accuracy,tv_accuracy,tv_accuracy,icl_comet,icl_comet,tv_comet,tv_comet
+,mean,std,mean,std,mean,std,mean,std
+model,,,,,,,,
+llama_7B,0.4457,0.3908,0.2914,0.2903,0.854,0.0802,0.7483,0.1132
+pythia_2.8B,0.4343,0.3953,0.16,0.2745,0.8515,0.0797,0.7026,0.1411
+swallow_7B,0.4657,0.3302,0.3,0.274,0.8733,0.0323,0.8,0.0632
+youko_8B,0.4971,0.3999,0.2057,0.2193,0.8783,0.0549,0.6334,0.1323

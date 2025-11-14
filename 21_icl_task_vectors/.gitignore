@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -98,12 +97,3 @@ outputs/logs
 
 # Deprecated code
 _deprecated/
-=======
-task_vectors/JESC/raw.tar.gz
-task_vectors/21_icl_task_vectors/raw/raw
-*.tar.gz
-**/raw/raw
-task_vectors/JESC/raw.tar.gz
-task_vectors/21_icl_task_vectors/raw/raw
->>>>>>> 168959b68abc1457d949af63bfa3996bccc5efd5
-raw/raw
