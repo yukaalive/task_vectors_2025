@@ -1,0 +1,9 @@
+,icl_metric,icl_metric,tv_metric,tv_metric,baseline_accuracy,baseline_accuracy
+,mean,std,mean,std,mean,std
+task_display,,,,,,
+translation_en_ja_easy_multi,0.8712,0.0242,0.6582,0.0714,0.0,0.0
+translation_en_ja_jesc_multi,0.7293,0.0255,0.4868,0.0129,0.0,0.0
+translation_en_ja_single,0.7548,0.0997,0.7531,0.0626,0.0,0.0
+translation_ja_en_easy_multi,0.8701,0.0536,0.6355,0.2307,0.0,0.0
+translation_ja_en_jesc_multi,0.6918,0.0335,0.5043,0.0623,0.0,0.0
+translation_ja_en_single,0.8587,0.0138,0.8377,0.0152,0.0,0.0

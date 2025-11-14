@@ -1,0 +1,10 @@
+,icl_accuracy,icl_accuracy,tv_accuracy,tv_accuracy,icl_comet,icl_comet,tv_comet,tv_comet
+,mean,std,mean,std,mean,std,mean,std
+task,,,,,,,,
+translation_en_es,0.73,0.0141,0.17,0.099,0.8854,0.0049,0.7376,0.0345
+translation_en_fr,0.72,0.0,0.25,0.1273,0.8835,0.0092,0.7733,0.0497
+translation_en_ja,0.01,0.0141,0.0,0.0,0.7297,0.0803,0.4937,0.0118
+translation_en_ja_single,0.2,0.2546,0.19,0.2687,0.7683,0.1127,0.7512,0.1139
+translation_es_en,0.88,0.0,0.64,0.1414,0.9487,0.0011,0.8913,0.0228
+translation_ja_en,0.0,0.0,0.0,0.0,0.6277,0.0435,0.4838,0.0281
+translation_ja_en_single,0.66,0.0849,0.62,0.0566,0.8445,0.0247,0.8357,0.0313
