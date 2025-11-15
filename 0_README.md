@@ -4,6 +4,44 @@
 pip install transformers==4.37.0
 pip install unbabel-comet
 
+# クロスタスク実験を実行（すべてのモデル）
+  python scripts/experiments/main.py --cross-task
+
+  # 特定のモデルでクロスタスク実験を実行
+  python scripts/experiments/main.py --cross-task 0  # swallow 7B
+
+  # 通常実験（既存機能、影響なし）
+  python scripts/experiments/main.py
+
+  3. 実験の流れ
+
+  1. ソースタスク（translation_ja_en_single）
+    - 開発データで全レイヤーの精度を評価
+    - ベストレイヤーを特定
+    - そのレイヤーでタスクベクトルを抽出
+  2. ターゲットタスク（translation_ja_en_easy）
+    - ソースのタスクベクトルをターゲットの各レイヤーに適用
+    - 開発データで最適なレイヤーを探索
+    - テストデータで最終評価
+  3. 評価指標
+    - Baseline精度（few-shotなし）
+    - ICL精度（通常のICL）
+    - Cross-task TV精度（クロスタスク転移）
+    - COMET スコア（翻訳品質評価）
+
+  4. 結果の保存先
+
+  結果は以下のパスに保存されます：
+  results/main/[experiment_id]_cross_task/[model_type]_[model_variant].pkl
+
+  5. 重要なポイント
+
+  ✅ 既存コードに影響なし：新規関数のみを追加、既存機能は変更なし✅ GPU対応完了：CUDA_VISIBLE_DEVICES="0,1"でH100を使用✅
+  構文チェック済み：Pythonの構文エラーなし✅ 拡張可能：main.py:438のCROSS_TASK_PAIRSに追加でペアを増やせます
+
+  実験を実行する準備が整いました！
+
+
 
 
 docker exec -it umezawa-icl_task_vectors bash

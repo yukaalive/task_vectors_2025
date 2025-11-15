@@ -255,6 +255,371 @@ def plot_heatmaps(df, output_dir):
     print(f"Saved: {os.path.join(output_dir, 'heatmaps.png')}")
     plt.close()
 
+def plot_dataset_type_comparison(df, output_dir):
+    """Plot comparison of jesc, easy, and single dataset types for translation tasks"""
+    # Filter only translation tasks with ja
+    translation_tasks = df[df['task'].str.contains('translation_.*_ja|translation_ja_', regex=True)].copy()
+
+    if len(translation_tasks) == 0:
+        print("No translation tasks found for dataset type comparison.")
+        return
+
+    # Extract dataset type (jesc, easy, single) and direction (ja_en or en_ja)
+    def extract_dataset_info(task_name):
+        parts = task_name.split('_')
+        if len(parts) >= 3:
+            # Extract direction (e.g., ja_en or en_ja)
+            if 'ja' in parts[1] or 'ja' in parts[2]:
+                direction = f"{parts[1]}_{parts[2]}"
+            else:
+                direction = "unknown"
+
+            # Extract dataset type
+            if 'jesc' in task_name:
+                dataset_type = 'jesc'
+            elif 'easy' in task_name:
+                dataset_type = 'easy'
+            elif 'single' in task_name:
+                dataset_type = 'single'
+            else:
+                dataset_type = 'unknown'
+
+            return direction, dataset_type
+        return None, None
+
+    translation_tasks['direction'], translation_tasks['dataset_type'] = zip(
+        *translation_tasks['task'].apply(extract_dataset_info)
+    )
+
+    # Remove unknown entries
+    translation_tasks = translation_tasks[
+        (translation_tasks['direction'] != 'unknown') &
+        (translation_tasks['dataset_type'] != 'unknown')
+    ]
+
+    if len(translation_tasks) == 0:
+        print("No valid translation tasks for dataset type comparison.")
+        return
+
+    # Create figure with subplots
+    fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+
+    models = translation_tasks['model'].unique()
+    directions = translation_tasks['direction'].unique()
+    dataset_types = ['single', 'easy', 'jesc']  # Order for plotting
+
+    colors_icl = {'single': '#1f77b4', 'easy': '#ff7f0e', 'jesc': '#2ca02c'}
+    colors_tv = {'single': '#aec7e8', 'easy': '#ffbb78', 'jesc': '#98df8a'}
+
+    # Plot 1: ICL - Grouped by direction and dataset type
+    ax1 = axes[0, 0]
+    x = np.arange(len(directions))
+    width = 0.25
+
+    for i, dtype in enumerate(dataset_types):
+        icl_values = []
+        for direction in directions:
+            subset = translation_tasks[
+                (translation_tasks['direction'] == direction) &
+                (translation_tasks['dataset_type'] == dtype)
+            ]
+            if len(subset) > 0:
+                icl_values.append(subset['icl_metric'].mean())
+            else:
+                icl_values.append(0)
+
+        ax1.bar(x + i * width - width, icl_values, width,
+                label=dtype.upper(), alpha=0.8, color=colors_icl[dtype])
+
+    ax1.set_xlabel('Translation Direction', fontsize=12, fontweight='bold')
+    ax1.set_ylabel('ICL Score (COMET)', fontsize=12, fontweight='bold')
+    ax1.set_title('ICL: Dataset Type Comparison (JESC vs Easy vs Single)',
+                  fontsize=13, fontweight='bold')
+    ax1.set_xticks(x)
+    ax1.set_xticklabels([d.replace('_', '→') for d in directions], fontsize=11)
+    ax1.legend(title='Dataset Type', fontsize=10)
+    ax1.grid(axis='y', alpha=0.3)
+    ax1.set_ylim([0, 1])
+
+    # Plot 2: Task Vector - Grouped by direction and dataset type
+    ax2 = axes[0, 1]
+
+    for i, dtype in enumerate(dataset_types):
+        tv_values = []
+        for direction in directions:
+            subset = translation_tasks[
+                (translation_tasks['direction'] == direction) &
+                (translation_tasks['dataset_type'] == dtype)
+            ]
+            if len(subset) > 0:
+                tv_values.append(subset['tv_metric'].mean())
+            else:
+                tv_values.append(0)
+
+        ax2.bar(x + i * width - width, tv_values, width,
+                label=dtype.upper(), alpha=0.8, color=colors_tv[dtype], hatch='//')
+
+    ax2.set_xlabel('Translation Direction', fontsize=12, fontweight='bold')
+    ax2.set_ylabel('Task Vector Score (COMET)', fontsize=12, fontweight='bold')
+    ax2.set_title('Task Vector: Dataset Type Comparison (JESC vs Easy vs Single)',
+                  fontsize=13, fontweight='bold')
+    ax2.set_xticks(x)
+    ax2.set_xticklabels([d.replace('_', '→') for d in directions], fontsize=11)
+    ax2.legend(title='Dataset Type', fontsize=10)
+    ax2.grid(axis='y', alpha=0.3)
+    ax2.set_ylim([0, 1])
+
+    # Plot 3: ICL vs TV comparison for each dataset type
+    ax3 = axes[1, 0]
+    x = np.arange(len(dataset_types))
+    width = 0.35
+
+    icl_by_dtype = []
+    tv_by_dtype = []
+    for dtype in dataset_types:
+        subset = translation_tasks[translation_tasks['dataset_type'] == dtype]
+        icl_by_dtype.append(subset['icl_metric'].mean() if len(subset) > 0 else 0)
+        tv_by_dtype.append(subset['tv_metric'].mean() if len(subset) > 0 else 0)
+
+    ax3.bar(x - width/2, icl_by_dtype, width, label='ICL', alpha=0.8, color='steelblue')
+    ax3.bar(x + width/2, tv_by_dtype, width, label='Task Vector', alpha=0.8,
+            color='coral', hatch='//')
+
+    ax3.set_xlabel('Dataset Type', fontsize=12, fontweight='bold')
+    ax3.set_ylabel('Average Score (COMET)', fontsize=12, fontweight='bold')
+    ax3.set_title('ICL vs Task Vector: Average Performance by Dataset Type',
+                  fontsize=13, fontweight='bold')
+    ax3.set_xticks(x)
+    ax3.set_xticklabels([d.upper() for d in dataset_types], fontsize=11)
+    ax3.legend(fontsize=10)
+    ax3.grid(axis='y', alpha=0.3)
+    ax3.set_ylim([0, 1])
+
+    # Add value labels on bars
+    for i, (icl_val, tv_val) in enumerate(zip(icl_by_dtype, tv_by_dtype)):
+        ax3.text(i - width/2, icl_val + 0.02, f'{icl_val:.3f}',
+                ha='center', va='bottom', fontsize=9, fontweight='bold')
+        ax3.text(i + width/2, tv_val + 0.02, f'{tv_val:.3f}',
+                ha='center', va='bottom', fontsize=9, fontweight='bold')
+
+    # Plot 4: Detailed breakdown by model and dataset type
+    ax4 = axes[1, 1]
+    x = np.arange(len(models))
+    width = 0.25
+
+    for i, dtype in enumerate(dataset_types):
+        avg_scores = []
+        for model in models:
+            subset = translation_tasks[
+                (translation_tasks['model'] == model) &
+                (translation_tasks['dataset_type'] == dtype)
+            ]
+            if len(subset) > 0:
+                # Average of ICL and TV for combined view
+                avg_score = (subset['icl_metric'].mean() + subset['tv_metric'].mean()) / 2
+                avg_scores.append(avg_score)
+            else:
+                avg_scores.append(0)
+
+        ax4.bar(x + i * width - width, avg_scores, width,
+                label=dtype.upper(), alpha=0.8)
+
+    ax4.set_xlabel('Model', fontsize=12, fontweight='bold')
+    ax4.set_ylabel('Average Score (ICL + TV)', fontsize=12, fontweight='bold')
+    ax4.set_title('Model Performance by Dataset Type (ICL + TV Average)',
+                  fontsize=13, fontweight='bold')
+    ax4.set_xticks(x)
+    ax4.set_xticklabels(models, rotation=45, ha='right', fontsize=10)
+    ax4.legend(title='Dataset Type', fontsize=10)
+    ax4.grid(axis='y', alpha=0.3)
+    ax4.set_ylim([0, 1])
+
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'dataset_type_comparison.png'),
+                dpi=300, bbox_inches='tight')
+    print(f"Saved: {os.path.join(output_dir, 'dataset_type_comparison.png')}")
+    plt.close()
+
+    # Create a detailed table for dataset type comparison
+    summary_data = []
+    for model in models:
+        for direction in directions:
+            for dtype in dataset_types:
+                subset = translation_tasks[
+                    (translation_tasks['model'] == model) &
+                    (translation_tasks['direction'] == direction) &
+                    (translation_tasks['dataset_type'] == dtype)
+                ]
+                if len(subset) > 0:
+                    summary_data.append({
+                        'model': model,
+                        'direction': direction,
+                        'dataset_type': dtype,
+                        'icl_score': subset['icl_metric'].mean(),
+                        'tv_score': subset['tv_metric'].mean(),
+                        'improvement': subset['tv_metric'].mean() - subset['icl_metric'].mean()
+                    })
+
+    summary_df = pd.DataFrame(summary_data)
+    summary_df.to_csv(os.path.join(output_dir, 'dataset_type_summary.csv'), index=False)
+    print(f"Saved: {os.path.join(output_dir, 'dataset_type_summary.csv')}")
+
+def export_prediction_examples(results, output_dir):
+    """Export prediction examples with sources, references, predictions, and scores"""
+    # Collect all translation tasks with prediction samples
+    examples_data = []
+
+    for model_name, tasks_data in results.items():
+        for task_name, metrics in tasks_data.items():
+            if not task_name.startswith('translation_'):
+                continue
+
+            # Check if prediction samples exist
+            if 'prediction_samples' not in metrics:
+                continue
+
+            samples = metrics['prediction_samples']
+            num_samples = len(samples.get('sources', []))
+
+            for i in range(num_samples):
+                examples_data.append({
+                    'model': model_name,
+                    'task': task_name,
+                    'example_id': i + 1,
+                    'source': samples['sources'][i],
+                    'reference': samples['references'][i],
+                    'icl_prediction': samples['icl_predictions'][i],
+                    'tv_prediction': samples['tv_predictions'][i],
+                    'icl_score': samples.get('icl_scores', [None] * num_samples)[i],
+                    'tv_score': samples.get('tv_scores', [None] * num_samples)[i],
+                })
+
+    if len(examples_data) == 0:
+        print("No prediction samples found. Make sure to re-run experiments after updating main.py.")
+        return
+
+    # Create DataFrame
+    examples_df = pd.DataFrame(examples_data)
+
+    # Save to CSV
+    csv_path = os.path.join(output_dir, 'prediction_examples.csv')
+    examples_df.to_csv(csv_path, index=False, encoding='utf-8')
+    print(f"Saved: {csv_path}")
+
+    # Create formatted text output for each task
+    for task_name in examples_df['task'].unique():
+        task_examples = examples_df[examples_df['task'] == task_name]
+
+        output_file = os.path.join(output_dir, f'examples_{task_name}.txt')
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write(f"{'='*100}\n")
+            f.write(f"Translation Examples: {task_name}\n")
+            f.write(f"{'='*100}\n\n")
+
+            # Group by example_id to show all models for each example
+            for example_id in sorted(task_examples['example_id'].unique()):
+                example_group = task_examples[task_examples['example_id'] == example_id]
+
+                # Get source and reference (same for all models)
+                source = example_group.iloc[0]['source']
+                reference = example_group.iloc[0]['reference']
+
+                f.write(f"Example {example_id}\n")
+                f.write(f"{'-'*100}\n")
+                f.write(f"Source:     {source}\n")
+                f.write(f"Reference:  {reference}\n")
+                f.write(f"\n")
+
+                # Show predictions from each model
+                for _, row in example_group.iterrows():
+                    f.write(f"[{row['model']}]\n")
+                    f.write(f"  ICL Prediction: {row['icl_prediction']}")
+                    if row['icl_score'] is not None:
+                        f.write(f" (COMET: {row['icl_score']:.4f})")
+                    f.write(f"\n")
+
+                    f.write(f"  TV Prediction:  {row['tv_prediction']}")
+                    if row['tv_score'] is not None:
+                        f.write(f" (COMET: {row['tv_score']:.4f})")
+                    f.write(f"\n\n")
+
+                f.write(f"\n")
+
+        print(f"Saved: {output_file}")
+
+    # Create HTML output with better formatting
+    html_path = os.path.join(output_dir, 'prediction_examples.html')
+    with open(html_path, 'w', encoding='utf-8') as f:
+        f.write("""
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Translation Prediction Examples</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .task-section { margin-bottom: 40px; border: 2px solid #333; padding: 20px; }
+        .task-title { font-size: 24px; font-weight: bold; margin-bottom: 20px; }
+        .example { margin-bottom: 30px; padding: 15px; background-color: #f9f9f9; border-left: 4px solid #4CAF50; }
+        .example-header { font-weight: bold; font-size: 18px; margin-bottom: 10px; }
+        .source { color: #1976D2; font-weight: bold; margin: 5px 0; }
+        .reference { color: #388E3C; font-weight: bold; margin: 5px 0; }
+        .model-section { margin-left: 20px; margin-top: 10px; }
+        .model-name { font-weight: bold; color: #D32F2F; }
+        .prediction { margin-left: 40px; margin: 5px 0; }
+        .icl { color: #1565C0; }
+        .tv { color: #6A1B9A; }
+        .score { font-size: 12px; color: #666; }
+    </style>
+</head>
+<body>
+    <h1>Translation Prediction Examples</h1>
+""")
+
+        for task_name in sorted(examples_df['task'].unique()):
+            task_examples = examples_df[examples_df['task'] == task_name]
+
+            f.write(f'<div class="task-section">\n')
+            f.write(f'<div class="task-title">{task_name}</div>\n')
+
+            for example_id in sorted(task_examples['example_id'].unique()):
+                example_group = task_examples[task_examples['example_id'] == example_id]
+
+                source = example_group.iloc[0]['source']
+                reference = example_group.iloc[0]['reference']
+
+                f.write(f'<div class="example">\n')
+                f.write(f'<div class="example-header">Example {example_id}</div>\n')
+                f.write(f'<div class="source">Source: {source}</div>\n')
+                f.write(f'<div class="reference">Reference: {reference}</div>\n')
+
+                for _, row in example_group.iterrows():
+                    f.write(f'<div class="model-section">\n')
+                    f.write(f'<span class="model-name">[{row["model"]}]</span><br>\n')
+
+                    f.write(f'<div class="prediction icl">• ICL: {row["icl_prediction"]}')
+                    if row['icl_score'] is not None:
+                        f.write(f' <span class="score">(COMET: {row["icl_score"]:.4f})</span>')
+                    f.write(f'</div>\n')
+
+                    f.write(f'<div class="prediction tv">• TV: {row["tv_prediction"]}')
+                    if row['tv_score'] is not None:
+                        f.write(f' <span class="score">(COMET: {row["tv_score"]:.4f})</span>')
+                    f.write(f'</div>\n')
+
+                    f.write(f'</div>\n')
+
+                f.write(f'</div>\n')
+
+            f.write(f'</div>\n')
+
+        f.write("""
+</body>
+</html>
+""")
+
+    print(f"Saved: {html_path}")
+
 def save_summary_table(df, output_dir):
     """Save summary statistics as CSV and LaTeX"""
     # Summary by task (using display names and unified metric)
@@ -313,6 +678,14 @@ def main():
 
     # Generate unified plot (only one PNG output)
     plot_unified_comparison(df, output_dir)
+
+    # Generate dataset type comparison (jesc vs easy vs single)
+    print("\nGenerating dataset type comparison...")
+    plot_dataset_type_comparison(df, output_dir)
+
+    # Export prediction examples
+    print("\nExporting prediction examples...")
+    export_prediction_examples(results, output_dir)
 
     # Save summary tables
     print("\nSaving summary tables...")

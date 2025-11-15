@@ -284,21 +284,36 @@ def modulated_generate_multi(
 
     # past_key_valuesをデバイスに移動
     updated_past_key_values = first_forward_outputs.past_key_values
-    if updated_past_key_values is not None:
-        updated_past_key_values = nested_apply(
-            updated_past_key_values, 
-            lambda x: x.to(device) if isinstance(x, torch.Tensor) else x
-        )
 
-    # 残りのトークンを生成（max_new_tokens - 1トークン）
-    output_ids = model.generate(
-        input_ids=full_input_ids,
-        attention_mask=full_attention_mask,
-        do_sample=False,
-        max_new_tokens=max_new_tokens - 1,  # 既に1トークン生成済み
-        past_key_values=updated_past_key_values,
-        pad_token_id=tokenizer.pad_token_id,
-    )
+    # DEBUG: Check past_key_values
+    has_past_kv = updated_past_key_values is not None
+    # print(f"DEBUG modulated_generate_multi: has past_key_values={has_past_kv}")
+    if not has_past_kv:
+        # If no past_key_values, we need to do full forward without cache
+        # print(f"DEBUG: No past_key_values, using full input for generation")
+        output_ids = model.generate(
+            input_ids=full_input_ids,
+            attention_mask=full_attention_mask,
+            do_sample=False,
+            max_new_tokens=max_new_tokens - 1,  # 既に1トークン生成済み
+            pad_token_id=tokenizer.pad_token_id,
+        )
+    else:
+        if updated_past_key_values is not None:
+            updated_past_key_values = nested_apply(
+                updated_past_key_values,
+                lambda x: x.to(device) if isinstance(x, torch.Tensor) else x
+            )
+
+        # 残りのトークンを生成（max_new_tokens - 1トークン）
+        output_ids = model.generate(
+            input_ids=full_input_ids,
+            attention_mask=full_attention_mask,
+            do_sample=False,
+            max_new_tokens=max_new_tokens - 1,  # 既に1トークン生成済み
+            past_key_values=updated_past_key_values,
+            pad_token_id=tokenizer.pad_token_id,
+        )
 
     # 元の入力部分を除いて新しく生成された部分のみを取得
     new_ids = output_ids[:, inputs["input_ids"].shape[-1]:]
@@ -407,7 +422,7 @@ def modulated_forward(
     first_forward_outputs = modified_forward(
         model,
         inputs=inputs,
-        forward_kwargs={"past_key_values": past_key_values},
+        forward_kwargs={"past_key_values": past_key_values, "use_cache": True},  # Add use_cache=True
         forward_modifiers=forward_modifiers,
         batch_size=len(inputs["input_ids"]),  # TODO: need to enable batched forward with HiddenInjector
     )
@@ -461,4 +476,158 @@ def task_vector_accuracy_by_layer(
     accuracy_by_layer = {layer: accuracy for layer, accuracy in zip(layers_to_test, accuracies)}
 
     return accuracy_by_layer
+
+
+def run_cross_task_vector(
+    model: PreTrainedModel,
+    tokenizer: PreTrainedTokenizer,
+    source_task: Task,
+    target_task: Task,
+    source_dev_datasets: List[FewShotDataset],
+    target_test_datasets: List[FewShotDataset],
+    target_dev_datasets: List[FewShotDataset],
+    layers_to_test: Optional[Iterable[int]] = None,
+    multi_context: bool = False,
+    generation_mode_source: str = "single",
+    generation_mode_target: str = "multi",
+    max_new_tokens_source: int = 1,
+    max_new_tokens_target: int = 30,
+):
+    """
+    Cross-task vector transfer experiment.
+
+    1. Find best layer for source task using source dev datasets
+    2. Extract task vector from source task at its best layer
+    3. Apply source task vector to target task across all layers
+    4. Find best target layer using target dev datasets
+    5. Generate predictions on target test datasets
+
+    Args:
+        model: The language model
+        tokenizer: The tokenizer
+        source_task: Source task (e.g., ja_en_single)
+        target_task: Target task (e.g., ja_en_easy)
+        source_dev_datasets: Development datasets for source task
+        target_test_datasets: Test datasets for target task
+        target_dev_datasets: Development datasets for target task
+        layers_to_test: Layers to test (default: all layers)
+        multi_context: Whether to use multi-context
+        generation_mode_source: Generation mode for source task
+        generation_mode_target: Generation mode for target task
+        max_new_tokens_source: Max new tokens for source task
+        max_new_tokens_target: Max new tokens for target task
+
+    Returns:
+        predictions: Predictions on target test datasets
+        source_best_layer: Best layer for source task
+        source_dev_accuracy_by_layer: Source task dev accuracy by layer
+        target_dev_accuracy_by_layer: Target task dev accuracy by layer (with source vector)
+        source_task_hiddens: Task hiddens from source task
+    """
+    # Step 1: Find best layer for source task
+    print("Step 1: Finding best layer for source task...")
+    source_dev_accuracy_by_layer = task_vector_accuracy_by_layer(
+        model,
+        tokenizer,
+        source_task,
+        source_dev_datasets,
+        layers_to_test=layers_to_test,
+        multi_context=multi_context,
+        generation_mode=generation_mode_source,
+        max_new_tokens=max_new_tokens_source,
+    )
+    source_best_layer = int(max(source_dev_accuracy_by_layer, key=source_dev_accuracy_by_layer.get))
+    print(f"Source task best layer: {source_best_layer}")
+
+    # Step 2: Extract task vectors from source dev datasets
+    print("Step 2: Extracting task vectors from source dev datasets...")
+    # Use source task with source dev datasets (each has 5 demos)
+    source_task_hiddens = get_task_hiddens(
+        model, tokenizer, source_task, source_dev_datasets, multi_context=multi_context
+    )
+    device = model.device
+    source_task_hiddens = source_task_hiddens.to(device)
+    print(f"Source task hiddens shape: {source_task_hiddens.shape}")
+    print(f"  → {len(source_dev_datasets)} task vectors extracted from source dev datasets")
+
+    # Step 3: Get past_key_values for target dev datasets (same as existing code)
+    print("Step 3: Computing past_key_values for target dev datasets...")
+    target_dev_inputs = tokenize_datasets(tokenizer, target_dev_datasets, format_dataset_kwargs={"include_train": False})
+    target_dev_outputs = batch_forward(model, inputs=target_dev_inputs, forward_kwargs={"use_cache": True})
+    target_dev_past_key_values = target_dev_outputs.past_key_values
+    target_dev_past_key_values = nested_apply(target_dev_past_key_values, lambda x: x[:, :, :-1])  # remove last token
+    target_dev_inputs["input_ids"] = target_dev_inputs["input_ids"][:, -1].unsqueeze(1)
+
+    # Step 4: Find best target layer using SOURCE task vectors on target dev set
+    print("Step 4: Finding best target layer using SOURCE task vectors on target dev...")
+    # Use source_task_hiddens to find the best layer for target task
+    # This is the cross-task transfer approach
+
+    if layers_to_test is None:
+        num_layers = len(get_layers(model))
+        layers_to_test = range(num_layers)
+
+    # Test each target layer with SOURCE task vectors
+    print(f"Testing SOURCE task vectors on target dev across {len(list(layers_to_test))} layers...")
+    target_dev_accuracy_by_layer = {}
+    for target_layer_num in layers_to_test:
+        print(f"  Testing layer {target_layer_num}...")
+        answers = modulated_generate(
+            model,
+            tokenizer,
+            target_task,
+            target_dev_datasets,
+            intermediate_layer=target_layer_num,
+            task_hiddens=source_task_hiddens,  # Use SOURCE task vectors for cross-task transfer
+            past_key_values=target_dev_past_key_values,  # Use target task's past_key_values
+            generation_mode=generation_mode_target,
+            max_new_tokens=max_new_tokens_target,
+        )
+
+        accuracy = calculate_accuracy_on_datasets(target_task, answers, target_dev_datasets)
+        target_dev_accuracy_by_layer[target_layer_num] = accuracy
+        print(f"    → Accuracy: {accuracy:.2f}")
+
+    # Find target best layer
+    max_accuracy = max(target_dev_accuracy_by_layer.values())
+    if max_accuracy == 0.0:
+        # If all layers have 0.0 accuracy, use source best layer as fallback
+        target_best_layer = source_best_layer
+        print(f"All target layers have 0.00 accuracy, using source best layer: {target_best_layer}")
+    else:
+        target_best_layer = int(max(target_dev_accuracy_by_layer, key=target_dev_accuracy_by_layer.get))
+        print(f"Target task best layer: {target_best_layer}")
+        print(f"  Max accuracy (with SOURCE task vectors): {target_dev_accuracy_by_layer[target_best_layer]:.2f}")
+
+    # Step 5: Get past_key_values for target test datasets
+    print("Step 5: Computing past_key_values for target test datasets...")
+    target_test_inputs = tokenize_datasets(tokenizer, target_test_datasets, format_dataset_kwargs={"include_train": False})
+    target_test_outputs = batch_forward(model, inputs=target_test_inputs, forward_kwargs={"use_cache": True})
+    target_test_past_key_values = target_test_outputs.past_key_values
+    target_test_past_key_values = nested_apply(target_test_past_key_values, lambda x: x[:, :, :-1])  # remove last token
+    target_test_inputs["input_ids"] = target_test_inputs["input_ids"][:, -1].unsqueeze(1)
+
+    # Step 6: Generate predictions on target test datasets with SOURCE task vectors
+    print("Step 6: Generating predictions with SOURCE task vectors on target test datasets...")
+    print(f"  Using SOURCE task vectors at target best layer {target_best_layer}")
+    predictions = modulated_generate(
+        model,
+        tokenizer,
+        target_task,
+        target_test_datasets,
+        task_hiddens=source_task_hiddens,  # Use SOURCE task vectors for cross-task transfer
+        past_key_values=target_test_past_key_values,  # Use target task's past_key_values
+        intermediate_layer=target_best_layer,
+        generation_mode=generation_mode_target,
+        max_new_tokens=max_new_tokens_target,
+    )
+
+    return (
+        predictions,
+        source_best_layer,
+        target_best_layer,
+        source_dev_accuracy_by_layer,
+        target_dev_accuracy_by_layer,
+        source_task_hiddens,
+    )
 

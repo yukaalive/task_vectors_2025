@@ -1,8 +1,9 @@
-,icl_accuracy,icl_accuracy,tv_accuracy,tv_accuracy,icl_comet,icl_comet,tv_comet,tv_comet
-,mean,std,mean,std,mean,std,mean,std
-task,,,,,,,,
-translation_en_es,0.84,0.0283,0.605,0.2744,0.9465,0.0053,0.8969,0.0313
-translation_en_fr,0.775,0.0957,0.535,0.2175,0.9123,0.0201,0.8535,0.0416
-translation_en_ja,0.335,0.3686,0.225,0.3627,0.8342,0.0962,0.6247,0.2425
-translation_es_en,0.865,0.0191,0.58,0.2185,0.944,0.0089,0.8377,0.1071
-translation_ja_en,0.485,0.4916,0.4,0.4665,0.8319,0.1383,0.7104,0.2394
+,icl_metric,icl_metric,tv_metric,tv_metric,baseline_accuracy,baseline_accuracy
+,mean,std,mean,std,mean,std
+task_display,,,,,,
+translation_en_ja_easy_multi,0.8712,0.0242,0.6582,0.0714,0.0,0.0
+translation_en_ja_jesc_multi,0.7293,0.0255,0.4868,0.0129,0.0,0.0
+translation_en_ja_single,0.7548,0.0997,0.7531,0.0626,0.0,0.0
+translation_ja_en_easy_multi,0.8701,0.0536,0.6355,0.2307,0.0,0.0
+translation_ja_en_jesc_multi,0.6918,0.0335,0.5043,0.0623,0.0,0.0
+translation_ja_en_single,0.8587,0.0138,0.8377,0.0152,0.0,0.0

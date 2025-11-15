@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Translation Prediction Examples</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
+        h1 { color: #333; text-align: center; }
+        h3 { color: #2c3e50; margin-top: 30px; margin-bottom: 15px; text-align: center; }
+        .example {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .success-example {
+            border-left: 5px solid #27ae60;
+        }
+        .failure-example {
+            border-left: 5px solid #e74c3c;
+        }
+        .example-header {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .source {
+            color: #e74c3c;
+            font-weight: bold;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        .reference {
+            color: #27ae60;
+            font-weight: bold;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        .prediction-section {
+            margin-left: 20px;
+            margin-top: 15px;
+            border-left: 3px solid #95a5a6;
+            padding-left: 15px;
+        }
+        .method-name {
+            font-weight: bold;
+            color: #34495e;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .score {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-left: 10px;
+        }
+        .score-good { color: #27ae60; font-weight: bold; }
+        .score-bad { color: #e74c3c; font-weight: bold; }
+        .score-medium { color: #f39c12; font-weight: bold; }
+        .icl { color: #2980b9; }
+        .cross-task { color: #d35400; }
+        .target-tv { color: #16a085; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Translation Prediction Examples</h1>
+    <h2 style="text-align: center; color: #7f8c8d;">translation_ja_en_single → translation_ja_en_easy</h2>
+<h3>🎉 Success Examples (High COMET Scores)</h3>
+
+    <div class="example success-example">
+        <div class="example-header">Example 1 (Index: 23)</div>
+        <div class="source">Source (Japanese): 昨日の夜のコンサートは残念だった。</div>
+        <div class="reference">Reference (Ground Truth): last night 's concert was disappointing .</div>
+
+        <div class="prediction-section">
+            <table>
+                <tr>
+                    <th>Method</th>
+                    <th>Prediction</th>
+                    <th>COMET Score</th>
+                </tr>
+                <tr>
+                    <td><span class="method-name icl">ICL</span></td>
+                    <td class="icl">the concert last night was disappointing .</td>
+                    <td><span class="score score-good">0.952</span></td>
+                </tr>
+                <tr>
+                    <td><span class="method-name cross-task">Single→Multi Cross TV</span></td>
+                    <td class="cross-task">last night's concert was disappointing.</td>
+                    <td><span class="score score-good">0.959</span></td>
+                </tr>
+                <tr>
+                    <td><span class="method-name target-tv">Target TV</span></td>
+                    <td class="target-tv">The concert last night's concert was disappointing.</td>
+                    <td><span class="score score-good">0.877</span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="example success-example">
+        <div class="example-header">Example 2 (Index: 5)</div>
+        <div class="source">Source (Japanese): 彼は繊細だ。</div>
+        <div class="reference">Reference (Ground Truth): he is delicate .</div>
+
+        <div class="prediction-section">
+            <table>
+                <tr>
+                    <th>Method</th>
+                    <th>Prediction</th>
+                    <th>COMET Score</th>
+                </tr>
+                <tr>
+                    <td><span class="method-name icl">ICL</span></td>
+                    <td class="icl">he is sensitive .</td>
+                    <td><span class="score score-good">0.874</span></td>
+                </tr>
+                <tr>
+                    <td><span class="method-name cross-task">Single→Multi Cross TV</span></td>
+                    <td class="cross-task">he is delicate</td>
+                    <td><span class="score score-good">0.939</span></td>
+                </tr>
+                <tr>
+                    <td><span class="method-name target-tv">Target TV</span></td>
+                    <td class="target-tv">He is delicate</td>
+                    <td><span class="score score-good">0.933</span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="example success-example">
+        <div class="example-header">Example 3 (Index: 27)</div>
+        <div class="source">Source (Japanese): 彼は大学に入れるように頑張って勉強した。</div>
+        <div class="reference">Reference (Ground Truth): he studied hard in order to get into college .</div>
+
+        <div class="prediction-section">
+            <table>
+                <tr>
+                    <th>Method</th>
+                    <th>Prediction</th>
+                    <th>COMET Score</th>
+                </tr>
+                <tr>
+                    <td><span class="method-name icl">ICL</span></td>
+                    <td class="icl">he studied hard to get into college .</td>
+                    <td><span class="score score-good">0.955</span></td>
+                </tr>
+                <tr>
+                    <td><span class="method-name cross-task">Single→Multi Cross TV</span></td>
+                    <td class="cross-task">studied to get into college</td>
+                    <td><span class="score score-good">0.843</span></td>
+                </tr>
+                <tr>
+                    <td><span class="method-name target-tv">Target TV</span></td>
+                    <td class="target-tv">he studied hard so that he could get into college.</td>
+                    <td><span class="score score-good">0.929</span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="example success-example">
+        <div class="example-header">Example 4 (Index: 18)</div>
+        <div class="source">Source (Japanese): これまでのところ全てが調子よい。</div>
+        <div class="reference">Reference (Ground Truth): so far everything has been going well .</div>
+
+        <div class="prediction-section">
+            <table>
+                <tr>
+                    <th>Method</th>
+                    <th>Prediction</th>
+                    <th>COMET Score</th>
+                </tr>
+                <tr>
+                    <td><span class="method-name icl">ICL</span></td>
+                    <td class="icl">so far so good .</td>
+                    <td><span class="score score-good">0.796</span></td>
+                </tr>
+                <tr>
+                    <td><span class="method-name cross-task">Single→Multi Cross TV</span></td>
+                    <td class="cross-task">all is going well</td>
+                    <td><span class="score score-good">0.904</span></td>
+                </tr>
+                <tr>
+                    <td><span class="method-name target-tv">Target TV</span></td>
+                    <td class="target-tv">so far everything has been going well so far.</td>
+                    <td><span class="score score-good">0.964</span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="example success-example">
+        <div class="example-header">Example 5 (Index: 4)</div>
+        <div class="source">Source (Japanese): とても好きです。</div>
+        <div class="reference">Reference (Ground Truth): i like it very much .</div>
+
+        <div class="prediction-section">
+            <table>
+                <tr>
+                    <th>Method</th>
+                    <th>Prediction</th>
+                    <th>COMET Score</th>
+                </tr>
+                <tr>
+                    <td><span class="method-name icl">ICL</span></td>
+                    <td class="icl">I like it very much .</td>
+                    <td><span class="score score-good">0.976</span></td>
+                </tr>
+                <tr>
+                    <td><span class="method-name cross-task">Single→Multi Cross TV</span></td>
+                    <td class="cross-task">very much</td>
+                    <td><span class="score score-medium">0.674</span></td>
+                </tr>
+                <tr>
+                    <td><span class="method-name target-tv">Target TV</span></td>
+                    <td class="target-tv">I love it very much</td>
+                    <td><span class="score score-good">0.949</span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+<h3>⚠️ Failure Examples (Low COMET Scores)</h3>
+
+    <div class="example failure-example">
+        <div class="example-header">Example 6 (Index: 49)</div>
+        <div class="source">Source (Japanese): いい年してそんな馬鹿なことはやめろ。</div>
+        <div class="reference">Reference (Ground Truth): at your age you should know better .</div>
+
+        <div class="prediction-section">
+            <table>
+                <tr>
+                    <th>Method</th>
+                    <th>Prediction</th>
+                    <th>COMET Score</th>
+                </tr>
+                <tr>
+                    <td><span class="method-name icl">ICL</span></td>
+                    <td class="icl">you 're too old to do such a foolish thing .</td>
+                    <td><span class="score score-medium">0.635</span></td>
+                </tr>
+                <tr>
+                    <td><span class="method-name cross-task">Single→Multi Cross TV</span></td>
+                    <td class="cross-task">year</td>
+                    <td><span class="score score-bad">0.334</span></td>
+                </tr>
+                <tr>
+                    <td><span class="method-name target-tv">Target TV</span></td>
+                    <td class="target-tv">young man, you're too old to do such a stupid thing.</td>
+                    <td><span class="score score-medium">0.672</span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="example failure-example">
+        <div class="example-header">Example 7 (Index: 37)</div>
+        <div class="source">Source (Japanese): もうちょっと品を良くできないの。</div>
+        <div class="reference">Reference (Ground Truth): you could try and be a bit more civilized .</div>
+
+        <div class="prediction-section">
+            <table>
+                <tr>
+                    <th>Method</th>
+                    <th>Prediction</th>
+                    <th>COMET Score</th>
+                </tr>
+                <tr>
+                    <td><span class="method-name icl">ICL</span></td>
+                    <td class="icl">you should be more polite .</td>
+                    <td><span class="score score-good">0.812</span></td>
+                </tr>
+                <tr>
+                    <td><span class="method-name cross-task">Single→Multi Cross TV</span></td>
+                    <td class="cross-task">goodsensei</td>
+                    <td><span class="score score-bad">0.350</span></td>
+                </tr>
+                <tr>
+                    <td><span class="method-name target-tv">Target TV</span></td>
+                    <td class="target-tv">I can't I can't improve my manners a little bit.</td>
+                    <td><span class="score score-medium">0.507</span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="example failure-example">
+        <div class="example-header">Example 8 (Index: 2)</div>
+        <div class="source">Source (Japanese): 電話を切らずにそのまま待ってください。</div>
+        <div class="reference">Reference (Ground Truth): please hold on a moment .</div>
+
+        <div class="prediction-section">
+            <table>
+                <tr>
+                    <th>Method</th>
+                    <th>Prediction</th>
+                    <th>COMET Score</th>
+                </tr>
+                <tr>
+                    <td><span class="method-name icl">ICL</span></td>
+                    <td class="icl">please wait for the phone to ring .</td>
+                    <td><span class="score score-medium">0.619</span></td>
+                </tr>
+                <tr>
+                    <td><span class="method-name cross-task">Single→Multi Cross TV</span></td>
+                    <td class="cross-task"></td>
+                    <td><span class="score score-medium">0.473</span></td>
+                </tr>
+                <tr>
+                    <td><span class="method-name target-tv">Target TV</span></td>
+                    <td class="target-tv">Please hold on the phone until the other party hangs up.</td>
+                    <td><span class="score score-medium">0.589</span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="example failure-example">
+        <div class="example-header">Example 9 (Index: 16)</div>
+        <div class="source">Source (Japanese): あなたがそんな事を言うとはな。</div>
+        <div class="reference">Reference (Ground Truth): it 's strange you say that .</div>
+
+        <div class="prediction-section">
+            <table>
+                <tr>
+                    <th>Method</th>
+                    <th>Prediction</th>
+                    <th>COMET Score</th>
+                </tr>
+                <tr>
+                    <td><span class="method-name icl">ICL</span></td>
+                    <td class="icl">you say such a thing ?</td>
+                    <td><span class="score score-good">0.718</span></td>
+                </tr>
+                <tr>
+                    <td><span class="method-name cross-task">Single→Multi Cross TV</span></td>
+                    <td class="cross-task">say</td>
+                    <td><span class="score score-medium">0.475</span></td>
+                </tr>
+                <tr>
+                    <td><span class="method-name target-tv">Target TV</span></td>
+                    <td class="target-tv">if you say such a thing, you say such a thing</td>
+                    <td><span class="score score-medium">0.508</span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="example failure-example">
+        <div class="example-header">Example 10 (Index: 26)</div>
+        <div class="source">Source (Japanese): 話の中心がわかる。</div>
+        <div class="reference">Reference (Ground Truth): i see the point of the argument .</div>
+
+        <div class="prediction-section">
+            <table>
+                <tr>
+                    <th>Method</th>
+                    <th>Prediction</th>
+                    <th>COMET Score</th>
+                </tr>
+                <tr>
+                    <td><span class="method-name icl">ICL</span></td>
+                    <td class="icl">the main point is clear .</td>
+                    <td><span class="score score-good">0.770</span></td>
+                </tr>
+                <tr>
+                    <td><span class="method-name cross-task">Single→Multi Cross TV</span></td>
+                    <td class="cross-task">center</td>
+                    <td><span class="score score-bad">0.382</span></td>
+                </tr>
+                <tr>
+                    <td><span class="method-name target-tv">Target TV</span></td>
+                    <td class="target-tv">the main point of the main point of the main point is that ~</td>
+                    <td><span class="score score-medium">0.581</span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

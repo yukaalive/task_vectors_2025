@@ -80,12 +80,13 @@ class TranslationTask(MappingTask):
         return len(set(synonyms1) & set(synonyms2)) > 0
     
     
-    def evaluate_with_comet(self, sources: List[str], predictions: List[str], references: List[str]) -> Dict[str, float]:
+    def evaluate_with_comet(self, sources: List[str], predictions: List[str], references: List[str], task_name: str = "") -> Dict[str, float]:
         # Lazy load COMET model if not already loaded
         if self.comet_model is None:
             self._load_comet_model()
 
         # Prepare data for COMET
+        # COMET expects: src=source language, mt=machine translation, ref=reference translation
         comet_input = [
             {"src": src, "mt": pred, "ref": ref}
             for src, pred, ref in zip(sources, predictions, references)
@@ -94,14 +95,27 @@ class TranslationTask(MappingTask):
         # Calculate COMET score on GPU with larger batch size
         # gpus=1 means use 1 GPU, batch_size increased for H100
         comet_scores = self.comet_model.predict(comet_input, batch_size=64, gpus=1)
-        print(len(comet_scores))
-        print("翻訳前",sources)
-        print("予測",predictions)
-        print("正解",references)
-        print("スコア",comet_scores)
-        print("cometの平均スコア",sum(comet_scores.scores) / len(comet_scores.scores))
-        print(max(comet_scores))
-        print(min(comet_scores))
+
+        # Extract translation direction from task_name for clearer logging
+        direction = ""
+        if task_name:
+            parts = task_name.split("_")
+            if len(parts) >= 3:
+                direction = f" ({parts[1]}→{parts[2]})"
+
+        print(f"\n--- COMET Evaluation{direction} ---")
+        print(f"Number of samples: {len(comet_scores)}")
+        print(f"First 3 examples:")
+        for i in range(min(3, len(sources))):
+            print(f"  [{i+1}] Source: {sources[i]}")
+            print(f"      Prediction: {predictions[i]}")
+            print(f"      Reference: {references[i]}")
+            print(f"      Score: {comet_scores.scores[i]:.4f}")
+        print(f"Average COMET score: {sum(comet_scores.scores) / len(comet_scores.scores):.4f}")
+        print(f"Max score: {max(comet_scores.scores):.4f}")
+        print(f"Min score: {min(comet_scores.scores):.4f}")
+        print("--- End of COMET Evaluation ---\n")
+
         return {
             "comet": sum(comet_scores.scores) / len(comet_scores.scores),
             "comet_scores": comet_scores.scores

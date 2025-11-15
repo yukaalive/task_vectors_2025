@@ -1,0 +1,39 @@
+================================================================================
+CROSS-TASK VECTOR TRANSFER EXPERIMENT SUMMARY
+================================================================================
+
+Task Pair: translation_ja_en_single_to_translation_ja_en_easy
+--------------------------------------------------------------------------------
+Source Task: translation_ja_en_single
+Target Task: translation_ja_en_easy
+Num Examples: 5
+
+PERFORMANCE METRICS:
+  Baseline Accuracy:        0.0000
+  ICL Accuracy:             0.1000
+  Single→Multi Cross TV Accuracy:   0.0000
+  Target TV Accuracy:       0.0000
+
+TRANSLATION QUALITY (COMET):
+  ICL COMET:                0.8554
+  Single→Multi Cross TV COMET:      0.5367
+  COMET Retention (Cross):  62.7%
+  Target TV COMET:          0.8007
+  COMET Retention (Target): 93.6%
+
+BEST LAYERS:
+  Source Best Layer:        12
+  Target Best Layer (source vec): 12
+  Target Best Layer (target vec): 13
+
+TOP 5 SOURCE LAYERS:
+  Layer 12: 0.5800
+  Layer 13: 0.5800
+  Layer 14: 0.5800
+  Layer 11: 0.5400
+  Layer 15: 0.5200
+
+NOTE: All target layers have 0.00 accuracy (fallback used)
+
+================================================================================
+
