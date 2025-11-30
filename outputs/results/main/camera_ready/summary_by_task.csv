@@ -1,9 +1,9 @@
 ,icl_metric,icl_metric,tv_metric,tv_metric,baseline_accuracy,baseline_accuracy
 ,mean,std,mean,std,mean,std
 task_display,,,,,,
-translation_en_ja_easy_multi,0.8959,0.0381,0.5276,0.079,0.0,0.0
-translation_en_ja_jesc_multi,0.7528,0.0255,0.4956,0.0378,0.0,0.0
-translation_en_ja_single,0.7698,0.067,0.7525,0.0642,0.0,0.0
-translation_ja_en_easy_multi,0.8294,0.007,0.5658,0.0817,0.0,0.0
-translation_ja_en_jesc_multi,0.7071,0.0268,0.4866,0.0631,0.0,0.0
-translation_ja_en_single,0.8087,0.0559,0.7715,0.0472,0.01,0.01
+translation_en_ja_easy_multi,0.9132,0.0201,0.6068,0.072,0.0,0.0
+translation_en_ja_jesc_multi,0.7444,0.018,0.5549,0.1123,0.0,0.0
+translation_en_ja_single,0.7474,0.067,0.7236,0.0727,0.0,0.0
+translation_ja_en_easy_multi,0.86,0.007,0.7097,0.0929,0.0,0.0
+translation_ja_en_jesc_multi,0.6818,0.0255,0.5185,0.0381,0.0,0.0
+translation_ja_en_single,0.8288,0.0422,0.8175,0.0508,0.02,0.0216

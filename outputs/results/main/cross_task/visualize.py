@@ -28,7 +28,7 @@ def plot_performance_comparison(results, save_dir):
     """Plot performance comparison: baseline, ICL, cross-task TV, target TV"""
     for task_pair_name, result in results.items():
         # Accuracy comparison
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+        fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(20, 5))
 
         # Accuracy - using colors from camera_ready
         methods = ['Baseline', 'ICL', 'Single→Multi Cross TV', 'Multi TV']
@@ -72,6 +72,28 @@ def plot_performance_comparison(results, save_dir):
         for bar, val in zip(bars2, comet_scores):
             height = bar.get_height()
             ax2.text(bar.get_x() + bar.get_width()/2., height,
+                    f'{val:.3f}',
+                    ha='center', va='bottom', fontsize=10, fontweight='bold')
+
+        # chrF scores - using colors from camera_ready
+        chrf_methods = ['ICL', 'Single→Multi Cross TV', 'Multi TV']
+        chrf_scores = [
+            result.get('icl_chrf', 0.0),
+            result.get('cross_task_tv_chrf', 0.0),
+            result.get('target_tv_chrf', 0.0)
+        ]
+        chrf_colors = ['steelblue', 'coral', '#2ca02c']
+
+        bars3 = ax3.bar(chrf_methods, chrf_scores, color=chrf_colors, alpha=0.8,linewidth=1.5)
+        ax3.set_ylabel('chrF Score', fontsize=12, fontweight='bold')
+        ax3.set_title('Translation Quality (chrF)', fontsize=13, fontweight='bold')
+        ax3.set_ylim(0, 1.0)
+        ax3.grid(axis='y', alpha=0.3)
+
+        # Add value labels on bars
+        for bar, val in zip(bars3, chrf_scores):
+            height = bar.get_height()
+            ax3.text(bar.get_x() + bar.get_width()/2., height,
                     f'{val:.3f}',
                     ha='center', va='bottom', fontsize=10, fontweight='bold')
 
@@ -132,9 +154,13 @@ def plot_comet_vs_accuracy(results, save_dir):
     plt.close()
 
 
-def generate_summary_report(results, save_dir):
+def generate_summary_report(results, save_dir, pkl_path):
     """Generate text summary report"""
     report_path = save_dir / 'summary_report.txt'
+
+    # Load full data to get prediction examples
+    with open(pkl_path, 'rb') as pf:
+        full_data = pickle.load(pf)
 
     with open(report_path, 'w', encoding='utf-8') as f:
         f.write("=" * 80 + "\n")
@@ -165,6 +191,20 @@ def generate_summary_report(results, save_dir):
                 f.write(f"  COMET Retention (Target): {(result['target_tv_comet'] / result['icl_comet'] * 100):.1f}%\n")
             f.write("\n")
 
+            f.write("TRANSLATION QUALITY (chrF):\n")
+            icl_chrf = result.get('icl_chrf', 0.0)
+            cross_chrf = result.get('cross_task_tv_chrf', 0.0)
+            f.write(f"  ICL chrF:                 {icl_chrf:.4f}\n")
+            f.write(f"  Single→Multi Cross TV chrF:       {cross_chrf:.4f}\n")
+            if icl_chrf > 0:
+                f.write(f"  chrF Retention (Cross):   {(cross_chrf / icl_chrf * 100):.1f}%\n")
+            if 'target_tv_chrf' in result:
+                target_chrf = result['target_tv_chrf']
+                f.write(f"  Target TV chrF:           {target_chrf:.4f}\n")
+                if icl_chrf > 0:
+                    f.write(f"  chrF Retention (Target):  {(target_chrf / icl_chrf * 100):.1f}%\n")
+            f.write("\n")
+
             f.write("BEST LAYERS:\n")
             f.write(f"  Source Best Layer:        {result['source_best_layer']}\n")
             f.write(f"  Target Best Layer (source vec): {result['target_best_layer']}\n")
@@ -189,6 +229,122 @@ def generate_summary_report(results, save_dir):
                     f.write(f"  Layer {layer:2d}: {acc:.4f}\n")
             else:
                 f.write("NOTE: All target layers have 0.00 accuracy (fallback used)\n")
+
+            # Add prediction examples
+            if 'prediction_examples' in full_data[task_pair_name]:
+                examples = full_data[task_pair_name]['prediction_examples']
+
+                # Get COMET scores
+                icl_scores = examples.get('icl_comet_scores', [])
+                cross_scores = examples.get('cross_task_tv_comet_scores', [])
+                target_scores = examples.get('target_tv_comet_scores', [])
+
+                # Get chrF scores
+                icl_chrf_scores = examples.get('icl_chrf_scores', [])
+                cross_chrf_scores = examples.get('cross_task_tv_chrf_scores', [])
+                target_chrf_scores = examples.get('target_tv_chrf_scores', [])
+
+                # Calculate average COMET score for each example (for sorting)
+                avg_scores = []
+                for i in range(len(examples['sources'])):
+                    scores = []
+                    if icl_scores and i < len(icl_scores):
+                        scores.append(icl_scores[i])
+                    if cross_scores and i < len(cross_scores):
+                        scores.append(cross_scores[i])
+                    if target_scores and i < len(target_scores):
+                        scores.append(target_scores[i])
+                    avg_scores.append(np.mean(scores) if scores else 0)
+
+                # Sort by average COMET score
+                sorted_indices = np.argsort(avg_scores)
+
+                # Top 10 and bottom 10
+                num_examples = min(10, len(sorted_indices))
+                top_indices = sorted_indices[-num_examples:][::-1]  # highest scores
+                bottom_indices = sorted_indices[:num_examples]  # lowest scores
+
+                # Write top 10 examples
+                f.write("\n" + "=" * 80 + "\n")
+                f.write(f"TOP {num_examples} TRANSLATION EXAMPLES (by COMET score)\n")
+                f.write("=" * 80 + "\n\n")
+
+                for rank, i in enumerate(top_indices, 1):
+                    f.write(f"[Example {rank}] (Index: {i}, Avg COMET: {avg_scores[i]:.4f})\n")
+                    f.write("-" * 80 + "\n")
+                    f.write(f"SOURCE (Japanese):\n  {examples['sources'][i]}\n\n")
+                    f.write(f"REFERENCE (Ground Truth):\n  {examples['references'][i]}\n\n")
+
+                    # ICL prediction
+                    f.write("ICL Prediction:\n")
+                    f.write(f"  {examples['icl_predictions'][i]}\n")
+                    if icl_scores and i < len(icl_scores):
+                        f.write(f"  COMET: {icl_scores[i]:.4f}")
+                    if icl_chrf_scores and i < len(icl_chrf_scores):
+                        f.write(f", chrF: {icl_chrf_scores[i]:.4f}")
+                    f.write("\n\n")
+
+                    # Cross-task TV prediction
+                    f.write("Single→Multi Cross TV Prediction:\n")
+                    f.write(f"  {examples['cross_task_tv_predictions'][i]}\n")
+                    if cross_scores and i < len(cross_scores):
+                        f.write(f"  COMET: {cross_scores[i]:.4f}")
+                    if cross_chrf_scores and i < len(cross_chrf_scores):
+                        f.write(f", chrF: {cross_chrf_scores[i]:.4f}")
+                    f.write("\n\n")
+
+                    # Target TV prediction (if available)
+                    if 'target_tv_predictions' in examples and examples['target_tv_predictions']:
+                        f.write("Target TV Prediction:\n")
+                        f.write(f"  {examples['target_tv_predictions'][i]}\n")
+                        if target_scores and i < len(target_scores):
+                            f.write(f"  COMET: {target_scores[i]:.4f}")
+                        if target_chrf_scores and i < len(target_chrf_scores):
+                            f.write(f", chrF: {target_chrf_scores[i]:.4f}")
+                        f.write("\n\n")
+
+                    f.write("\n")
+
+                # Write bottom 10 examples
+                f.write("=" * 80 + "\n")
+                f.write(f"BOTTOM {num_examples} TRANSLATION EXAMPLES (by COMET score)\n")
+                f.write("=" * 80 + "\n\n")
+
+                for rank, i in enumerate(bottom_indices, 1):
+                    f.write(f"[Example {rank}] (Index: {i}, Avg COMET: {avg_scores[i]:.4f})\n")
+                    f.write("-" * 80 + "\n")
+                    f.write(f"SOURCE (Japanese):\n  {examples['sources'][i]}\n\n")
+                    f.write(f"REFERENCE (Ground Truth):\n  {examples['references'][i]}\n\n")
+
+                    # ICL prediction
+                    f.write("ICL Prediction:\n")
+                    f.write(f"  {examples['icl_predictions'][i]}\n")
+                    if icl_scores and i < len(icl_scores):
+                        f.write(f"  COMET: {icl_scores[i]:.4f}")
+                    if icl_chrf_scores and i < len(icl_chrf_scores):
+                        f.write(f", chrF: {icl_chrf_scores[i]:.4f}")
+                    f.write("\n\n")
+
+                    # Cross-task TV prediction
+                    f.write("Single→Multi Cross TV Prediction:\n")
+                    f.write(f"  {examples['cross_task_tv_predictions'][i]}\n")
+                    if cross_scores and i < len(cross_scores):
+                        f.write(f"  COMET: {cross_scores[i]:.4f}")
+                    if cross_chrf_scores and i < len(cross_chrf_scores):
+                        f.write(f", chrF: {cross_chrf_scores[i]:.4f}")
+                    f.write("\n\n")
+
+                    # Target TV prediction (if available)
+                    if 'target_tv_predictions' in examples and examples['target_tv_predictions']:
+                        f.write("Target TV Prediction:\n")
+                        f.write(f"  {examples['target_tv_predictions'][i]}\n")
+                        if target_scores and i < len(target_scores):
+                            f.write(f"  COMET: {target_scores[i]:.4f}")
+                        if target_chrf_scores and i < len(target_chrf_scores):
+                            f.write(f", chrF: {target_chrf_scores[i]:.4f}")
+                        f.write("\n\n")
+
+                    f.write("\n")
 
             f.write("\n" + "=" * 80 + "\n\n")
 
@@ -316,6 +472,11 @@ def generate_prediction_examples_html(results, save_dir, pkl_path):
         icl_scores = examples.get('icl_comet_scores', [])
         cross_scores = examples.get('cross_task_tv_comet_scores', [])
         target_scores = examples.get('target_tv_comet_scores', [])
+
+        # Get chrF scores
+        icl_chrf_scores = examples.get('icl_chrf_scores', [])
+        cross_chrf_scores = examples.get('cross_task_tv_chrf_scores', [])
+        target_chrf_scores = examples.get('target_tv_chrf_scores', [])
 
         # Calculate average score for each example
         avg_scores = []
@@ -448,10 +609,15 @@ def generate_prediction_examples_html(results, save_dir, pkl_path):
                 # Determine example class
                 example_class = "success-example" if "Success" in current_section else "failure-example"
 
-                # Get scores
+                # Get COMET scores
                 icl_score = icl_scores[i] if icl_scores and i < len(icl_scores) else None
                 cross_score = cross_scores[i] if cross_scores and i < len(cross_scores) else None
                 target_score = target_scores[i] if target_scores and i < len(target_scores) else None
+
+                # Get chrF scores
+                icl_chrf = icl_chrf_scores[i] if icl_chrf_scores and i < len(icl_chrf_scores) else None
+                cross_chrf = cross_chrf_scores[i] if cross_chrf_scores and i < len(cross_chrf_scores) else None
+                target_chrf = target_chrf_scores[i] if target_chrf_scores and i < len(target_chrf_scores) else None
 
                 def score_class(score):
                     if score is None:
@@ -478,21 +644,25 @@ def generate_prediction_examples_html(results, save_dir, pkl_path):
                     <th>Method</th>
                     <th>Prediction</th>
                     <th>COMET Score</th>
+                    <th>chrF Score</th>
                 </tr>
                 <tr>
                     <td><span class="method-name icl">ICL</span></td>
                     <td class="icl">{examples['icl_predictions'][i]}</td>
                     <td><span class="score {score_class(icl_score)}">{format_score(icl_score)}</span></td>
+                    <td><span class="score {score_class(icl_chrf)}">{format_score(icl_chrf)}</span></td>
                 </tr>
                 <tr>
                     <td><span class="method-name cross-task">Single→Multi Cross TV</span></td>
                     <td class="cross-task">{examples['cross_task_tv_predictions'][i]}</td>
                     <td><span class="score {score_class(cross_score)}">{format_score(cross_score)}</span></td>
+                    <td><span class="score {score_class(cross_chrf)}">{format_score(cross_chrf)}</span></td>
                 </tr>
                 <tr>
                     <td><span class="method-name target-tv">Target TV</span></td>
                     <td class="target-tv">{examples['target_tv_predictions'][i]}</td>
                     <td><span class="score {score_class(target_score)}">{format_score(target_score)}</span></td>
+                    <td><span class="score {score_class(target_chrf)}">{format_score(target_chrf)}</span></td>
                 </tr>
             </table>
         </div>
@@ -509,28 +679,58 @@ def generate_prediction_examples_html(results, save_dir, pkl_path):
 
 def main():
     """Main visualization function"""
-    # Paths
-    pkl_path = Path(__file__).parent / 'swallow_7B.pkl'
-    save_dir = Path(__file__).parent / 'figures'
-    save_dir.mkdir(exist_ok=True)
+    import sys
 
-    print(f"Loading results from: {pkl_path}")
-    results = load_results(pkl_path)
-    print(f"Found {len(results)} task pair(s)\n")
+    # Check if a specific pkl file is provided as argument
+    if len(sys.argv) > 1:
+        pkl_files = [Path(sys.argv[1])]
+    else:
+        # Process all pkl files in the directory
+        base_dir = Path(__file__).parent
+        pkl_files = sorted(base_dir.glob('*.pkl'))
 
-    # Generate all visualizations
-    print("Generating visualizations...\n")
+    if not pkl_files:
+        print("No .pkl files found in the directory.")
+        return
 
-    plot_performance_comparison(results, save_dir)
-    plot_comet_vs_accuracy(results, save_dir)
-    plot_task_vectors_tsne(results, save_dir, pkl_path)
-    generate_prediction_examples_html(results, save_dir, pkl_path)
-    generate_summary_report(results, save_dir)
+    print(f"Found {len(pkl_files)} pkl file(s) to process\n")
 
-    print(f"\n✅ All visualizations saved to: {save_dir}")
-    print("\nGenerated files:")
-    for file in sorted(save_dir.glob('*')):
-        print(f"  - {file.name}")
+    for pkl_path in pkl_files:
+        model_name = pkl_path.stem
+        print(f"\n{'='*80}")
+        print(f"Processing: {model_name}")
+        print(f"{'='*80}")
+
+        # Create model-specific save directory
+        save_dir = Path(__file__).parent / 'figures' / model_name
+        save_dir.mkdir(parents=True, exist_ok=True)
+
+        print(f"Loading results from: {pkl_path}")
+        try:
+            results = load_results(pkl_path)
+            print(f"Found {len(results)} task pair(s)\n")
+
+            # Generate all visualizations
+            print("Generating visualizations...\n")
+
+            plot_performance_comparison(results, save_dir)
+            plot_comet_vs_accuracy(results, save_dir)
+            plot_task_vectors_tsne(results, save_dir, pkl_path)
+            generate_prediction_examples_html(results, save_dir, pkl_path)
+            generate_summary_report(results, save_dir, pkl_path)
+
+            print(f"\n✅ All visualizations saved to: {save_dir}")
+            print("\nGenerated files:")
+            for file in sorted(save_dir.glob('*')):
+                print(f"  - {file.name}")
+        except Exception as e:
+            print(f"❌ Error processing {pkl_path}: {e}")
+            import traceback
+            traceback.print_exc()
+            continue
+
+    print(f"\n{'='*80}")
+    print("All processing complete!")
 
 
 if __name__ == "__main__":

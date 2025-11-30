@@ -1,0 +1,224 @@
+====================================================================================================
+Translation Examples: translation_ja_en_jesc
+====================================================================================================
+
+Example 1
+----------------------------------------------------------------------------------------------------
+Source:     ちょっと! 坂田さん 待って~
+Reference:  wait! wait! wait
+
+[swallow_7B]
+  ICL Prediction: come on, sakata-san! (COMET: 0.4198)
+  TV Prediction:  ちょっと! 坂田さん 待って~ (COMET: 0.5413)
+
+[llama_7B]
+  ICL Prediction: don't worry, this guy (COMET: 0.4674)
+  TV Prediction:  this guyamaznobamaeat this guyamaznobama (COMET: 0.3662)
+
+[llama_13B]
+  ICL Prediction: get out of here, you jerk (COMET: 0.6793)
+  TV Prediction:  this guy is a この この野郎 (COMET: 0.3962)
+
+[youko_8B]
+  ICL Prediction: get out of my way, you bastard (COMET: 0.8367)
+  TV Prediction:  どけ どけ どけ どけ この野郎 どけ この野郎 どけ この野郎 どけ この (COMET: 0.3453)
+
+
+Example 2
+----------------------------------------------------------------------------------------------------
+Source:     おーい バカ野郎
+Reference:  hey! hey, asshole
+
+[swallow_7B]
+  ICL Prediction: hey, you idiot (COMET: 0.6832)
+  TV Prediction:  例:おーい バカ野郎 (COMET: 0.4610)
+
+[llama_7B]
+  ICL Prediction: what's the song you always play? (COMET: 0.5867)
+  TV Prediction:  what song? (COMET: 0.6042)
+
+[llama_13B]
+  ICL Prediction: what's the song you always listen to (COMET: 0.5665)
+  TV Prediction:  what is it's ですみんな曲? (COMET: 0.4140)
+
+[youko_8B]
+  ICL Prediction: what's your favorite song? (COMET: 0.5905)
+  TV Prediction:  いつも? いつも? いつもいつも? どんなどんな? いつもどんな? どんなどんな (COMET: 0.3173)
+
+
+Example 3
+----------------------------------------------------------------------------------------------------
+Source:     ある24歳の男性が
+Reference:  so what happened is that a 24yearold man
+
+[swallow_7B]
+  ICL Prediction: a 24-year-old man (COMET: 0.6683)
+  TV Prediction:  240歳の女性に会いたいと思っています。 例:ある24歳の男性が-> 20 (COMET: 0.4249)
+
+[llama_7B]
+  ICL Prediction: eh...? what's that? (COMET: 0.7454)
+  TV Prediction:  え... ? (COMET: 0.8298)
+
+[llama_13B]
+  ICL Prediction: eh? really? (COMET: 0.8081)
+  TV Prediction:  that's not そんな (COMET: 0.5625)
+
+[youko_8B]
+  ICL Prediction: what...? (COMET: 0.8067)
+  TV Prediction:  え...? 例えば...? 例えば...? 例えば...? 例えば...? 例えば...? 例 (COMET: 0.4816)
+
+
+Example 4
+----------------------------------------------------------------------------------------------------
+Source:     あんたの家
+Reference:  your house? i don't
+
+[swallow_7B]
+  ICL Prediction: your house (COMET: 0.5890)
+  TV Prediction:  あんたの家の住所 (COMET: 0.4451)
+
+[llama_7B]
+  ICL Prediction: i'll read it next time (COMET: 0.6324)
+  TV Prediction:  I'm (COMET: 0.5062)
+
+[llama_13B]
+  ICL Prediction: i'll read it next time (COMET: 0.6324)
+  TV Prediction:  what will you read next time: 今度読んですか (COMET: 0.4411)
+
+[youko_8B]
+  ICL Prediction: i'll read it next time (COMET: 0.6324)
+  TV Prediction:  今度読むかな、読むつもりかな、読むつもりかな、読むつもりかな、読むつもりかな、 (COMET: 0.3487)
+
+
+Example 5
+----------------------------------------------------------------------------------------------------
+Source:     わかりました。 どうぞ
+Reference:  understand, go ahead
+
+[swallow_7B]
+  ICL Prediction: yes, yes (COMET: 0.4664)
+  TV Prediction:  わかりました。 (COMET: 0.6148)
+
+[llama_7B]
+  ICL Prediction: it's all right, doctor norton (COMET: 0.8618)
+  TV Prediction:  I am a good doctor, Dr. Noonan (COMET: 0.7326)
+
+[llama_13B]
+  ICL Prediction: it's all right, doctor norton (COMET: 0.8618)
+  TV Prediction:  no, ノートン ノートン サポート コンタクト パソコン (COMET: 0.3819)
+
+[youko_8B]
+  ICL Prediction: it's all right, dr. Norton (COMET: 0.8229)
+  TV Prediction:  大丈夫です、ノートン博士、ノートン博士、ノートン博士、ノートン博士、ノートン博士、ノ (COMET: 0.4624)
+
+
+Example 6
+----------------------------------------------------------------------------------------------------
+Source:     私は風景が大好きになりました
+Reference:  i learned to love landscapes
+
+[swallow_7B]
+  ICL Prediction: i love the scenery (COMET: 0.8372)
+  TV Prediction:  私は風景が大好きになりました。 (COMET: 0.8660)
+
+[llama_7B]
+  ICL Prediction: i'll never forget the man i fell in love with (COMET: 0.7724)
+  TV Prediction:  I forgot about the man I love (COMET: 0.7374)
+
+[llama_13B]
+  ICL Prediction: i'll forget about the man i fell in love with (COMET: 0.7620)
+  TV Prediction:  forget over (COMET: 0.3847)
+
+[youko_8B]
+  ICL Prediction: i can't forget the man i loved (COMET: 0.8192)
+  TV Prediction:  恋した男の恋した男のことは忘れられない (COMET: 0.4081)
+
+
+Example 7
+----------------------------------------------------------------------------------------------------
+Source:     よう リズ 大丈夫か
+Reference:  hi, liz. you ok, love
+
+[swallow_7B]
+  ICL Prediction: hey liz, are you okay? (COMET: 0.8847)
+  TV Prediction:  例:よう リズ 大丈夫か? (COMET: 0.5863)
+
+[llama_7B]
+  ICL Prediction: stop (COMET: 0.5954)
+  TV Prediction:  stop (COMET: 0.5954)
+
+[llama_13B]
+  ICL Prediction: stop (COMET: 0.5954)
+  TV Prediction:  stop (COMET: 0.5954)
+
+[youko_8B]
+  ICL Prediction: stop it (COMET: 0.6432)
+  TV Prediction:  やめろやめろやめろやめろやめろやめろやめろやめろやめろやめろ (COMET: 0.3467)
+
+
+Example 8
+----------------------------------------------------------------------------------------------------
+Source:     私の仕事じゃなくな
+Reference:  not mine
+
+[swallow_7B]
+  ICL Prediction: it's not my job (COMET: 0.7505)
+  TV Prediction:  私の仕事じゃなくて (COMET: 0.8223)
+
+[llama_7B]
+  ICL Prediction: crops were burned and livestock slaughtered (COMET: 0.9355)
+  TV Prediction:  the crops were burned and the cattle were slaughtered (COMET: 0.9147)
+
+[llama_13B]
+  ICL Prediction: crops were burned, livestock was slaughtered (COMET: 0.9332)
+  TV Prediction:  the crops are burned and the livestock are slaughtered (COMET: 0.9210)
+
+[youko_8B]
+  ICL Prediction: crops were burned and livestock slaughtered (COMET: 0.9355)
+  TV Prediction:  家畜は屠殺され 作物は燃やされ (COMET: 0.7778)
+
+
+Example 9
+----------------------------------------------------------------------------------------------------
+Source:     BF: なんていいスタッフだ!ワォ
+Reference:  bf: they're a good crew! whoa
+
+[swallow_7B]
+  ICL Prediction: B: What a great staff! Wow! (COMET: 0.7533)
+  TV Prediction:  BF: なんていいスタッフだ!ワォ (COMET: 0.7610)
+
+[llama_7B]
+  ICL Prediction: I'm not going to give up on you (COMET: 0.4579)
+  TV Prediction:  I will not give up to the lady (COMET: 0.5755)
+
+[llama_13B]
+  ICL Prediction: don't give it to the ladies (COMET: 0.6063)
+  TV Prediction:  don't give it to a woman (COMET: 0.5878)
+
+[youko_8B]
+  ICL Prediction: why don't you let the lady go first? (COMET: 0.8145)
+  TV Prediction:  譲ります (COMET: 0.4467)
+
+
+Example 10
+----------------------------------------------------------------------------------------------------
+Source:     いいんですよ
+Reference:  it's not a problem
+
+[swallow_7B]
+  ICL Prediction: it's okay (COMET: 0.8428)
+  TV Prediction:  いいんですよかわいいんですよか (COMET: 0.4641)
+
+[llama_7B]
+  ICL Prediction: you think I didn't do it (COMET: 0.4990)
+  TV Prediction:  you don't think you don't think you're coming (COMET: 0.3574)
+
+[llama_13B]
+  ICL Prediction: you think you didn't do it (COMET: 0.4729)
+  TV Prediction:  you think you think you don't you think you haven't done it (COMET: 0.4071)
+
+[youko_8B]
+  ICL Prediction: I don't think you did it (COMET: 0.4973)
+  TV Prediction:  お前はやってない (COMET: 0.4850)
+
+

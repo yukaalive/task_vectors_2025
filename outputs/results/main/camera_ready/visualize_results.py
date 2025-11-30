@@ -71,6 +71,12 @@ def extract_metrics_to_dataframe(results):
                 'tv_metric': tv_metric,
                 'baseline_accuracy': metrics.get('baseline_accuracy', np.nan),
                 'num_examples': metrics.get('num_examples', np.nan),
+                'icl_comet': metrics.get('icl_comet', np.nan),
+                'tv_comet': metrics.get('tv_comet', np.nan),
+                'icl_chrf': metrics.get('icl_chrf', np.nan),
+                'tv_chrf': metrics.get('tv_chrf', np.nan),
+                'icl_accuracy': metrics.get('icl_accuracy', np.nan),
+                'tv_accuracy': metrics.get('tv_accuracy', np.nan),
             }
             rows.append(row)
 
@@ -177,7 +183,7 @@ def plot_comet_comparison(df, output_dir):
 
     ax1.set_xlabel('Task', fontsize=12, fontweight='bold')
     ax1.set_ylabel('COMET Score', fontsize=12, fontweight='bold')
-    ax1.set_title('COMET Score: ICL vs Task Vector by Task', fontsize=14, fontweight='bold')
+    ax1.set_title('COMET Score by Task', fontsize=14, fontweight='bold')
     ax1.set_xticks(x + width * (len(models) - 1))
     ax1.set_xticklabels(task_display_names, rotation=45, ha='right')
     ax1.legend(loc='upper left', bbox_to_anchor=(1, 1))
@@ -203,7 +209,7 @@ def plot_comet_comparison(df, output_dir):
 
     ax2.set_xlabel('Model', fontsize=12, fontweight='bold')
     ax2.set_ylabel('COMET Score', fontsize=12, fontweight='bold')
-    ax2.set_title('COMET Score: ICL vs Task Vector by Model', fontsize=14, fontweight='bold')
+    ax2.set_title('COMET Score by Model', fontsize=14, fontweight='bold')
     ax2.set_xticks(x + width * (len(tasks) - 1))
     ax2.set_xticklabels(models, rotation=45, ha='right')
     ax2.legend(loc='upper left', bbox_to_anchor=(1, 1), ncol=2)
@@ -215,15 +221,88 @@ def plot_comet_comparison(df, output_dir):
     print(f"Saved: {os.path.join(output_dir, 'comet_comparison.png')}")
     plt.close()
 
+def plot_chrf_comparison(df, output_dir):
+    """Plot chrF score comparison: ICL vs Task Vector"""
+    # Filter only translation tasks with chrF scores
+    df_chrf = df[df['icl_chrf'].notna() & df['tv_chrf'].notna()].copy()
+
+    if len(df_chrf) == 0:
+        print("No chrF scores available to plot.")
+        return
+    fig, axes = plt.subplots(2, 1, figsize=(14, 10))
+
+    models = df_chrf['model'].unique()
+    tasks = df_chrf['task'].unique()
+    task_display_names = [df_chrf[df_chrf['task'] == task]['task_display'].values[0] for task in tasks]
+
+    # Plot 1: Grouped bar chart by task
+    ax1 = axes[0]
+    x = np.arange(len(tasks))
+    width = 0.15
+
+    for i, model in enumerate(models):
+        model_data = df_chrf[df_chrf['model'] == model]
+        icl_chrf = [model_data[model_data['task'] == task]['icl_chrf'].values[0]
+                    if len(model_data[model_data['task'] == task]) > 0 else 0
+                    for task in tasks]
+        tv_chrf = [model_data[model_data['task'] == task]['tv_chrf'].values[0]
+                   if len(model_data[model_data['task'] == task]) > 0 else 0
+                   for task in tasks]
+
+        ax1.bar(x + i * width * 2 - width/2, icl_chrf, width, label=f'{model} (ICL)', alpha=0.8)
+        ax1.bar(x + i * width * 2 + width/2, tv_chrf, width, label=f'{model} (TV)', alpha=0.8, hatch='//')
+
+    ax1.set_xlabel('Task', fontsize=12, fontweight='bold')
+    ax1.set_ylabel('chrF Score', fontsize=12, fontweight='bold')
+    ax1.set_title('chrF Score: ICL vs Task Vector by Task', fontsize=14, fontweight='bold')
+    ax1.set_xticks(x + width * (len(models) - 1))
+    ax1.set_xticklabels(task_display_names, rotation=45, ha='right')
+    ax1.legend(loc='upper left', bbox_to_anchor=(1, 1))
+    ax1.grid(axis='y', alpha=0.3)
+    ax1.set_ylim([0, 1])
+
+    # Plot 2: Grouped bar chart by model
+    ax2 = axes[1]
+    x = np.arange(len(models))
+    width = 0.08
+
+    for i, (task, task_display) in enumerate(zip(tasks, task_display_names)):
+        task_data = df_chrf[df_chrf['task'] == task]
+        icl_chrf = [task_data[task_data['model'] == model]['icl_chrf'].values[0]
+                    if len(task_data[task_data['model'] == model]) > 0 else 0
+                    for model in models]
+        tv_chrf = [task_data[task_data['model'] == model]['tv_chrf'].values[0]
+                   if len(task_data[task_data['model'] == model]) > 0 else 0
+                   for model in models]
+
+        ax2.bar(x + i * width * 2 - width/2, icl_chrf, width, label=f'{task_display} (ICL)', alpha=0.8)
+        ax2.bar(x + i * width * 2 + width/2, tv_chrf, width, label=f'{task_display} (TV)', alpha=0.8, hatch='//')
+
+    ax2.set_xlabel('Model', fontsize=12, fontweight='bold')
+    ax2.set_ylabel('chrF Score', fontsize=12, fontweight='bold')
+    ax2.set_title('chrF Score: ICL vs Task Vector by Model', fontsize=14, fontweight='bold')
+    ax2.set_xticks(x + width * (len(tasks) - 1))
+    ax2.set_xticklabels(models, rotation=45, ha='right')
+    ax2.legend(loc='upper left', bbox_to_anchor=(1, 1), ncol=2)
+    ax2.grid(axis='y', alpha=0.3)
+    ax2.set_ylim([0, 1])
+
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'chrf_comparison.png'), dpi=300, bbox_inches='tight')
+    print(f"Saved: {os.path.join(output_dir, 'chrf_comparison.png')}")
+    plt.close()
+
 def plot_heatmaps(df, output_dir):
-    """Plot heatmaps for accuracy and COMET scores"""
-    fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+    """Plot heatmaps for accuracy, COMET, and chrF scores"""
+    fig, axes = plt.subplots(3, 2, figsize=(16, 18))
 
     # Prepare pivot tables with display names
     icl_acc_pivot = df.pivot(index='task_display', columns='model', values='icl_accuracy')
     tv_acc_pivot = df.pivot(index='task_display', columns='model', values='tv_accuracy')
     icl_comet_pivot = df.pivot(index='task_display', columns='model', values='icl_comet')
     tv_comet_pivot = df.pivot(index='task_display', columns='model', values='tv_comet')
+    icl_chrf_pivot = df.pivot(index='task_display', columns='model', values='icl_chrf')
+    tv_chrf_pivot = df.pivot(index='task_display', columns='model', values='tv_chrf')
 
     # Plot heatmaps
     sns.heatmap(icl_acc_pivot, annot=True, fmt='.3f', cmap='YlGnBu', ax=axes[0, 0],
@@ -249,6 +328,18 @@ def plot_heatmaps(df, output_dir):
     axes[1, 1].set_title('Task Vector: COMET Score', fontsize=12, fontweight='bold')
     axes[1, 1].set_xlabel('Model', fontsize=10, fontweight='bold')
     axes[1, 1].set_ylabel('Task', fontsize=10, fontweight='bold')
+
+    sns.heatmap(icl_chrf_pivot, annot=True, fmt='.3f', cmap='BuGn', ax=axes[2, 0],
+                cbar_kws={'label': 'chrF Score'}, vmin=0, vmax=1)
+    axes[2, 0].set_title('ICL: chrF Score', fontsize=12, fontweight='bold')
+    axes[2, 0].set_xlabel('Model', fontsize=10, fontweight='bold')
+    axes[2, 0].set_ylabel('Task', fontsize=10, fontweight='bold')
+
+    sns.heatmap(tv_chrf_pivot, annot=True, fmt='.3f', cmap='BuGn', ax=axes[2, 1],
+                cbar_kws={'label': 'chrF Score'}, vmin=0, vmax=1)
+    axes[2, 1].set_title('Task Vector: chrF Score', fontsize=12, fontweight='bold')
+    axes[2, 1].set_xlabel('Model', fontsize=10, fontweight='bold')
+    axes[2, 1].set_ylabel('Task', fontsize=10, fontweight='bold')
 
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, 'heatmaps.png'), dpi=300, bbox_inches='tight')
@@ -678,6 +769,18 @@ def main():
 
     # Generate unified plot (only one PNG output)
     plot_unified_comparison(df, output_dir)
+
+    # Generate COMET comparison
+    print("\nGenerating COMET comparison...")
+    plot_comet_comparison(df, output_dir)
+
+    # Generate chrF comparison
+    print("\nGenerating chrF comparison...")
+    plot_chrf_comparison(df, output_dir)
+
+    # Generate heatmaps
+    print("\nGenerating heatmaps...")
+    plot_heatmaps(df, output_dir)
 
     # Generate dataset type comparison (jesc vs easy vs single)
     print("\nGenerating dataset type comparison...")

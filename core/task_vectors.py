@@ -47,6 +47,7 @@ def run_task_vector(
     multi_context: bool = False,
     generation_mode: str = "multi",
     max_new_tokens: int = 30,
+    task_name: str = "",
 ):
     dev_accuracy_by_layer = task_vector_accuracy_by_layer(
         model,
@@ -57,9 +58,24 @@ def run_task_vector(
         multi_context=multi_context,
         generation_mode=generation_mode,
         max_new_tokens=max_new_tokens,
+        task_name=task_name,
     )
     best_intermediate_layer = int(max(dev_accuracy_by_layer, key=dev_accuracy_by_layer.get))
-    print("ベストレイヤー：",best_intermediate_layer)
+    best_score = dev_accuracy_by_layer[best_intermediate_layer]
+
+    # Determine which metric was used
+    use_comet = (
+        "ja" in task_name.lower() and
+        task_name.startswith("translation_") and
+        generation_mode == "multi" and
+        hasattr(task, 'evaluate_with_comet')
+    )
+    metric_name = "COMET" if use_comet else "Accuracy"
+
+    print(f"\n{'='*50}")
+    print(f"★ SELECTED BEST LAYER FOR INFERENCE: {best_intermediate_layer}")
+    print(f"  (Selected by {metric_name} = {best_score:.4f})")
+    print(f"{'='*50}\n")
     task_hiddens = get_task_hiddens(model, tokenizer, task, test_datasets, multi_context=multi_context)
     predictions = modulated_generate(
         model,
@@ -439,6 +455,7 @@ def task_vector_accuracy_by_layer(
     multi_context: bool = False,
     generation_mode: str = "multi",
     max_new_tokens: int = 30,
+    task_name: str = "",
 ) -> Dict[int, float]:
     if layers_to_test is None:
         num_layers = len(get_layers(model))
@@ -456,8 +473,21 @@ def task_vector_accuracy_by_layer(
     past_key_values = nested_apply(past_key_values, lambda x: x[:, :, :-1])  # remove last token from past_key_values
     inputs["input_ids"] = inputs["input_ids"][:, -1].unsqueeze(1)
 
+    # Check if this is a Japanese translation task with multi-token generation
+    use_comet = (
+        "ja" in task_name.lower() and
+        task_name.startswith("translation_") and
+        generation_mode == "multi" and
+        hasattr(task, 'evaluate_with_comet')
+    )
+
+    if use_comet:
+        print(f"Using COMET score for best layer selection (task: {task_name}, mode: {generation_mode})")
+    else:
+        print(f"Using accuracy for best layer selection (task: {task_name}, mode: {generation_mode})")
+
     # Find best intermediate layer using dev set
-    accuracies = []
+    scores = []
     for layer_num in layers_to_test:
         answers = modulated_generate(
             model,
@@ -471,11 +501,31 @@ def task_vector_accuracy_by_layer(
             max_new_tokens=max_new_tokens,
         )
 
-        accuracy = calculate_accuracy_on_datasets(task, answers, datasets)
-        accuracies.append(accuracy)
-    accuracy_by_layer = {layer: accuracy for layer, accuracy in zip(layers_to_test, accuracies)}
+        if use_comet:
+            # Use COMET score for Japanese translation tasks
+            sources = [dataset.test_input for dataset in datasets]
+            references = [dataset.test_output for dataset in datasets]
+            comet_results = task.evaluate_with_comet(sources, answers, references, task_name)
+            score = comet_results["comet"]
+            print(f"  Layer {layer_num:2d}: COMET = {score:.4f}")
+        else:
+            # Use accuracy for other tasks
+            score = calculate_accuracy_on_datasets(task, answers, datasets)
+            print(f"  Layer {layer_num:2d}: Accuracy = {score:.4f}")
 
-    return accuracy_by_layer
+        scores.append(score)
+
+    score_by_layer = {layer: score for layer, score in zip(layers_to_test, scores)}
+
+    # Find and print best layer
+    best_layer = int(max(score_by_layer, key=score_by_layer.get))
+    best_score = score_by_layer[best_layer]
+    metric_name = "COMET" if use_comet else "Accuracy"
+    print(f"\n{'='*50}")
+    print(f"★ BEST LAYER: {best_layer} ({metric_name} = {best_score:.4f})")
+    print(f"{'='*50}\n")
+
+    return score_by_layer
 
 
 def run_cross_task_vector(
@@ -492,6 +542,8 @@ def run_cross_task_vector(
     generation_mode_target: str = "multi",
     max_new_tokens_source: int = 1,
     max_new_tokens_target: int = 30,
+    source_task_name: str = "",
+    target_task_name: str = "",
 ):
     """
     Cross-task vector transfer experiment.
@@ -516,6 +568,8 @@ def run_cross_task_vector(
         generation_mode_target: Generation mode for target task
         max_new_tokens_source: Max new tokens for source task
         max_new_tokens_target: Max new tokens for target task
+        source_task_name: Source task name (optional, for COMET evaluation)
+        target_task_name: Target task name (optional, for COMET evaluation)
 
     Returns:
         predictions: Predictions on target test datasets
@@ -535,9 +589,12 @@ def run_cross_task_vector(
         multi_context=multi_context,
         generation_mode=generation_mode_source,
         max_new_tokens=max_new_tokens_source,
+        task_name=source_task_name,
     )
     source_best_layer = int(max(source_dev_accuracy_by_layer, key=source_dev_accuracy_by_layer.get))
-    print(f"Source task best layer: {source_best_layer}")
+    print(f"\n{'='*50}")
+    print(f"★ SOURCE TASK BEST LAYER: {source_best_layer}")
+    print(f"{'='*50}\n")
 
     # Step 2: Extract task vectors from source dev datasets
     print("Step 2: Extracting task vectors from source dev datasets...")
@@ -567,6 +624,18 @@ def run_cross_task_vector(
         num_layers = len(get_layers(model))
         layers_to_test = range(num_layers)
 
+    # Check if we should use COMET score for best layer selection
+    # Use COMET if: target task name contains "ja" AND it's a translation task AND multi-token generation
+    use_comet_for_target = (
+        "ja" in target_task_name.lower() and
+        target_task_name.startswith("translation_") and
+        generation_mode_target == "multi" and
+        hasattr(target_task, 'evaluate_with_comet')
+    )
+
+    metric_name = "COMET" if use_comet_for_target else "Accuracy"
+    print(f"Using {metric_name} for best target layer selection (task: {target_task_name}, mode: {generation_mode_target})")
+
     # Test each target layer with SOURCE task vectors
     print(f"Testing SOURCE task vectors on target dev across {len(list(layers_to_test))} layers...")
     target_dev_accuracy_by_layer = {}
@@ -584,20 +653,33 @@ def run_cross_task_vector(
             max_new_tokens=max_new_tokens_target,
         )
 
-        accuracy = calculate_accuracy_on_datasets(target_task, answers, target_dev_datasets)
-        target_dev_accuracy_by_layer[target_layer_num] = accuracy
-        print(f"    → Accuracy: {accuracy:.2f}")
+        if use_comet_for_target:
+            # Use COMET score for Japanese translation tasks
+            sources = [dataset.test_input for dataset in target_dev_datasets]
+            references = [dataset.test_output for dataset in target_dev_datasets]
+            comet_results = target_task.evaluate_with_comet(sources, answers, references, target_task_name)
+            score = comet_results["comet"]
+            target_dev_accuracy_by_layer[target_layer_num] = score
+            print(f"    → COMET: {score:.4f}")
+        else:
+            # Use accuracy for other tasks
+            score = calculate_accuracy_on_datasets(target_task, answers, target_dev_datasets)
+            target_dev_accuracy_by_layer[target_layer_num] = score
+            print(f"    → Accuracy: {score:.2f}")
 
     # Find target best layer
-    max_accuracy = max(target_dev_accuracy_by_layer.values())
-    if max_accuracy == 0.0:
-        # If all layers have 0.0 accuracy, use source best layer as fallback
+    max_score = max(target_dev_accuracy_by_layer.values())
+    if max_score == 0.0:
+        # If all layers have 0.0 score, use source best layer as fallback
         target_best_layer = source_best_layer
-        print(f"All target layers have 0.00 accuracy, using source best layer: {target_best_layer}")
+        print(f"\nAll target layers have 0.00 {metric_name.lower()}, using source best layer: {target_best_layer}")
     else:
         target_best_layer = int(max(target_dev_accuracy_by_layer, key=target_dev_accuracy_by_layer.get))
-        print(f"Target task best layer: {target_best_layer}")
-        print(f"  Max accuracy (with SOURCE task vectors): {target_dev_accuracy_by_layer[target_best_layer]:.2f}")
+        score_str = f"{target_dev_accuracy_by_layer[target_best_layer]:.4f}" if use_comet_for_target else f"{target_dev_accuracy_by_layer[target_best_layer]:.2f}"
+        print(f"\n{'='*50}")
+        print(f"★ TARGET TASK BEST LAYER: {target_best_layer}")
+        print(f"  Max {metric_name.lower()} (with SOURCE task vectors): {score_str}")
+        print(f"{'='*50}\n")
 
     # Step 5: Get past_key_values for target test datasets
     print("Step 5: Computing past_key_values for target test datasets...")

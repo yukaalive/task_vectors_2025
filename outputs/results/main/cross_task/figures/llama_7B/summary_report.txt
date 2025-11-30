@@ -1,0 +1,507 @@
+================================================================================
+CROSS-TASK VECTOR TRANSFER EXPERIMENT SUMMARY
+================================================================================
+
+Task Pair: translation_ja_en_single_to_translation_ja_en_easy
+--------------------------------------------------------------------------------
+Source Task: translation_ja_en_single
+Target Task: translation_ja_en_easy
+Num Examples: 5
+
+PERFORMANCE METRICS:
+  Baseline Accuracy:        0.0000
+  ICL Accuracy:             0.1800
+  Single→Multi Cross TV Accuracy:   0.0000
+  Target TV Accuracy:       0.0000
+
+TRANSLATION QUALITY (COMET):
+  ICL COMET:                0.8504
+  Single→Multi Cross TV COMET:      0.5583
+  COMET Retention (Cross):  65.7%
+  Target TV COMET:          0.6420
+  COMET Retention (Target): 75.5%
+
+TRANSLATION QUALITY (chrF):
+  ICL chrF:                 0.5466
+  Single→Multi Cross TV chrF:       0.1299
+  chrF Retention (Cross):   23.8%
+  Target TV chrF:           0.3368
+  chrF Retention (Target):  61.6%
+
+BEST LAYERS:
+  Source Best Layer:        12
+  Target Best Layer (source vec): 0
+  Target Best Layer (target vec): 13
+
+TOP 5 SOURCE LAYERS:
+  Layer 12: 0.5000
+  Layer 15: 0.4800
+  Layer 14: 0.4600
+  Layer 13: 0.4400
+  Layer 16: 0.4000
+
+NON-ZERO TARGET LAYERS (with source vector):
+  Layer  0: 0.6057
+  Layer  1: 0.5831
+  Layer  2: 0.5774
+  Layer  3: 0.5629
+  Layer  4: 0.5602
+  Layer 12: 0.5419
+  Layer  7: 0.5362
+  Layer  5: 0.5250
+  Layer  6: 0.5200
+  Layer  9: 0.5114
+  Layer 10: 0.4994
+  Layer  8: 0.4975
+  Layer 31: 0.4957
+  Layer 11: 0.4954
+  Layer 29: 0.4926
+  Layer 17: 0.4880
+  Layer 30: 0.4836
+  Layer 13: 0.4801
+  Layer 28: 0.4603
+  Layer 24: 0.4603
+  Layer 15: 0.4601
+  Layer 14: 0.4559
+  Layer 26: 0.4556
+  Layer 16: 0.4554
+  Layer 18: 0.4554
+  Layer 19: 0.4527
+  Layer 21: 0.4514
+  Layer 23: 0.4506
+  Layer 25: 0.4502
+  Layer 22: 0.4308
+  Layer 27: 0.4307
+  Layer 20: 0.4183
+
+================================================================================
+TOP 10 TRANSLATION EXAMPLES (by COMET score)
+================================================================================
+
+[Example 1] (Index: 40, Avg COMET: 0.9069)
+--------------------------------------------------------------------------------
+SOURCE (Japanese):
+  何のことを言っているの？
+
+REFERENCE (Ground Truth):
+  what are you talking about ?
+
+ICL Prediction:
+  what are you talking about ?
+  COMET: 0.9855, chrF: 1.0000
+
+Single→Multi Cross TV Prediction:
+  What are you saying?
+  COMET: 0.8641, chrF: 0.3942
+
+Target TV Prediction:
+  what are you saying?
+  COMET: 0.8710, chrF: 0.4465
+
+
+[Example 2] (Index: 16, Avg COMET: 0.9022)
+--------------------------------------------------------------------------------
+SOURCE (Japanese):
+  彼らはその問題を解決するために大変努力した。
+
+REFERENCE (Ground Truth):
+  they made a great effort to settle the problem .
+
+ICL Prediction:
+  they worked hard to solve the problem .
+  COMET: 0.9022, chrF: 0.3772
+
+Single→Multi Cross TV Prediction:
+  They worked very hard to solve that problem.
+  COMET: 0.8959, chrF: 0.2816
+
+Target TV Prediction:
+  they worked very hard to solve the problem.
+  COMET: 0.9086, chrF: 0.3732
+
+
+[Example 3] (Index: 13, Avg COMET: 0.8830)
+--------------------------------------------------------------------------------
+SOURCE (Japanese):
+  私は彼女が子供の頃から知っています。
+
+REFERENCE (Ground Truth):
+  i have known her since she was a child .
+
+ICL Prediction:
+  i 've known her since she was a child .
+  COMET: 0.9575, chrF: 0.9061
+
+Single→Multi Cross TV Prediction:
+  I have known her since she was a child.
+  COMET: 0.9490, chrF: 0.9648
+
+Target TV Prediction:
+  I've known her since she was a child.Ће знам од детињства.
+  COMET: 0.7426, chrF: 0.7989
+
+
+[Example 4] (Index: 27, Avg COMET: 0.8629)
+--------------------------------------------------------------------------------
+SOURCE (Japanese):
+  列車が入ってくるよ。
+
+REFERENCE (Ground Truth):
+  here comes the train .
+
+ICL Prediction:
+  the train is coming .
+  COMET: 0.8936, chrF: 0.4285
+
+Single→Multi Cross TV Prediction:
+  列車が入ってくる
+  COMET: 0.7987, chrF: 0.0000
+
+Target TV Prediction:
+  the train is coming
+  COMET: 0.8963, chrF: 0.4246
+
+
+[Example 5] (Index: 35, Avg COMET: 0.8452)
+--------------------------------------------------------------------------------
+SOURCE (Japanese):
+  彼女は出来るだけ頑張って英語を勉強した。
+
+REFERENCE (Ground Truth):
+  she studied english as hard as she could .
+
+ICL Prediction:
+  she tried her best to study English .
+  COMET: 0.8441, chrF: 0.2754
+
+Single→Multi Cross TV Prediction:
+  She tried her best to study English.
+  COMET: 0.8420, chrF: 0.2599
+
+Target TV Prediction:
+  she tried her best to study English
+  COMET: 0.8497, chrF: 0.2721
+
+
+[Example 6] (Index: 22, Avg COMET: 0.8418)
+--------------------------------------------------------------------------------
+SOURCE (Japanese):
+  近くで火事が起こった。
+
+REFERENCE (Ground Truth):
+  a fire broke out nearby .
+
+ICL Prediction:
+  a fire broke out nearby .
+  COMET: 0.9854, chrF: 1.0000
+
+Single→Multi Cross TV Prediction:
+  近くで火事が起こう
+  COMET: 0.5985, chrF: 0.0000
+
+Target TV Prediction:
+  a fire broke out
+  COMET: 0.9416, chrF: 0.6485
+
+
+[Example 7] (Index: 14, Avg COMET: 0.8408)
+--------------------------------------------------------------------------------
+SOURCE (Japanese):
+  彼女は試験に失敗しないように頑張って勉強した。
+
+REFERENCE (Ground Truth):
+  she studied hard lest she should fail in the exam .
+
+ICL Prediction:
+  she studied hard to pass the exam .
+  COMET: 0.8590, chrF: 0.4963
+
+Single→Multi Cross TV Prediction:
+  She tried hard to pass the exam.
+  COMET: 0.8284, chrF: 0.3218
+
+Target TV Prediction:
+  she tried hard to pass the exam.
+  COMET: 0.8350, chrF: 0.3353
+
+
+[Example 8] (Index: 9, Avg COMET: 0.8403)
+--------------------------------------------------------------------------------
+SOURCE (Japanese):
+  いつコンサートのチケットを買ったの。
+
+REFERENCE (Ground Truth):
+  when did you get the concert ticket ?
+
+ICL Prediction:
+  when did you buy the concert tickets ?
+  COMET: 0.9568, chrF: 0.7589
+
+Single→Multi Cross TV Prediction:
+  When did you buy a concert ticket for the concert
+  COMET: 0.8570, chrF: 0.6840
+
+Target TV Prediction:
+  when did you buy a ticket for the concert when did you buy a ticket for the concert
+  COMET: 0.7072, chrF: 0.5409
+
+
+[Example 9] (Index: 8, Avg COMET: 0.8220)
+--------------------------------------------------------------------------------
+SOURCE (Japanese):
+  郵便局はあの店のちょうど向かいにあります。
+
+REFERENCE (Ground Truth):
+  the post office is just across from the store .
+
+ICL Prediction:
+  the post office is right across the street from that store .
+  COMET: 0.9461, chrF: 0.6774
+
+Single→Multi Cross TV Prediction:
+  Post office is next to the post office is next to the shop
+  COMET: 0.7266, chrF: 0.4382
+
+Target TV Prediction:
+  the post office is just across the street from the post office
+  COMET: 0.7931, chrF: 0.7698
+
+
+[Example 10] (Index: 44, Avg COMET: 0.7987)
+--------------------------------------------------------------------------------
+SOURCE (Japanese):
+  木の下に何人かの少年がいます。
+
+REFERENCE (Ground Truth):
+  there are some boys under the tree .
+
+ICL Prediction:
+  there are some boys sitting under the tree .
+  COMET: 0.9406, chrF: 0.8559
+
+Single→Multi Cross TV Prediction:
+  木の下に少年がいる
+  COMET: 0.6990, chrF: 0.0000
+
+Target TV Prediction:
+  there are there are some people are sitting under the tree
+  COMET: 0.7565, chrF: 0.6329
+
+
+================================================================================
+BOTTOM 10 TRANSLATION EXAMPLES (by COMET score)
+================================================================================
+
+[Example 1] (Index: 5, Avg COMET: 0.3446)
+--------------------------------------------------------------------------------
+SOURCE (Japanese):
+  自分のことをダメだと考える人。
+
+REFERENCE (Ground Truth):
+  don 't be a dog .
+
+ICL Prediction:
+  a person who thinks badly of himself .
+  COMET: 0.4180, chrF: 0.1175
+
+Single→Multi Cross TV Prediction:
+  自分からればかられば自分からばれば自分からば自分のことをダメ
+  COMET: 0.2421, chrF: 0.0000
+
+Target TV Prediction:
+  people who think that I think that I think that I am a person who think that I am a person who think that I am dumb.
+  COMET: 0.3736, chrF: 0.0606
+
+
+[Example 2] (Index: 7, Avg COMET: 0.4449)
+--------------------------------------------------------------------------------
+SOURCE (Japanese):
+  彼はその時までに完全に頭にきていた。
+
+REFERENCE (Ground Truth):
+  he was good and mad by that time .
+
+ICL Prediction:
+  he had it all figured out by then .
+  COMET: 0.5478, chrF: 0.1751
+
+Single→Multi Cross TV Prediction:
+  He was completely
+  COMET: 0.4191, chrF: 0.1083
+
+Target TV Prediction:
+  he was not 彼はその時までにきていた
+  COMET: 0.3678, chrF: 0.1270
+
+
+[Example 3] (Index: 10, Avg COMET: 0.4616)
+--------------------------------------------------------------------------------
+SOURCE (Japanese):
+  この国では、砂がたくさんある場所にいる動物はなくてはならない。
+
+REFERENCE (Ground Truth):
+  they cannot do without camels in this country .
+
+ICL Prediction:
+  in this country, animals that live in sandy places must have sand on their bodies .
+  COMET: 0.5236, chrF: 0.3593
+
+Single→Multi Cross TV Prediction:
+  この国では、砂がたくさんある場所にいる動物はなくてはなら
+  COMET: 0.3833, chrF: 0.0000
+
+Target TV Prediction:
+  there are no animals in the place where there is a lot of sand in this country.
+  COMET: 0.4779, chrF: 0.4249
+
+
+[Example 4] (Index: 2, Avg COMET: 0.5040)
+--------------------------------------------------------------------------------
+SOURCE (Japanese):
+  歩いて５分以下で着くはずです。
+
+REFERENCE (Ground Truth):
+  you should get there in five minutes walking .
+
+ICL Prediction:
+  i should be able to walk there in 5 minutes .
+  COMET: 0.8776, chrF: 0.4290
+
+Single→Multi Cross TV Prediction:
+  歩いてごめんどうまったいてごめんたいです。
+  COMET: 0.3270, chrF: 0.0000
+
+Target TV Prediction:
+  I'm
+  COMET: 0.3075, chrF: 0.0108
+
+
+[Example 5] (Index: 47, Avg COMET: 0.5073)
+--------------------------------------------------------------------------------
+SOURCE (Japanese):
+  いい案が浮かんだぞ。
+
+REFERENCE (Ground Truth):
+  i hit upon a good idea .
+
+ICL Prediction:
+  here 's an idea .
+  COMET: 0.6595, chrF: 0.1901
+
+Single→Multi Cross TV Prediction:
+  
+  COMET: 0.4591, chrF: 0.0000
+
+Target TV Prediction:
+  a good idea: a good idea: a good idea: a good idea: a good idea: a good idea: a good idea: a good
+  COMET: 0.4032, chrF: 0.2560
+
+
+[Example 6] (Index: 20, Avg COMET: 0.5200)
+--------------------------------------------------------------------------------
+SOURCE (Japanese):
+  何の目的でここまできたのですか。
+
+REFERENCE (Ground Truth):
+  what has brought you here ?
+
+ICL Prediction:
+  what is the purpose of your coming here .
+  COMET: 0.7614, chrF: 0.2491
+
+Single→Multi Cross TV Prediction:
+  What is this is this is this is what is what is what is what is what is what is what is what is what is what is what is
+  COMET: 0.3251, chrF: 0.0860
+
+Target TV Prediction:
+  why
+  COMET: 0.4736, chrF: 0.0744
+
+
+[Example 7] (Index: 41, Avg COMET: 0.5296)
+--------------------------------------------------------------------------------
+SOURCE (Japanese):
+  彼は言ったことをできずに終わった。
+
+REFERENCE (Ground Truth):
+  he failed to do what he said he would do .
+
+ICL Prediction:
+  he couldn 't finish what he said .
+  COMET: 0.6242, chrF: 0.3593
+
+Single→Multi Cross TV Prediction:
+  彼は言ったことをできずに終わった
+  COMET: 0.4652, chrF: 0.0000
+
+Target TV Prediction:
+  he could not finished��������は言ったことをできずに終わった。
+  COMET: 0.4995, chrF: 0.1196
+
+
+[Example 8] (Index: 3, Avg COMET: 0.5410)
+--------------------------------------------------------------------------------
+SOURCE (Japanese):
+  いい案が浮かんだぞ。
+
+REFERENCE (Ground Truth):
+  i hit upon a good idea .
+
+ICL Prediction:
+  i have a good idea .
+  COMET: 0.8473, chrF: 0.5261
+
+Single→Multi Cross TV Prediction:
+  いいいいいいいいいいいいいいいいいいいいい案が浮か
+  COMET: 0.3725, chrF: 0.0000
+
+Target TV Prediction:
+  a good idea: a good idea: a good idea: a good idea: a good idea: a good idea: a good idea: a good
+  COMET: 0.4032, chrF: 0.2560
+
+
+[Example 9] (Index: 48, Avg COMET: 0.5501)
+--------------------------------------------------------------------------------
+SOURCE (Japanese):
+  あなたは必ずしも間違ってはいない。
+
+REFERENCE (Ground Truth):
+  you are not at all wrong .
+
+ICL Prediction:
+  you may not be wrong .
+  COMET: 0.8702, chrF: 0.3230
+
+Single→Multi Cross TV Prediction:
+  あないでしないでし
+  COMET: 0.3534, chrF: 0.0000
+
+Target TV Prediction:
+  you are not いない is not necessarily
+  COMET: 0.4266, chrF: 0.3813
+
+
+[Example 10] (Index: 32, Avg COMET: 0.5550)
+--------------------------------------------------------------------------------
+SOURCE (Japanese):
+  私とテニスをしませんか。
+
+REFERENCE (Ground Truth):
+  what do you say to playing tennis with me ?
+
+ICL Prediction:
+  would you like to play tennis with me ?
+  COMET: 0.8570, chrF: 0.5093
+
+Single→Multi Cross TV Prediction:
+  私とテニャ
+  COMET: 0.4656, chrF: 0.0000
+
+Target TV Prediction:
+  shall
+  COMET: 0.3425, chrF: 0.0357
+
+
+
+================================================================================
+

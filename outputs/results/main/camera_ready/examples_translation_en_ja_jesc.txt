@@ -1,0 +1,224 @@
+====================================================================================================
+Translation Examples: translation_en_ja_jesc
+====================================================================================================
+
+Example 1
+----------------------------------------------------------------------------------------------------
+Source:     hello, deltaxray
+Reference:  デルタ -X -レイ
+
+[swallow_7B]
+  ICL Prediction: こんにちは デルタXレイ (COMET: 0.7933)
+  TV Prediction:  ハロー、デルタウ (COMET: 0.6758)
+
+[llama_7B]
+  ICL Prediction: あなたは 素晴らしい (COMET: 0.8146)
+  TV Prediction:  您好看起很您好看 (COMET: 0.4922)
+
+[llama_13B]
+  ICL Prediction: あなたは 素敵だよ (COMET: 0.9095)
+  TV Prediction:  あなんてるなんてる (COMET: 0.5451)
+
+[youko_8B]
+  ICL Prediction: あなたは素敵に見える (COMET: 0.8760)
+  TV Prediction:  あ (COMET: 0.5767)
+
+
+Example 2
+----------------------------------------------------------------------------------------------------
+Source:     you think you better than everybody else
+Reference:  バカにしてんのか
+
+[swallow_7B]
+  ICL Prediction: あなたは自分がみんなより優れていると思ってる (COMET: 0.6788)
+  TV Prediction:  あなたはみんなより自分の方が優れていると思っている (COMET: 0.6232)
+
+[llama_7B]
+  ICL Prediction: エクスキューズ、ロス氏。何を言っているのか (COMET: 0.7308)
+  TV Prediction:  これは何ですか。 (COMET: 0.6964)
+
+[llama_13B]
+  ICL Prediction: すみません、ロスさん。何か言ってましたか (COMET: 0.7242)
+  TV Prediction:  何か言ってたの？ (COMET: 0.6770)
+
+[youko_8B]
+  ICL Prediction: すみません、ロスさん (COMET: 0.6987)
+  TV Prediction:  誰かが何かを言ったのですか？例文:excuse me, mr. ross. did you say something?→誰かが (COMET: 0.4767)
+
+
+Example 3
+----------------------------------------------------------------------------------------------------
+Source:     via these dense interconnections
+Reference:  場所細胞が互いに活性化させあい
+
+[swallow_7B]
+  ICL Prediction: それらの 密接な接続 (COMET: 0.6427)
+  TV Prediction:  これらのように、これらの密接な接続を介して (COMET: 0.6318)
+
+[llama_7B]
+  ICL Prediction: 私を男にしてくれ (COMET: 0.5976)
+  TV Prediction:  それでする (COMET: 0.6644)
+
+[llama_13B]
+  ICL Prediction: 男にしてくれ (COMET: 0.5610)
+  TV Prediction:  please make me a man (COMET: 0.3082)
+
+[youko_8B]
+  ICL Prediction: 男にしてくれ (COMET: 0.5610)
+  TV Prediction:  ああ (COMET: 0.5968)
+
+
+Example 4
+----------------------------------------------------------------------------------------------------
+Source:     please make me a man
+Reference:  っていう あれ
+
+[swallow_7B]
+  ICL Prediction: 私を男にして下さい (COMET: 0.5742)
+  TV Prediction:  私を男にしてください (COMET: 0.5716)
+
+[llama_7B]
+  ICL Prediction: 噛み付く (COMET: 0.7309)
+  TV Prediction:  それを噛 (COMET: 0.6855)
+
+[llama_13B]
+  ICL Prediction: 噛みつく (COMET: 0.6422)
+  TV Prediction:  咬他们咬他们咬他们 (COMET: 0.3888)
+
+[youko_8B]
+  ICL Prediction: 噛みついて (COMET: 0.6688)
+  TV Prediction:  さやかながら、ご紹介します。 (COMET: 0.5218)
+
+
+Example 5
+----------------------------------------------------------------------------------------------------
+Source:     i don't want to help him
+Reference:  彼を助けたくないわ
+
+[swallow_7B]
+  ICL Prediction: 彼を助けたくない (COMET: 0.9663)
+  TV Prediction:  彼を助けたくない (COMET: 0.9663)
+
+[llama_7B]
+  ICL Prediction: 私はそれを燃やす (COMET: 0.6636)
+  TV Prediction:  私は、私は、私は、私は、私は、私は、 (COMET: 0.2852)
+
+[llama_13B]
+  ICL Prediction: それを燃やす (COMET: 0.5635)
+  TV Prediction:  i'm gonna kindle that (COMET: 0.3537)
+
+[youko_8B]
+  ICL Prediction: 燃やしてやる (COMET: 0.6393)
+  TV Prediction:  農業の例文を例文を例文に例文を例文に例文を例文に例文を例文に (COMET: 0.2660)
+
+
+Example 6
+----------------------------------------------------------------------------------------------------
+Source:     and you can see how they all converge
+Reference:  一か所に集まっています
+
+[swallow_7B]
+  ICL Prediction: そして、彼らがどうやって集まってくるのか (COMET: 0.7327)
+  TV Prediction:  そして、あなたはそれらすべてがどのように収束するかを見ることができます (COMET: 0.6395)
+
+[llama_7B]
+  ICL Prediction: 彼らは恐れていた (COMET: 0.6917)
+  TV Prediction:  私は、私は、彼らは怖かったのではないかと思っ (COMET: 0.5868)
+
+[llama_13B]
+  ICL Prediction: 彼らは恐怖におおわれていた (COMET: 0.6410)
+  TV Prediction:  私知道他们怕的 (COMET: 0.3720)
+
+[youko_8B]
+  ICL Prediction: 彼らは怖がっていた (COMET: 0.7042)
+  TV Prediction:  私は彼らは私が彼らは私が彼らを怖がらせたことを知っていた (COMET: 0.4228)
+
+
+Example 7
+----------------------------------------------------------------------------------------------------
+Source:     meteor buster attack
+Reference:  メテオバスターアタック
+
+[swallow_7B]
+  ICL Prediction: メテオバースト (COMET: 0.8234)
+  TV Prediction:  メテメテメテオバスタ (COMET: 0.5448)
+
+[llama_7B]
+  ICL Prediction: その写真を思い出して (COMET: 0.7850)
+  TV Prediction:  は「その写真を思い出してください (COMET: 0.6963)
+
+[llama_13B]
+  ICL Prediction: その写真を思い出して (COMET: 0.7850)
+  TV Prediction:  その写真っていいつかその写真を見てみたい (COMET: 0.6370)
+
+[youko_8B]
+  ICL Prediction: みんなで撮った写真を覚えてる？ (COMET: 0.8635)
+  TV Prediction:  うん、例文:remember that photo we all took (COMET: 0.5275)
+
+
+Example 8
+----------------------------------------------------------------------------------------------------
+Source:     um... no, i didn't
+Reference:  あの... しておりません
+
+[swallow_7B]
+  ICL Prediction: ・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・ (COMET: 0.4291)
+  TV Prediction:  私は...いいえ、私はしませんでした (COMET: 0.8513)
+
+[llama_7B]
+  ICL Prediction: そう知ってるの? (COMET: 0.8518)
+  TV Prediction:  あなには、どうしていますか？ (COMET: 0.5514)
+
+[llama_13B]
+  ICL Prediction: どうして知ってるの? (COMET: 0.9354)
+  TV Prediction:  how do you know that (COMET: 0.6495)
+
+[youko_8B]
+  ICL Prediction: どうやって知ったの? (COMET: 0.8350)
+  TV Prediction:  あなたは、例文を例文は、例文を例文は、例文を例文は、例文を例文 (COMET: 0.2715)
+
+
+Example 9
+----------------------------------------------------------------------------------------------------
+Source:     i'm flattered
+Reference:  光栄です
+
+[swallow_7B]
+  ICL Prediction: 嬉しい (COMET: 0.7658)
+  TV Prediction:  私は嬉しいです (COMET: 0.8680)
+
+[llama_7B]
+  ICL Prediction: 私は風景を愛するようになった (COMET: 0.9766)
+  TV Prediction:  それは、それを愛することを知った (COMET: 0.5342)
+
+[llama_13B]
+  ICL Prediction: 私は風景を愛するようになった (COMET: 0.9766)
+  TV Prediction:  それっていいいいいいからなっていいからなっていいからなってい (COMET: 0.3149)
+
+[youko_8B]
+  ICL Prediction: 風景を愛することを学んだ (COMET: 0.8748)
+  TV Prediction:  ええええええええええええええええええええええええええええええ (COMET: 0.1892)
+
+
+Example 10
+----------------------------------------------------------------------------------------------------
+Source:     i learned to love landscapes
+Reference:  私は風景が大好きになりました
+
+[swallow_7B]
+  ICL Prediction: 風景を愛するようになった (COMET: 0.9311)
+  TV Prediction:  私は風景画を描くことを学んだ (COMET: 0.8749)
+
+[llama_7B]
+  ICL Prediction: あなたは大きく声を出して寝ていた (COMET: 0.4871)
+  TV Prediction:  それが彼はずがずがずがずがずがずがずがずがずがずがずがず (COMET: 0.3270)
+
+[llama_13B]
+  ICL Prediction: 大変に喉を鳴らしていた (COMET: 0.6201)
+  TV Prediction:  您您很吵吵的�������������� (COMET: 0.3520)
+
+[youko_8B]
+  ICL Prediction: いびきをかいてた (COMET: 0.6221)
+  TV Prediction:  変な夢を見た。I was snoring very loudly.例:あなたは私に会いたいと言った。You said you wanted (COMET: 0.4022)
+
+

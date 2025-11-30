@@ -1,0 +1,224 @@
+====================================================================================================
+Translation Examples: translation_ja_en_easy
+====================================================================================================
+
+Example 1
+----------------------------------------------------------------------------------------------------
+Source:     あなたの答えは適切である。
+Reference:  your answer is to the point .
+
+[swallow_7B]
+  ICL Prediction: your answer is appropriate . (COMET: 0.9002)
+  TV Prediction:  your answer is correct (COMET: 0.8803)
+
+[llama_7B]
+  ICL Prediction: do you know how to use a computer ? (COMET: 0.9638)
+  TV Prediction:  do you know how to use a computer? (COMET: 0.9614)
+
+[llama_13B]
+  ICL Prediction: do you know how to use a computer ? (COMET: 0.9638)
+  TV Prediction:  Do you know how to use a computer? (COMET: 0.9618)
+
+[youko_8B]
+  ICL Prediction: do you know how to use the computer? (COMET: 0.9563)
+  TV Prediction:  do you know how to use a computer.例:コンピューターを使う方法を知っていますか。do you know how to use (COMET: 0.6684)
+
+
+Example 2
+----------------------------------------------------------------------------------------------------
+Source:     彼の話はおかしく聞こえる。
+Reference:  his story seems to be strange .
+
+[swallow_7B]
+  ICL Prediction: his story sounds funny . (COMET: 0.8588)
+  TV Prediction:  His story sounds strange (COMET: 0.9044)
+
+[llama_7B]
+  ICL Prediction: i 'll see you again soon . (COMET: 0.8696)
+  TV Prediction:  I hope to see you soon (COMET: 0.7478)
+
+[llama_13B]
+  ICL Prediction: i 'll look forward to seeing you soon . (COMET: 0.7950)
+  TV Prediction:  I' (COMET: 0.4176)
+
+[youko_8B]
+  ICL Prediction: i 'll see you soon. (COMET: 0.8210)
+  TV Prediction:  Iかれるかもしまた近いうちに会えるかもしれません。例文:お目にかかりまして光栄です (COMET: 0.4854)
+
+
+Example 3
+----------------------------------------------------------------------------------------------------
+Source:     私たちは予想以上に多くの金を使った。
+Reference:  we spent more money than was expected .
+
+[swallow_7B]
+  ICL Prediction: we spent more money than we expected . (COMET: 0.9574)
+  TV Prediction:  we spent more money than we expected to. (COMET: 0.9297)
+
+[llama_7B]
+  ICL Prediction: she lost her sight . (COMET: 0.8407)
+  TV Prediction:  she lost her eyesight (COMET: 0.7710)
+
+[llama_13B]
+  ICL Prediction: she lost her sight . (COMET: 0.8407)
+  TV Prediction:  She lost her sight. (COMET: 0.8021)
+
+[youko_8B]
+  ICL Prediction: she has lost her sight. (COMET: 0.7771)
+  TV Prediction:  sheは見えない。） (COMET: 0.5004)
+
+
+Example 4
+----------------------------------------------------------------------------------------------------
+Source:     老人には親切にしなさい。
+Reference:  be kind to old people .
+
+[swallow_7B]
+  ICL Prediction: be kind to the old . (COMET: 0.8865)
+  TV Prediction:  be kind to the old man (COMET: 0.9241)
+
+[llama_7B]
+  ICL Prediction: his story amused everyone . (COMET: 0.9819)
+  TV Prediction:  his story made me (COMET: 0.6560)
+
+[llama_13B]
+  ICL Prediction: his story pleased everyone . (COMET: 0.8711)
+  TV Prediction:  His conversation:彼の話はみんの話はみんなを楽しませた。 (COMET: 0.5868)
+
+[youko_8B]
+  ICL Prediction: his talk amused everybody. (COMET: 0.9139)
+  TV Prediction:  hisをさせる。彼の話はみんなを楽しませた。彼の話はみんなを楽しませた。彼の (COMET: 0.6193)
+
+
+Example 5
+----------------------------------------------------------------------------------------------------
+Source:     私はあなたがそうしたことを注意しない。
+Reference:  i don 't blame you for doing that .
+
+[swallow_7B]
+  ICL Prediction: I don't mind if you do that . (COMET: 0.8170)
+  TV Prediction:  I don't want you to do that. (COMET: 0.7244)
+
+[llama_7B]
+  ICL Prediction: her uncle is a famous doctor . (COMET: 0.9799)
+  TV Prediction:  her uncle is a famous doctor (COMET: 0.9666)
+
+[llama_13B]
+  ICL Prediction: her uncle is a famous doctor . (COMET: 0.9799)
+  TV Prediction:  Her uncle is a famous doctor. (COMET: 0.9600)
+
+[youko_8B]
+  ICL Prediction: her uncle is a famous doctor. (COMET: 0.9671)
+  TV Prediction:  Heilpraktと彼は医者です。彼は有名です。彼のおじさんは医者です。彼は有名です (COMET: 0.5325)
+
+
+Example 6
+----------------------------------------------------------------------------------------------------
+Source:     人間は心を動かされやすい。
+Reference:  men are subject to temptation .
+
+[swallow_7B]
+  ICL Prediction: people are easily moved . (COMET: 0.5175)
+  TV Prediction:  人間は心を動かされやすい (COMET: 0.6769)
+
+[llama_7B]
+  ICL Prediction: he was so angry that he could not speak . (COMET: 0.9338)
+  TV Prediction:  he was so angry that he could not say a word. (COMET: 0.9061)
+
+[llama_13B]
+  ICL Prediction: he was so angry that he could not speak . (COMET: 0.9338)
+  TV Prediction:  He was so angry that he couldn't say anything. (COMET: 0.8884)
+
+[youko_8B]
+  ICL Prediction: he was so angry that he could not speak. (COMET: 0.9259)
+  TV Prediction:  He was so angry that he couldn't speak.例:彼は何も話すことが出来ないほどに腹を立てていた。He was (COMET: 0.7925)
+
+
+Example 7
+----------------------------------------------------------------------------------------------------
+Source:     この世界に全く新しいものなし。
+Reference:  there is nothing new under the sun .
+
+[swallow_7B]
+  ICL Prediction: there is nothing new in this world . (COMET: 0.8937)
+  TV Prediction:  there is nothing new in this world (COMET: 0.9102)
+
+[llama_7B]
+  ICL Prediction: my daughter is sound asleep . (COMET: 0.9039)
+  TV Prediction:  my daughter is sleeping deeply (COMET: 0.8786)
+
+[llama_13B]
+  ICL Prediction: my daughter is fast asleep . (COMET: 0.9683)
+  TV Prediction:  My daughter is sleeping. (COMET: 0.8730)
+
+[youko_8B]
+  ICL Prediction: my daughter is fast asleep. (COMET: 0.9437)
+  TV Prediction:  My daughter is sleeping.私の娘は眠っている。例:My daughter is sleeping.私の娘は眠っている。例:My daughter is sleeping (COMET: 0.5627)
+
+
+Example 8
+----------------------------------------------------------------------------------------------------
+Source:     私は船で具合が悪くならない。
+Reference:  i 'm a good sailor .
+
+[swallow_7B]
+  ICL Prediction: I 'm not seasick . (COMET: 0.4789)
+  TV Prediction:  I don't get sick on the ship. (COMET: 0.4880)
+
+[llama_7B]
+  ICL Prediction: please wait for me . (COMET: 0.7166)
+  TV Prediction:  please wait for me without hanging up the phone (COMET: 0.6499)
+
+[llama_13B]
+  ICL Prediction: please wait on the line . (COMET: 0.6597)
+  TV Prediction:  Please wait on the phone. (COMET: 0.7049)
+
+[youko_8B]
+  ICL Prediction: please hold on. (COMET: 0.8443)
+  TV Prediction:  Pleaseを続けば、電話を切らずにそのまま待ってください。例文:電話を切らずにそのまま待ってください (COMET: 0.4940)
+
+
+Example 9
+----------------------------------------------------------------------------------------------------
+Source:     私の仕事には助ける人がいる。
+Reference:  i need some help with my work .
+
+[swallow_7B]
+  ICL Prediction: i have helpers for my work . (COMET: 0.7572)
+  TV Prediction:  I have a helper for my job. (COMET: 0.6865)
+
+[llama_7B]
+  ICL Prediction: do you have a room of your own ? (COMET: 0.9826)
+  TV Prediction:  do you have you have you have your own room? (COMET: 0.6959)
+
+[llama_13B]
+  ICL Prediction: do you have a room of your own ? (COMET: 0.9826)
+  TV Prediction:  Do you have your own room? (COMET: 0.9540)
+
+[youko_8B]
+  ICL Prediction: do you have a room of your own? (COMET: 0.9754)
+  TV Prediction:  Do you have a room of your own?例:あなたは自分用の部屋を持っていますか。Do you have a room of your (COMET: 0.7324)
+
+
+Example 10
+----------------------------------------------------------------------------------------------------
+Source:     彼はゆっくりと歩く。
+Reference:  he walks slowly .
+
+[swallow_7B]
+  ICL Prediction: he walks slowly . (COMET: 0.9795)
+  TV Prediction:  he walksゆっくりと歩く (COMET: 0.7038)
+
+[llama_7B]
+  ICL Prediction: my mother made me a bag . (COMET: 0.9749)
+  TV Prediction:  my mother made me a bag.Ћ (COMET: 0.9084)
+
+[llama_13B]
+  ICL Prediction: my mother made me a bag . (COMET: 0.9749)
+  TV Prediction:  My mother made me a bag. (COMET: 0.9522)
+
+[youko_8B]
+  ICL Prediction: my mother made me a bag. (COMET: 0.9597)
+  TV Prediction:  My mother made me a bag.例:私の母は私に鞄を作ってくれました。My mother made me a bag.例: (COMET: 0.7060)
+
+

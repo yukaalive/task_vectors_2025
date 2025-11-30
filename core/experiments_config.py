@@ -1,21 +1,27 @@
 TASKS_TO_EVALUATE = [
     # One for each category
-    # "translation_fr_en",
+
     # "linguistic_present_simple_gerund",
     # "knowledge_country_capital",
     # "algorithmic_next_letter",
     # Translation
-    "translation_en_ja_single",
-    "translation_ja_en_single",
+
+    # "translation_en_ja_single",
+    # "translation_ja_en_single",
+    # "translation_ja_en_jesc",
+    # "translation_en_ja_jesc",
+    # "translation_ja_en_easy",
+    "translation_en_ja_easy",
+
     # "translation_ja_en",
     # "translation_en_ja",
-    "translation_ja_en_jesc",
-    "translation_en_ja_jesc",
-    "translation_ja_en_easy",
-    "translation_en_ja_easy",
+
+    # "translation_en_es",
     # "translation_es_en",
     # "translation_en_fr",
-    # "translation_en_es",
+    # "translation_fr_en",
+
+    
 
 
     # # Linguistic
@@ -37,12 +43,12 @@ TASKS_TO_EVALUATE = [
 
 MODELS_TO_EVALUATE = [
     # ("llama", "30B"),
-    ("swallow", "7B"),
+    # ("swallow", "7B"),
     # ("pythia", "2.8B"),
-    ("llama", "7B"),
-    ("youko", "8B"),
+    # ("llama", "7B"),
+    # ("youko", "8B"),
     # ("gpt-2", "1.5B"),
-    # ("llama", "13B"),
+    ("llama", "13B"),
     # ("pythia", "6.9B"),
 
     # ("pythia", "12B"),

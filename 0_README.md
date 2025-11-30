@@ -4,6 +4,11 @@
 pip install transformers==4.37.0
 pip install unbabel-comet
 
+  cd /home/yukaalive/2025workspace
+  pip install -r requirements.txt
+
+chmod -R 777 /home/yukaalive/2025workspace/
+
 # クロスタスク実験を実行（すべてのモデル）
   python scripts/experiments/main.py --cross-task
 

@@ -13,6 +13,7 @@ import pickle
 import time
 from typing import Optional, Tuple
 
+import sacrebleu
 from transformers import PreTrainedModel, PreTrainedTokenizer
 
 from scripts.utils import MAIN_RESULTS_DIR, main_experiment_results_dir
@@ -22,7 +23,7 @@ from core.models.llm_loading import load_model_and_tokenizer
 from core.models.utils.inference import hidden_to_logits
 from core.analysis.utils import logits_top_tokens
 from core.analysis.evaluation import calculate_accuracy_on_datasets
-from core.task_vectors import run_icl, run_task_vector, run_cross_task_vector
+from core.task_vectors import run_icl, run_task_vector, run_cross_task_vector, get_task_hiddens
 from core.utils.misc import limit_gpus, seed_everything
 from core.experiments_config import MODELS_TO_EVALUATE, TASKS_TO_EVALUATE
 
@@ -70,6 +71,7 @@ def evaluate_task(model: PreTrainedModel, tokenizer: PreTrainedTokenizer, task_n
         dev_datasets,
         generation_mode=generation_mode,
         max_new_tokens=max_new_tokens,
+        task_name=task_name,
     )
     accuracies["tv_dev_by_layer"] = tv_dev_accuracy_by_layer
     accuracies["icl"] = calculate_accuracy_on_datasets(task, icl_predictions, test_datasets)
@@ -102,6 +104,34 @@ def evaluate_task(model: PreTrainedModel, tokenizer: PreTrainedTokenizer, task_n
             tv_comet_results = task.evaluate_with_comet(sources, tv_predictions, references, task_name)
             comet_results["tv_comet"] = tv_comet_results["comet"]
 
+            # Calculate chrF scores
+            print("\nCalculating chrF scores...")
+            icl_chrf_scores = []
+            tv_chrf_scores = []
+
+            for ref, icl_pred, tv_pred in zip(references, icl_predictions, tv_predictions):
+                # Calculate chrF for ICL
+                icl_chrf_result = sacrebleu.sentence_chrf(
+                    icl_pred,
+                    [ref],
+                    word_order=0,  # Character n-grams only
+                    char_order=6   # Default: up to 6-grams
+                )
+                icl_chrf_scores.append(icl_chrf_result.score / 100.0)
+
+                # Calculate chrF for TV
+                tv_chrf_result = sacrebleu.sentence_chrf(
+                    tv_pred,
+                    [ref],
+                    word_order=0,
+                    char_order=6
+                )
+                tv_chrf_scores.append(tv_chrf_result.score / 100.0)
+
+            # Store average chrF scores
+            comet_results["icl_chrf"] = sum(icl_chrf_scores) / len(icl_chrf_scores) if icl_chrf_scores else 0.0
+            comet_results["tv_chrf"] = sum(tv_chrf_scores) / len(tv_chrf_scores) if tv_chrf_scores else 0.0
+
             # Store sample predictions for visualization (first 10 examples)
             num_samples = min(10, len(sources))
             comet_results["prediction_samples"] = {
@@ -111,6 +141,8 @@ def evaluate_task(model: PreTrainedModel, tokenizer: PreTrainedTokenizer, task_n
                 "tv_predictions": tv_predictions[:num_samples],
                 "icl_scores": icl_comet_results.get("comet_scores", [])[:num_samples],
                 "tv_scores": tv_comet_results.get("comet_scores", [])[:num_samples],
+                "icl_chrf_scores": icl_chrf_scores[:num_samples],
+                "tv_chrf_scores": tv_chrf_scores[:num_samples],
             }
 
             # Compare individual COMET scores
@@ -120,7 +152,7 @@ def evaluate_task(model: PreTrainedModel, tokenizer: PreTrainedTokenizer, task_n
                     icl_score = icl_comet_results["comet_scores"][i]
                     tv_score = tv_comet_results["comet_scores"][i]
                     # print(f"  Example {i+1}: ICL={icl_score:.4f}, TV={tv_score:.4f}")
-            
+
         except Exception as e:
             import traceback
             traceback.print_exc()
@@ -217,6 +249,8 @@ def evaluate_cross_task(
         generation_mode_target=target_generation_mode,
         max_new_tokens_source=max_new_tokens_source,
         max_new_tokens_target=max_new_tokens_target,
+        source_task_name=source_task_name,
+        target_task_name=target_task_name,
     )
 
     accuracies["cross_task_tv"] = calculate_accuracy_on_datasets(target_task, cross_predictions, target_test_datasets)
@@ -227,25 +261,24 @@ def evaluate_cross_task(
     print(f"Target task vector: {target_task_name}")
     print("="*50)
 
-    # Use layer 13 for multi-token translation (known to be effective)
-    target_tv_layers_to_test = [13] if target_generation_mode == "multi" else None
-
     target_tv_predictions, target_tv_dev_accuracy_by_layer, target_task_hiddens = run_task_vector(
         model,
         tokenizer,
         target_task,
         target_test_datasets,
         target_dev_datasets,
-        layers_to_test=target_tv_layers_to_test,
         generation_mode=target_generation_mode,
         max_new_tokens=max_new_tokens_target,
+        task_name=target_task_name,
     )
 
     accuracies["target_tv"] = calculate_accuracy_on_datasets(target_task, target_tv_predictions, target_test_datasets)
     print(f"Target task vector accuracy: {accuracies['target_tv']:.2f}")
 
     target_tv_best_layer = int(max(target_tv_dev_accuracy_by_layer, key=target_tv_dev_accuracy_by_layer.get))
-    print(f"Target task vector best layer: {target_tv_best_layer}")
+    print(f"\n{'='*50}")
+    print(f"★ TARGET TASK VECTOR BEST LAYER: {target_tv_best_layer}")
+    print(f"{'='*50}\n")
 
     # Store layer information
     layer_info["source_best_layer"] = source_best_layer
@@ -255,14 +288,20 @@ def evaluate_cross_task(
     layer_info["target_dev_accuracy_by_layer"] = target_dev_accuracy_by_layer
     layer_info["target_tv_dev_accuracy_by_layer"] = target_tv_dev_accuracy_by_layer
 
-    print(f"\nSource task best layer: {source_best_layer}")
-    print(f"Target task best layer (with source vector): {target_best_layer}")
-    print(f"Target task vector best layer (with target vector): {target_tv_best_layer}")
+    print(f"\n{'='*70}")
+    print(f"★ BEST LAYER SUMMARY:")
+    print(f"  - Source task best layer: {source_best_layer}")
+    print(f"  - Target task best layer (with source vector): {target_best_layer}")
+    print(f"  - Target task vector best layer (with target vector): {target_tv_best_layer}")
+    print(f"{'='*70}\n")
 
     # COMET evaluation for translation tasks
     icl_comet_scores = None
     cross_task_tv_comet_scores = None
     target_tv_comet_scores = None
+    icl_chrf_scores = None
+    cross_task_tv_chrf_scores = None
+    target_tv_chrf_scores = None
 
     if target_task_name.startswith("translation_") and hasattr(target_task, 'evaluate_with_comet'):
         try:
@@ -286,6 +325,45 @@ def evaluate_cross_task(
             comet_results["target_tv_comet"] = target_tv_comet_results["comet"]
             target_tv_comet_scores = target_tv_comet_results.get("comet_scores", None)
 
+            # Calculate chrF scores
+            print("\nCalculating chrF scores...")
+            icl_chrf_scores = []
+            cross_task_tv_chrf_scores = []
+            target_tv_chrf_scores = []
+
+            for ref, icl_pred, cross_pred, target_pred in zip(references, icl_predictions, cross_predictions, target_tv_predictions):
+                # Calculate chrF for ICL
+                icl_chrf_result = sacrebleu.sentence_chrf(
+                    icl_pred,
+                    [ref],
+                    word_order=0,
+                    char_order=6
+                )
+                icl_chrf_scores.append(icl_chrf_result.score / 100.0)
+
+                # Calculate chrF for cross-task TV
+                cross_chrf_result = sacrebleu.sentence_chrf(
+                    cross_pred,
+                    [ref],
+                    word_order=0,
+                    char_order=6
+                )
+                cross_task_tv_chrf_scores.append(cross_chrf_result.score / 100.0)
+
+                # Calculate chrF for target TV
+                target_chrf_result = sacrebleu.sentence_chrf(
+                    target_pred,
+                    [ref],
+                    word_order=0,
+                    char_order=6
+                )
+                target_tv_chrf_scores.append(target_chrf_result.score / 100.0)
+
+            # Store average chrF scores
+            comet_results["icl_chrf"] = sum(icl_chrf_scores) / len(icl_chrf_scores) if icl_chrf_scores else 0.0
+            comet_results["cross_task_tv_chrf"] = sum(cross_task_tv_chrf_scores) / len(cross_task_tv_chrf_scores) if cross_task_tv_chrf_scores else 0.0
+            comet_results["target_tv_chrf"] = sum(target_tv_chrf_scores) / len(target_tv_chrf_scores) if target_tv_chrf_scores else 0.0
+
         except Exception as e:
             import traceback
             traceback.print_exc()
@@ -306,9 +384,402 @@ def evaluate_cross_task(
         'icl_comet_scores': icl_comet_scores if icl_comet_scores is not None else None,
         'cross_task_tv_comet_scores': cross_task_tv_comet_scores if cross_task_tv_comet_scores is not None else None,
         'target_tv_comet_scores': target_tv_comet_scores if target_tv_comet_scores is not None else None,
+        'icl_chrf_scores': icl_chrf_scores if icl_chrf_scores is not None else None,
+        'cross_task_tv_chrf_scores': cross_task_tv_chrf_scores if cross_task_tv_chrf_scores is not None else None,
+        'target_tv_chrf_scores': target_tv_chrf_scores if target_tv_chrf_scores is not None else None,
     }
 
     return accuracies, comet_results, layer_info, task_hiddens, prediction_examples
+
+
+def evaluate_bidirectional_averaged_task_vector(
+    model: PreTrainedModel,
+    tokenizer: PreTrainedTokenizer,
+    task1_name: str,
+    task2_name: str,
+    num_examples: int
+) -> Tuple:
+    """
+    Evaluate bidirectional averaged task vectors (e.g., en_ja_easy + ja_en_easy).
+
+    Creates task vectors from both tasks using the same number of examples,
+    averages them, and tests the averaged vector on both task directions.
+
+    Args:
+        model: The language model
+        tokenizer: The tokenizer
+        task1_name: First task name (e.g., "translation_en_ja_easy")
+        task2_name: Second task name (e.g., "translation_ja_en_easy")
+        num_examples: Number of examples for ICL
+
+    Returns:
+        results: Dictionary containing accuracies, COMET scores, and predictions
+    """
+    seed_everything(41)
+    print(f"\n{'='*80}")
+    print(f"BIDIRECTIONAL AVERAGED TASK VECTOR EXPERIMENT")
+    print(f"Task 1: {task1_name}")
+    print(f"Task 2: {task2_name}")
+    print(f"{'='*80}\n")
+
+    results = {}
+
+    # Get both tasks
+    task1 = get_task_by_name(tokenizer=tokenizer, task_name=task1_name)
+    task2 = get_task_by_name(tokenizer=tokenizer, task_name=task2_name)
+
+    # Determine generation mode
+    generation_mode1 = "single" if "_single" in task1_name else "multi"
+    generation_mode2 = "single" if "_single" in task2_name else "multi"
+    max_new_tokens1 = 1 if generation_mode1 == "single" else 30
+    max_new_tokens2 = 1 if generation_mode2 == "single" else 30
+
+    num_test_datasets, num_dev_datasets = 50, 50
+
+    # Create datasets for both tasks
+    print(f"Creating datasets for {task1_name}...")
+    task1_test_datasets = task1.create_datasets(num_datasets=num_test_datasets, num_examples=num_examples)
+    task1_dev_datasets = task1.create_datasets(num_datasets=num_dev_datasets, num_examples=num_examples)
+
+    print(f"Creating datasets for {task2_name}...")
+    task2_test_datasets = task2.create_datasets(num_datasets=num_test_datasets, num_examples=num_examples)
+    task2_dev_datasets = task2.create_datasets(num_datasets=num_dev_datasets, num_examples=num_examples)
+
+    # Display examples used for creating task vectors
+    from core.data.datasets.few_shot_format import FewShotFormat
+    few_shot_format = FewShotFormat()
+
+    print(f"\n{'='*80}")
+    print(f"EXAMPLES USED FOR CREATING TASK VECTORS (from dev datasets)")
+    print(f"{'='*80}\n")
+
+    print(f"\n{task1_name} - Dev Examples (first 3):")
+    print("-" * 80)
+    for i in range(min(3, len(task1_dev_datasets))):
+        dataset = task1_dev_datasets[i]
+        print(f"\nExample {i+1}:")
+        print(f"  Prompt (formatted):")
+        formatted_prompt = few_shot_format.format_dataset(dataset, include_train=True)
+        print(f"    {formatted_prompt}")
+        print(f"  Input: {dataset.test_input}")
+        print(f"  Output: {dataset.test_output}")
+        if hasattr(dataset, 'train_inputs') and dataset.train_inputs:
+            print(f"  ICL examples used: {len(dataset.train_inputs)}")
+            for j, (inp, out) in enumerate(zip(dataset.train_inputs[:2], dataset.train_outputs[:2])):
+                print(f"    ICL {j+1}: {inp} -> {out}")
+
+    print(f"\n{task2_name} - Dev Examples (first 3):")
+    print("-" * 80)
+    for i in range(min(3, len(task2_dev_datasets))):
+        dataset = task2_dev_datasets[i]
+        print(f"\nExample {i+1}:")
+        print(f"  Prompt (formatted):")
+        formatted_prompt = few_shot_format.format_dataset(dataset, include_train=True)
+        print(f"    {formatted_prompt}")
+        print(f"  Input: {dataset.test_input}")
+        print(f"  Output: {dataset.test_output}")
+        if hasattr(dataset, 'train_inputs') and dataset.train_inputs:
+            print(f"  ICL examples used: {len(dataset.train_inputs)}")
+            for j, (inp, out) in enumerate(zip(dataset.train_inputs[:2], dataset.train_outputs[:2])):
+                print(f"    ICL {j+1}: {inp} -> {out}")
+
+    # Get task hiddens for both tasks
+    print(f"\n{'='*80}")
+    print(f"COMPUTING TASK VECTORS")
+    print(f"{'='*80}\n")
+
+    print(f"Computing task vectors for {task1_name}...")
+    task1_hiddens = get_task_hiddens(model, tokenizer, task1, task1_dev_datasets, multi_context=False)
+    print(f"  Task vector shape: {task1_hiddens.shape}")
+
+    print(f"Computing task vectors for {task2_name}...")
+    task2_hiddens = get_task_hiddens(model, tokenizer, task2, task2_dev_datasets, multi_context=False)
+    print(f"  Task vector shape: {task2_hiddens.shape}")
+
+    # Average the task vectors
+    print(f"\nAveraging task vectors...")
+    import numpy as np
+    import torch
+    averaged_task_hiddens = (task1_hiddens + task2_hiddens) / 2.0
+    print(f"Averaged task vector shape: {averaged_task_hiddens.shape}")
+
+    # Find best layer for each task using dev sets with averaged vector
+    from core.task_vectors import modulated_generate
+    from core.models.utils.llm_layers import get_layers
+
+    num_layers = len(get_layers(model))
+
+    # Find best layer for task1
+    print(f"\nFinding best layer for {task1_name} using averaged vector...")
+    task1_dev_acc_by_layer = {}
+
+    use_comet_task1 = (
+        "ja" in task1_name.lower() and
+        task1_name.startswith("translation_") and
+        generation_mode1 == "multi" and
+        hasattr(task1, 'evaluate_with_comet')
+    )
+
+    for layer_num in range(num_layers):
+        predictions = modulated_generate(
+            model, tokenizer, task1, task1_dev_datasets,
+            task_hiddens=averaged_task_hiddens,
+            intermediate_layer=layer_num,
+            generation_mode=generation_mode1,
+            max_new_tokens=max_new_tokens1
+        )
+
+        if use_comet_task1:
+            sources = [d.test_input for d in task1_dev_datasets]
+            references = [d.test_output for d in task1_dev_datasets]
+            comet_result = task1.evaluate_with_comet(sources, predictions, references, task1_name)
+            task1_dev_acc_by_layer[layer_num] = comet_result['comet']
+        else:
+            task1_dev_acc_by_layer[layer_num] = calculate_accuracy_on_datasets(task1, predictions, task1_dev_datasets)
+
+        if layer_num % 5 == 0:
+            print(f"  Layer {layer_num}: {task1_dev_acc_by_layer[layer_num]:.4f}")
+
+    task1_best_layer = int(max(task1_dev_acc_by_layer, key=task1_dev_acc_by_layer.get))
+    print(f"Best layer for {task1_name}: {task1_best_layer} (score: {task1_dev_acc_by_layer[task1_best_layer]:.4f})")
+
+    # Find best layer for task2
+    print(f"\nFinding best layer for {task2_name} using averaged vector...")
+    task2_dev_acc_by_layer = {}
+
+    use_comet_task2 = (
+        "ja" in task2_name.lower() and
+        task2_name.startswith("translation_") and
+        generation_mode2 == "multi" and
+        hasattr(task2, 'evaluate_with_comet')
+    )
+
+    for layer_num in range(num_layers):
+        predictions = modulated_generate(
+            model, tokenizer, task2, task2_dev_datasets,
+            task_hiddens=averaged_task_hiddens,
+            intermediate_layer=layer_num,
+            generation_mode=generation_mode2,
+            max_new_tokens=max_new_tokens2
+        )
+
+        if use_comet_task2:
+            sources = [d.test_input for d in task2_dev_datasets]
+            references = [d.test_output for d in task2_dev_datasets]
+            comet_result = task2.evaluate_with_comet(sources, predictions, references, task2_name)
+            task2_dev_acc_by_layer[layer_num] = comet_result['comet']
+        else:
+            task2_dev_acc_by_layer[layer_num] = calculate_accuracy_on_datasets(task2, predictions, task2_dev_datasets)
+
+        if layer_num % 5 == 0:
+            print(f"  Layer {layer_num}: {task2_dev_acc_by_layer[layer_num]:.4f}")
+
+    task2_best_layer = int(max(task2_dev_acc_by_layer, key=task2_dev_acc_by_layer.get))
+    print(f"Best layer for {task2_name}: {task2_best_layer} (score: {task2_dev_acc_by_layer[task2_best_layer]:.4f})")
+
+    # Test on task 1 with averaged vector
+    print(f"\n{'='*80}")
+    print(f"TESTING AVERAGED VECTOR ON {task1_name}")
+    print(f"{'='*80}\n")
+
+    # Display test prompts
+    print(f"Test Prompts (first 3 examples):")
+    print("-" * 80)
+    for i in range(min(3, len(task1_test_datasets))):
+        dataset = task1_test_datasets[i]
+        print(f"\nTest Example {i+1}:")
+        print(f"  Prompt (formatted with ICL):")
+        formatted_prompt = few_shot_format.format_dataset(dataset, include_train=True)
+        print(f"    {formatted_prompt}")
+        print(f"  Expected output: {dataset.test_output}")
+        if hasattr(dataset, 'train_inputs') and dataset.train_inputs:
+            print(f"  Number of ICL examples in prompt: {len(dataset.train_inputs)}")
+
+    # ICL predictions for task1
+    print(f"\nGenerating ICL predictions for {task1_name}...")
+    icl_predictions_task1 = run_icl(model, tokenizer, task1, task1_test_datasets, generation_mode=generation_mode1)
+
+    # Averaged TV predictions for task1
+    print(f"\nGenerating Averaged TV predictions for {task1_name}...")
+    print(f"  Using averaged task vector at layer {task1_best_layer}")
+    from core.task_vectors import modulated_generate
+    avg_tv_predictions_task1 = modulated_generate(
+        model, tokenizer, task1, task1_test_datasets,
+        task_hiddens=averaged_task_hiddens,
+        intermediate_layer=task1_best_layer,
+        generation_mode=generation_mode1,
+        max_new_tokens=max_new_tokens1
+    )
+
+    # Calculate accuracies for task1
+    results['task1_name'] = task1_name
+    results['task1_icl_accuracy'] = calculate_accuracy_on_datasets(task1, icl_predictions_task1, task1_test_datasets)
+    results['task1_avg_tv_accuracy'] = calculate_accuracy_on_datasets(task1, avg_tv_predictions_task1, task1_test_datasets)
+    results['task1_best_layer'] = task1_best_layer
+
+    # COMET evaluation for task1
+    if task1_name.startswith("translation_") and hasattr(task1, 'evaluate_with_comet'):
+        sources_task1 = [dataset.test_input for dataset in task1_test_datasets]
+        references_task1 = [dataset.test_output for dataset in task1_test_datasets]
+
+        icl_comet_task1 = task1.evaluate_with_comet(sources_task1, icl_predictions_task1, references_task1, task1_name)
+        avg_tv_comet_task1 = task1.evaluate_with_comet(sources_task1, avg_tv_predictions_task1, references_task1, task1_name)
+
+        results['task1_icl_comet'] = icl_comet_task1['comet']
+        results['task1_avg_tv_comet'] = avg_tv_comet_task1['comet']
+
+        # Calculate chrF scores
+        icl_chrf_scores_task1 = []
+        avg_tv_chrf_scores_task1 = []
+        for ref, icl_pred, avg_tv_pred in zip(references_task1, icl_predictions_task1, avg_tv_predictions_task1):
+            # ICL chrF
+            icl_chrf_result = sacrebleu.sentence_chrf(icl_pred, [ref], word_order=0, char_order=6)
+            icl_chrf_scores_task1.append(icl_chrf_result.score / 100.0)
+            # Averaged TV chrF
+            avg_tv_chrf_result = sacrebleu.sentence_chrf(avg_tv_pred, [ref], word_order=0, char_order=6)
+            avg_tv_chrf_scores_task1.append(avg_tv_chrf_result.score / 100.0)
+
+        results['task1_icl_chrf'] = sum(icl_chrf_scores_task1) / len(icl_chrf_scores_task1) if icl_chrf_scores_task1 else 0.0
+        results['task1_avg_tv_chrf'] = sum(avg_tv_chrf_scores_task1) / len(avg_tv_chrf_scores_task1) if avg_tv_chrf_scores_task1 else 0.0
+
+        print(f"\n{task1_name} Results:")
+        print(f"  ICL COMET: {results['task1_icl_comet']:.4f}")
+        print(f"  Averaged TV COMET: {results['task1_avg_tv_comet']:.4f}")
+        print(f"  Retention: {(results['task1_avg_tv_comet'] / results['task1_icl_comet'] * 100):.1f}%")
+        print(f"  ICL chrF: {results['task1_icl_chrf']:.4f}")
+        print(f"  Averaged TV chrF: {results['task1_avg_tv_chrf']:.4f}")
+
+    # Test on task 2 with averaged vector
+    print(f"\n{'='*80}")
+    print(f"TESTING AVERAGED VECTOR ON {task2_name}")
+    print(f"{'='*80}\n")
+
+    # Display test prompts
+    print(f"Test Prompts (first 3 examples):")
+    print("-" * 80)
+    for i in range(min(3, len(task2_test_datasets))):
+        dataset = task2_test_datasets[i]
+        print(f"\nTest Example {i+1}:")
+        print(f"  Prompt (formatted with ICL):")
+        formatted_prompt = few_shot_format.format_dataset(dataset, include_train=True)
+        print(f"    {formatted_prompt}")
+        print(f"  Expected output: {dataset.test_output}")
+        if hasattr(dataset, 'train_inputs') and dataset.train_inputs:
+            print(f"  Number of ICL examples in prompt: {len(dataset.train_inputs)}")
+
+    # ICL predictions for task2
+    print(f"\nGenerating ICL predictions for {task2_name}...")
+    icl_predictions_task2 = run_icl(model, tokenizer, task2, task2_test_datasets, generation_mode=generation_mode2)
+
+    # Averaged TV predictions for task2
+    print(f"\nGenerating Averaged TV predictions for {task2_name}...")
+    print(f"  Using averaged task vector at layer {task2_best_layer}")
+    avg_tv_predictions_task2 = modulated_generate(
+        model, tokenizer, task2, task2_test_datasets,
+        task_hiddens=averaged_task_hiddens,
+        intermediate_layer=task2_best_layer,
+        generation_mode=generation_mode2,
+        max_new_tokens=max_new_tokens2
+    )
+
+    # Calculate accuracies for task2
+    results['task2_name'] = task2_name
+    results['task2_icl_accuracy'] = calculate_accuracy_on_datasets(task2, icl_predictions_task2, task2_test_datasets)
+    results['task2_avg_tv_accuracy'] = calculate_accuracy_on_datasets(task2, avg_tv_predictions_task2, task2_test_datasets)
+    results['task2_best_layer'] = task2_best_layer
+
+    # COMET evaluation for task2
+    if task2_name.startswith("translation_") and hasattr(task2, 'evaluate_with_comet'):
+        sources_task2 = [dataset.test_input for dataset in task2_test_datasets]
+        references_task2 = [dataset.test_output for dataset in task2_test_datasets]
+
+        icl_comet_task2 = task2.evaluate_with_comet(sources_task2, icl_predictions_task2, references_task2, task2_name)
+        avg_tv_comet_task2 = task2.evaluate_with_comet(sources_task2, avg_tv_predictions_task2, references_task2, task2_name)
+
+        results['task2_icl_comet'] = icl_comet_task2['comet']
+        results['task2_avg_tv_comet'] = avg_tv_comet_task2['comet']
+
+        # Calculate chrF scores
+        icl_chrf_scores_task2 = []
+        avg_tv_chrf_scores_task2 = []
+        for ref, icl_pred, avg_tv_pred in zip(references_task2, icl_predictions_task2, avg_tv_predictions_task2):
+            # ICL chrF
+            icl_chrf_result = sacrebleu.sentence_chrf(icl_pred, [ref], word_order=0, char_order=6)
+            icl_chrf_scores_task2.append(icl_chrf_result.score / 100.0)
+            # Averaged TV chrF
+            avg_tv_chrf_result = sacrebleu.sentence_chrf(avg_tv_pred, [ref], word_order=0, char_order=6)
+            avg_tv_chrf_scores_task2.append(avg_tv_chrf_result.score / 100.0)
+
+        results['task2_icl_chrf'] = sum(icl_chrf_scores_task2) / len(icl_chrf_scores_task2) if icl_chrf_scores_task2 else 0.0
+        results['task2_avg_tv_chrf'] = sum(avg_tv_chrf_scores_task2) / len(avg_tv_chrf_scores_task2) if avg_tv_chrf_scores_task2 else 0.0
+
+        print(f"\n{task2_name} Results:")
+        print(f"  ICL COMET: {results['task2_icl_comet']:.4f}")
+        print(f"  Averaged TV COMET: {results['task2_avg_tv_comet']:.4f}")
+        print(f"  Retention: {(results['task2_avg_tv_comet'] / results['task2_icl_comet'] * 100):.1f}%")
+        print(f"  ICL chrF: {results['task2_icl_chrf']:.4f}")
+        print(f"  Averaged TV chrF: {results['task2_avg_tv_chrf']:.4f}")
+
+    # Store prediction examples with individual COMET and chrF scores
+    results['task1_prediction_examples'] = {
+        'sources': sources_task1 if task1_name.startswith("translation_") else None,
+        'references': references_task1 if task1_name.startswith("translation_") else None,
+        'icl_predictions': icl_predictions_task1,
+        'avg_tv_predictions': avg_tv_predictions_task1,
+        'icl_comet_scores': icl_comet_task1.get('comet_scores', []) if task1_name.startswith("translation_") else [],
+        'avg_tv_comet_scores': avg_tv_comet_task1.get('comet_scores', []) if task1_name.startswith("translation_") else [],
+        'icl_chrf_scores': icl_chrf_scores_task1 if task1_name.startswith("translation_") else [],
+        'avg_tv_chrf_scores': avg_tv_chrf_scores_task1 if task1_name.startswith("translation_") else [],
+    }
+
+    results['task2_prediction_examples'] = {
+        'sources': sources_task2 if task2_name.startswith("translation_") else None,
+        'references': references_task2 if task2_name.startswith("translation_") else None,
+        'icl_predictions': icl_predictions_task2,
+        'avg_tv_predictions': avg_tv_predictions_task2,
+        'icl_comet_scores': icl_comet_task2.get('comet_scores', []) if task2_name.startswith("translation_") else [],
+        'avg_tv_comet_scores': avg_tv_comet_task2.get('comet_scores', []) if task2_name.startswith("translation_") else [],
+        'icl_chrf_scores': icl_chrf_scores_task2 if task2_name.startswith("translation_") else [],
+        'avg_tv_chrf_scores': avg_tv_chrf_scores_task2 if task2_name.startswith("translation_") else [],
+    }
+
+    # Store dev examples used for creating task vectors
+    results['task1_dev_examples'] = {
+        'inputs': [d.test_input for d in task1_dev_datasets[:5]],
+        'outputs': [d.test_output for d in task1_dev_datasets[:5]],
+        'prompts': [few_shot_format.format_dataset(d, include_train=True) for d in task1_dev_datasets[:5]],
+    }
+
+    results['task2_dev_examples'] = {
+        'inputs': [d.test_input for d in task2_dev_datasets[:5]],
+        'outputs': [d.test_output for d in task2_dev_datasets[:5]],
+        'prompts': [few_shot_format.format_dataset(d, include_train=True) for d in task2_dev_datasets[:5]],
+    }
+
+    # Store test examples (prompts)
+    results['task1_test_examples'] = {
+        'inputs': [d.test_input for d in task1_test_datasets[:5]],
+        'outputs': [d.test_output for d in task1_test_datasets[:5]],
+        'prompts': [few_shot_format.format_dataset(d, include_train=True) for d in task1_test_datasets[:5]],
+    }
+
+    results['task2_test_examples'] = {
+        'inputs': [d.test_input for d in task2_test_datasets[:5]],
+        'outputs': [d.test_output for d in task2_test_datasets[:5]],
+        'prompts': [few_shot_format.format_dataset(d, include_train=True) for d in task2_test_datasets[:5]],
+    }
+
+    # Store additional info
+    results['num_examples'] = num_examples
+    results['task1_dev_accuracy_by_layer'] = task1_dev_acc_by_layer
+    results['task2_dev_accuracy_by_layer'] = task2_dev_acc_by_layer
+    results['averaged_task_hiddens_shape'] = averaged_task_hiddens.shape
+
+    print(f"\n{'='*80}")
+    print(f"BIDIRECTIONAL AVERAGED TASK VECTOR EXPERIMENT COMPLETED")
+    print(f"{'='*80}\n")
+
+    return results
 
 
 def run_main_experiment(
@@ -493,6 +964,77 @@ def run_cross_task_experiment(
         **comet_results,
     }
 
+    with open(results_file, "wb") as f:
+        pickle.dump(results, f)
+
+    print(f"Results saved to: {results_file}")
+
+
+def run_bidirectional_averaged_experiment(
+    model_type: str,
+    model_variant: str,
+    task1_name: str,
+    task2_name: str,
+    num_examples: int = 5,
+    experiment_id: str = "",
+    model: Optional[PreTrainedModel] = None,
+    tokenizer: Optional[PreTrainedTokenizer] = None,
+) -> None:
+    """
+    Run bidirectional averaged task vector experiment.
+
+    Args:
+        model_type: Model type (e.g., "llama")
+        model_variant: Model variant (e.g., "13B")
+        task1_name: First task name (e.g., "translation_en_ja_easy")
+        task2_name: Second task name (e.g., "translation_ja_en_easy")
+        num_examples: Number of ICL examples
+        experiment_id: Experiment ID for saving results
+        model: Pre-loaded model (optional)
+        tokenizer: Pre-loaded tokenizer (optional)
+    """
+    # Create results file path
+    results_file = get_results_file_path(
+        model_type,
+        model_variant,
+        experiment_id=experiment_id + "_bidirectional_avg" if experiment_id else "bidirectional_avg"
+    )
+    os.makedirs(os.path.dirname(results_file), exist_ok=True)
+
+    # Load existing results if available
+    if os.path.exists(results_file):
+        with open(results_file, "rb") as f:
+            results = pickle.load(f)
+    else:
+        results = {}
+
+    # Create experiment key
+    experiment_key = f"{task1_name}_and_{task2_name}"
+
+    if experiment_key in results:
+        print(f"Skipping bidirectional averaged experiment: {experiment_key}")
+        return
+
+    print("Loading model and tokenizer...")
+    print(f"CUDA_VISIBLE_DEVICES: {os.environ.get('CUDA_VISIBLE_DEVICES', 'Not set')}")
+
+    import torch
+    print(f"PyTorch CUDA available: {torch.cuda.is_available()}")
+    print(f"PyTorch device count: {torch.cuda.device_count()}")
+
+    if model is None or tokenizer is None:
+        model, tokenizer = load_model_and_tokenizer(model_type, model_variant)
+        limit_gpus([1])
+
+    # Run evaluation
+    experiment_results = evaluate_bidirectional_averaged_task_vector(
+        model, tokenizer, task1_name, task2_name, num_examples
+    )
+
+    # Store results
+    results[experiment_key] = experiment_results
+
+    # Save results
     with open(results_file, "wb") as f:
         pickle.dump(results, f)
 

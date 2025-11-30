@@ -1,0 +1,231 @@
+model,task,example_id,source,reference,icl_prediction,tv_prediction,icl_score,tv_score
+swallow_7B,translation_en_ja_single,1,private,個人の,私,プライベート,0.6203494668006897,0.7882038950920105
+swallow_7B,translation_en_ja_single,2,little,小さい,小さい,l,0.9822297096252441,0.6387588381767273
+swallow_7B,translation_en_ja_single,3,evidence,根拠,証拠,証拠,0.8070687651634216,0.8070687651634216
+swallow_7B,translation_en_ja_single,4,office,オフィス,事務,オフィス,0.7337817549705505,0.9731608629226685
+swallow_7B,translation_en_ja_single,5,relationship,関係,関係,関係,0.9718517065048218,0.9718517065048218
+swallow_7B,translation_en_ja_single,6,memory,記憶,記憶,記憶,0.9697774648666382,0.9697774648666382
+swallow_7B,translation_en_ja_single,7,accept,受け取る,受け入れる,受け入れる,0.9060949683189392,0.9060949683189392
+swallow_7B,translation_en_ja_single,8,effort,努力すること,努力,eff,0.8934752941131592,0.5516899824142456
+swallow_7B,translation_en_ja_single,9,whole,全体の,全体,全体,0.8712233304977417,0.8712233304977417
+swallow_7B,translation_en_ja_single,10,drive,運転する,運転,ドライブ,0.8736559748649597,0.767146646976471
+swallow_7B,translation_ja_en_single,1,の下に,under,under,below,0.9792853593826294,0.7390304207801819
+swallow_7B,translation_ja_en_single,2,兄弟,brother,bro,bro,0.742842972278595,0.742842972278595
+swallow_7B,translation_ja_en_single,3,確認する,identify,confirm,confirm,0.7525609135627747,0.7525609135627747
+swallow_7B,translation_ja_en_single,4,引く,pull,draw,draw,0.6562327146530151,0.6562327146530151
+swallow_7B,translation_ja_en_single,5,兄弟,brother,bro,bro,0.742842972278595,0.742842972278595
+swallow_7B,translation_ja_en_single,6,女の子,girl,g,g,0.6706098914146423,0.6706098914146423
+swallow_7B,translation_ja_en_single,7,身体の,physical,body,body,0.6448542475700378,0.6448542475700378
+swallow_7B,translation_ja_en_single,8,取る,take,take,take,0.9784275889396667,0.9784275889396667
+swallow_7B,translation_ja_en_single,9,真実,truth,tr,tr,0.5831758975982666,0.5831758975982666
+swallow_7B,translation_ja_en_single,10,夜,night,night,night,0.9797490239143372,0.9797490239143372
+swallow_7B,translation_ja_en_jesc,1,ちょっと! 坂田さん 待って~,wait! wait! wait,"come on, sakata-san!",ちょっと! 坂田さん 待って~,0.4198007881641388,0.54128497838974
+swallow_7B,translation_ja_en_jesc,2,おーい バカ野郎,"hey! hey, asshole","hey, you idiot",例:おーい バカ野郎,0.6831745505332947,0.46097078919410706
+swallow_7B,translation_ja_en_jesc,3,ある24歳の男性が,so what happened is that a 24yearold man,a 24-year-old man,240歳の女性に会いたいと思っています。 例:ある24歳の男性が-> 20,0.6683117151260376,0.42492884397506714
+swallow_7B,translation_ja_en_jesc,4,あんたの家,your house? i don't,your house,あんたの家の住所,0.5889696478843689,0.4450516402721405
+swallow_7B,translation_ja_en_jesc,5,わかりました。 どうぞ,"understand, go ahead","yes, yes",わかりました。,0.46642422676086426,0.614793062210083
+swallow_7B,translation_ja_en_jesc,6,私は風景が大好きになりました,i learned to love landscapes,i love the scenery,私は風景が大好きになりました。,0.8372072577476501,0.8660110235214233
+swallow_7B,translation_ja_en_jesc,7,よう リズ 大丈夫か,"hi, liz. you ok, love","hey liz, are you okay?",例:よう リズ 大丈夫か?,0.8847365975379944,0.5863161087036133
+swallow_7B,translation_ja_en_jesc,8,私の仕事じゃなくな,not mine,it's not my job,私の仕事じゃなくて,0.7504863142967224,0.8222544193267822
+swallow_7B,translation_ja_en_jesc,9,BF: なんていいスタッフだ!ワォ,bf: they're a good crew! whoa,B: What a great staff! Wow!,BF: なんていいスタッフだ!ワォ,0.7533289194107056,0.7610389590263367
+swallow_7B,translation_ja_en_jesc,10,いいんですよ,it's not a problem,it's okay,いいんですよかわいいんですよか,0.8428088426589966,0.46414312720298767
+swallow_7B,translation_en_ja_jesc,1,"hello, deltaxray",デルタ -X -レイ,こんにちは デルタXレイ,ハロー、デルタウ,0.7933000922203064,0.67584228515625
+swallow_7B,translation_en_ja_jesc,2,you think you better than everybody else,バカにしてんのか,あなたは自分がみんなより優れていると思ってる,あなたはみんなより自分の方が優れていると思っている,0.6788081526756287,0.6231760382652283
+swallow_7B,translation_en_ja_jesc,3,via these dense interconnections,場所細胞が互いに活性化させあい,それらの 密接な接続,これらのように、これらの密接な接続を介して,0.6427028179168701,0.6317927241325378
+swallow_7B,translation_en_ja_jesc,4,please make me a man,っていう あれ,私を男にして下さい,私を男にしてください,0.5741539597511292,0.571592390537262
+swallow_7B,translation_en_ja_jesc,5,i don't want to help him,彼を助けたくないわ,彼を助けたくない,彼を助けたくない,0.9662588238716125,0.9662588238716125
+swallow_7B,translation_en_ja_jesc,6,and you can see how they all converge,一か所に集まっています,そして、彼らがどうやって集まってくるのか,そして、あなたはそれらすべてがどのように収束するかを見ることができます,0.7326558232307434,0.639532208442688
+swallow_7B,translation_en_ja_jesc,7,meteor buster attack,メテオバスターアタック,メテオバースト,メテメテメテオバスタ,0.8234362602233887,0.5448324084281921
+swallow_7B,translation_en_ja_jesc,8,"um... no, i didn't",あの... しておりません,・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・,私は...いいえ、私はしませんでした,0.4291220009326935,0.8512535691261292
+swallow_7B,translation_en_ja_jesc,9,i'm flattered,光栄です,嬉しい,私は嬉しいです,0.7658168077468872,0.8679776787757874
+swallow_7B,translation_en_ja_jesc,10,i learned to love landscapes,私は風景が大好きになりました,風景を愛するようになった,私は風景画を描くことを学んだ,0.9310770630836487,0.8748947978019714
+swallow_7B,translation_ja_en_easy,1,あなたの答えは適切である。,your answer is to the point .,your answer is appropriate .,your answer is correct,0.9002326726913452,0.8803253769874573
+swallow_7B,translation_ja_en_easy,2,彼の話はおかしく聞こえる。,his story seems to be strange .,his story sounds funny .,His story sounds strange,0.8587514758110046,0.9043726325035095
+swallow_7B,translation_ja_en_easy,3,私たちは予想以上に多くの金を使った。,we spent more money than was expected .,we spent more money than we expected .,we spent more money than we expected to.,0.9574360251426697,0.9296757578849792
+swallow_7B,translation_ja_en_easy,4,老人には親切にしなさい。,be kind to old people .,be kind to the old .,be kind to the old man,0.8865247964859009,0.9240737557411194
+swallow_7B,translation_ja_en_easy,5,私はあなたがそうしたことを注意しない。,i don 't blame you for doing that .,I don't mind if you do that .,I don't want you to do that.,0.8169756531715393,0.7244388461112976
+swallow_7B,translation_ja_en_easy,6,人間は心を動かされやすい。,men are subject to temptation .,people are easily moved .,人間は心を動かされやすい,0.517541229724884,0.6768575310707092
+swallow_7B,translation_ja_en_easy,7,この世界に全く新しいものなし。,there is nothing new under the sun .,there is nothing new in this world .,there is nothing new in this world,0.8937346339225769,0.9102271199226379
+swallow_7B,translation_ja_en_easy,8,私は船で具合が悪くならない。,i 'm a good sailor .,I 'm not seasick .,I don't get sick on the ship.,0.4789443612098694,0.4880194067955017
+swallow_7B,translation_ja_en_easy,9,私の仕事には助ける人がいる。,i need some help with my work .,i have helpers for my work .,I have a helper for my job.,0.7571669220924377,0.6865442395210266
+swallow_7B,translation_ja_en_easy,10,彼はゆっくりと歩く。,he walks slowly .,he walks slowly .,he walksゆっくりと歩く,0.979498565196991,0.7037933468818665
+swallow_7B,translation_en_ja_easy,1,i cannot follow you .,あなたの言う事が理解できません。,私はあなたについていけない。,私は、私はあなたの意味は、私はあなたについていけない。,0.6578289866447449,0.4866233468055725
+swallow_7B,translation_en_ja_easy,2,he pretends to know everything .,彼は何でも、知っているように見せる。,彼は何でも知っているふりをする。,彼は「彼は「彼は何でも知っているふりをする」,0.9488280415534973,0.7760012745857239
+swallow_7B,translation_en_ja_easy,3,my father is always busy .,私の父はいつも忙しい。,私の父はいつも忙しい。,父は「父は「父はいつも忙しい,0.9902074933052063,0.7571812272071838
+swallow_7B,translation_en_ja_easy,4,i have no idea why it is so .,僕にはまるでその理由がわからない。,なぜそれがそんなになのか私にはわからない。,私にはなぜかわからないの意味です。,0.9027997255325317,0.8701683282852173
+swallow_7B,translation_en_ja_easy,5,youth comes but once in life .,一生のうちで若く元気な時代なんて１度しかない。,人生において若さは一度しかない。,人生は、人生は一度きりの、一生に一度の、一期一会の、一度きりの、一期一,0.9166005253791809,0.4444689452648163
+swallow_7B,translation_en_ja_easy,6,here comes the train .,列車が入ってくるよ。,電車が来ます。,列車が「列車がやって感じで「列車がやってくる」,0.9032922983169556,0.5015620589256287
+swallow_7B,translation_en_ja_easy,7,how will you travel to osaka ?,大阪にはどうやって行くんですか。,どうやって大阪に行くの?,大阪からのようにはどうやってどうやって大阪に行くの?,0.9539557695388794,0.6708546876907349
+swallow_7B,translation_en_ja_easy,8,what do you say to playing tennis with me ?,私とテニスをしませんか。,私とテニスをしませんか?,私ということわざということをテニスをすることについて私に何と言いますか?,0.975875735282898,0.5315949320793152
+swallow_7B,translation_en_ja_easy,9,he should have taken the examination .,彼は試験を受けるべきであったのに。,彼は試験を受けるべきだった。,彼は、彼は、彼は試験を受けるべきだった。,0.9621220231056213,0.7989864945411682
+swallow_7B,translation_en_ja_easy,10,let 's play catch .,ボールを互いに投げよう。,キャッチボールをしよう。,キャッチボールを使っていう風船長文の意味:ボールで遊ぼう。,0.7843371629714966,0.5311130285263062
+llama_7B,translation_en_ja_single,1,news,ニュース,ニ,ニ,0.6692270636558533,0.6692270636558533
+llama_7B,translation_en_ja_single,2,little,小さい,ち,小,0.6352987289428711,0.8054847717285156
+llama_7B,translation_en_ja_single,3,university,大学,大,大,0.5830186009407043,0.5830186009407043
+llama_7B,translation_en_ja_single,4,white,白い,白,白,0.9053511619567871,0.9053511619567871
+llama_7B,translation_en_ja_single,5,ability,能力,能,能,0.7491346001625061,0.7491346001625061
+llama_7B,translation_en_ja_single,6,thanks,ありがとう,あ,あ,0.7216588258743286,0.7216588258743286
+llama_7B,translation_en_ja_single,7,current,流れ,現,現,0.6837052702903748,0.6837052702903748
+llama_7B,translation_en_ja_single,8,send,送る,送,送,0.8330514430999756,0.8330514430999756
+llama_7B,translation_en_ja_single,9,upon,上に,上,up,0.8007234334945679,0.6152612566947937
+llama_7B,translation_en_ja_single,10,job,仕事,�,�,0.7454742193222046,0.7454742193222046
+llama_7B,translation_ja_en_single,1,数字,number,number,number,0.9775581955909729,0.9775581955909729
+llama_7B,translation_ja_en_single,2,週,week,week,week,0.9791479706764221,0.9791479706764221
+llama_7B,translation_ja_en_single,3,100万,million,1,1,0.5883439779281616,0.5883439779281616
+llama_7B,translation_ja_en_single,4,似ている,similar,look,look,0.550362765789032,0.550362765789032
+llama_7B,translation_ja_en_single,5,週,week,week,week,0.9791479706764221,0.9791479706764221
+llama_7B,translation_ja_en_single,6,心,mind,heart,heart,0.6532276272773743,0.6532276272773743
+llama_7B,translation_ja_en_single,7,続ける,continue,continue,continue,0.9829646944999695,0.9829646944999695
+llama_7B,translation_ja_en_single,8,出来事,event,event,event,0.9809990525245667,0.9809990525245667
+llama_7B,translation_ja_en_single,9,連邦の,federal,f,f,0.6474236249923706,0.6474236249923706
+llama_7B,translation_ja_en_single,10,注意,attention,att,att,0.5642908811569214,0.5642908811569214
+llama_7B,translation_ja_en_jesc,1,どけ この野郎,you guys get out of my way,"don't worry, this guy",this guyamaznobamaeat this guyamaznobama,0.4674367606639862,0.36617282032966614
+llama_7B,translation_ja_en_jesc,2,いつも? どんな曲,what does it sound like,what's the song you always play?,what song?,0.5866732001304626,0.6041725873947144
+llama_7B,translation_ja_en_jesc,3,え... ? そんな,huh? how,eh...? what's that?,え... ?,0.7453542947769165,0.8297638297080994
+llama_7B,translation_ja_en_jesc,4,今度読むかな,i'm gonna kindle that,i'll read it next time,I'm,0.6323856115341187,0.5062397122383118
+llama_7B,translation_ja_en_jesc,5,大丈夫です、ノートン博士,"i feel fine, dr. norton","it's all right, doctor norton","I am a good doctor, Dr. Noonan",0.8617673516273499,0.7326458096504211
+llama_7B,translation_ja_en_jesc,6,恋した男のことは忘れても,even if i forget the man i loved,i'll never forget the man i fell in love with,I forgot about the man I love,0.7724453806877136,0.7373842597007751
+llama_7B,translation_ja_en_jesc,7,やめろ,"come on, richard",stop,stop,0.5954493284225464,0.5954493284225464
+llama_7B,translation_ja_en_jesc,8,作物は燃やされ 家畜は屠殺され,crops are burned. animals slaughtered,crops were burned and livestock slaughtered,the crops were burned and the cattle were slaughtered,0.9354822039604187,0.9147452712059021
+llama_7B,translation_ja_en_jesc,9,ご婦人に譲らないか,why don't you let the lady in,I'm not going to give up on you,I will not give up to the lady,0.4578709900379181,0.5754513740539551
+llama_7B,translation_ja_en_jesc,10,お前はやってないと 思ってる,"as far as i'm concerned, you never inhaled",you think I didn't do it,you don't think you don't think you're coming,0.49903741478919983,0.35738807916641235
+llama_7B,translation_en_ja_jesc,1,you look amazing,綺麗だよとっても,あなたは 素晴らしい,您好看起很您好看,0.8145820498466492,0.492166668176651
+llama_7B,translation_en_ja_jesc,2,"excuse me, mr. ross. did you say something",ロス 何が言いたい,エクスキューズ、ロス氏。何を言っているのか,これは何ですか。,0.7308143973350525,0.6964107155799866
+llama_7B,translation_en_ja_jesc,3,please make me a man,っていう あれ,私を男にしてくれ,それでする,0.5976373553276062,0.6644093990325928
+llama_7B,translation_en_ja_jesc,4,bite them,噛まない,噛み付く,それを噛,0.7308530211448669,0.6855113506317139
+llama_7B,translation_en_ja_jesc,5,i'm gonna kindle that,今度読むかな,私はそれを燃やす,私は、私は、私は、私は、私は、私は、,0.6636233925819397,0.28524529933929443
+llama_7B,translation_en_ja_jesc,6,i know they were scared before,きっと説得できるわ,彼らは恐れていた,私は、私は、彼らは怖かったのではないかと思っ,0.6917052865028381,0.5868021845817566
+llama_7B,translation_en_ja_jesc,7,remember that photo we all took,撮った写真が あるんだ,その写真を思い出して,は「その写真を思い出してください,0.78498774766922,0.6963317394256592
+llama_7B,translation_en_ja_jesc,8,how do you know that,なぜ知ってる,そう知ってるの?,あなには、どうしていますか？,0.8517505526542664,0.5513872504234314
+llama_7B,translation_en_ja_jesc,9,i learned to love landscapes,私は風景が大好きになりました,私は風景を愛するようになった,それは、それを愛することを知った,0.9766213893890381,0.5341920256614685
+llama_7B,translation_en_ja_jesc,10,you were snoring very loudly,すごいイビキだったわ,あなたは大きく声を出して寝ていた,それが彼はずがずがずがずがずがずがずがずがずがずがずがず,0.48712319135665894,0.3269994854927063
+llama_7B,translation_ja_en_easy,1,コンピューターの使い方を知っていますか。,do you know how to use a personal computer ?,do you know how to use a computer ?,do you know how to use a computer?,0.9638317227363586,0.9614242911338806
+llama_7B,translation_ja_en_easy,2,また近いうちにお目にかかりましょう。,let 's meet again soon .,i 'll see you again soon .,I hope to see you soon,0.8695980906486511,0.7478067278862
+llama_7B,translation_ja_en_easy,3,彼女は目が見えなくなった。,she went blind .,she lost her sight .,she lost her eyesight,0.8406561613082886,0.7710014581680298
+llama_7B,translation_ja_en_easy,4,彼の話はみんなを楽しませた。,his story amused everyone .,his story amused everyone .,his story made me,0.9819245934486389,0.655989944934845
+llama_7B,translation_ja_en_easy,5,彼女のおじさんは有名な医者です。,her uncle is a famous doctor .,her uncle is a famous doctor .,her uncle is a famous doctor,0.9799239039421082,0.9666298627853394
+llama_7B,translation_ja_en_easy,6,彼は何も話すことが出来ないほどに腹を立てていた。,"he could not speak , he was so angry .",he was so angry that he could not speak .,he was so angry that he could not say a word.,0.9337911009788513,0.906093180179596
+llama_7B,translation_ja_en_easy,7,私の娘は深く寝ている。,my daughter is fast asleep .,my daughter is sound asleep .,my daughter is sleeping deeply,0.9038963317871094,0.8785793781280518
+llama_7B,translation_ja_en_easy,8,電話を切らずにそのまま待ってください。,please hold on a moment .,please wait for me .,please wait for me without hanging up the phone,0.7166133522987366,0.6498572826385498
+llama_7B,translation_ja_en_easy,9,あなたは自分用の部屋を持っていますか。,do you have a room of your own ?,do you have a room of your own ?,do you have you have you have your own room?,0.9825818538665771,0.6959271430969238
+llama_7B,translation_ja_en_easy,10,私の母は私に鞄を作ってくれました。,my mother made me a bag .,my mother made me a bag .,my mother made me a bag.Ћ,0.9748537540435791,0.9083598256111145
+llama_7B,translation_en_ja_easy,1,her uncle is a famous doctor .,彼女のおじさんは有名な医者です。,彼女のおじは有名な医者です。,��������������的叔叔是一位名人。,0.9804350733757019,0.7831289172172546
+llama_7B,translation_en_ja_easy,2,my father consented to my going abroad .,父は私が外国へ行くことを許した。,父は私の海外留学を許可した。,父父父父は私の海外出張を許可した。,0.9191403985023499,0.7597230076789856
+llama_7B,translation_en_ja_easy,3,i have no idea what you mean .,私はあなたの言うことが全くわかりません。,私は何とも知らない。,翻,0.8225719332695007,0.34992891550064087
+llama_7B,translation_en_ja_easy,4,i don 't have much money now .,今あまりお金を持っていません。,今は金がない。,現在現在現在現在的意思是現在的意思。,0.8663229942321777,0.3346129059791565
+llama_7B,translation_en_ja_easy,5,your advice is always helpful to me .,あなたの助言はいつも私の役に立つ。,私にとってあなたの助言は常に有効である。,翻秘她的建议总是帮助我。,0.9581782221794128,0.6825655102729797
+llama_7B,translation_en_ja_easy,6,the police are after me .,警察が私を探している。,警察は私を追っている。,私秘她她她她她她她她,0.9566680788993835,0.27467992901802063
+llama_7B,translation_en_ja_easy,7,please help yourself to more cake .,ケーキをもっと食べてください。,お菓子を何枚でも食べてください。,ケーケーキャックッケーキをもっと食べてください。,0.8505810499191284,0.8124408721923828
+llama_7B,translation_en_ja_easy,8,who is going to try this case ?,誰がこの事件を裁くのでしょうか。,この裁判を考えるのは誰ですか？,她,0.9023416042327881,0.41245636343955994
+llama_7B,translation_en_ja_easy,9,i didn 't mean to hurt you .,あなたの心を悪くするつもりはなかった。,私は君を傷つけたくない。,君は君がんばかわたしは君を傷つけたくないと思っていません,0.8477304577827454,0.576668381690979
+llama_7B,translation_en_ja_easy,10,i have to write a letter .,書かねばならない手紙があります。,私は手紙を書く必要がある。,翻秘〉翘翉翉翉翉翉翉,0.902134120464325,0.40337300300598145
+llama_13B,translation_en_ja_single,1,news,ニュース,ニ,ニ,0.6692270636558533,0.6692270636558533
+llama_13B,translation_en_ja_single,2,little,小さい,少,l,0.7532883882522583,0.6387587785720825
+llama_13B,translation_en_ja_single,3,university,大学,大,univers,0.5830186009407043,0.5619712471961975
+llama_13B,translation_en_ja_single,4,white,白い,白,白,0.9053511619567871,0.9053511619567871
+llama_13B,translation_en_ja_single,5,ability,能力,能,能,0.7491346001625061,0.7491346001625061
+llama_13B,translation_en_ja_single,6,thanks,ありがとう,あ,th,0.7216588258743286,0.5955951809883118
+llama_13B,translation_en_ja_single,7,current,流れ,現,現,0.6837052702903748,0.6837052702903748
+llama_13B,translation_en_ja_single,8,send,送る,送,メ,0.8330514430999756,0.602383553981781
+llama_13B,translation_en_ja_single,9,upon,上に,上,up,0.8007234334945679,0.6152612566947937
+llama_13B,translation_en_ja_single,10,job,仕事,�,job,0.7454742193222046,0.8606767058372498
+llama_13B,translation_ja_en_single,1,数字,number,number,dig,0.9775581955909729,0.5730537176132202
+llama_13B,translation_ja_en_single,2,週,week,week,week,0.9791479706764221,0.9791479706764221
+llama_13B,translation_ja_en_single,3,100万,million,1,1,0.5883439779281616,0.5883439779281616
+llama_13B,translation_ja_en_single,4,似ている,similar,res,similar,0.54782634973526,0.9866397976875305
+llama_13B,translation_ja_en_single,5,週,week,week,week,0.9791479706764221,0.9791479706764221
+llama_13B,translation_ja_en_single,6,心,mind,heart,heart,0.6532276272773743,0.6532276272773743
+llama_13B,translation_ja_en_single,7,続ける,continue,continue,continue,0.9829646944999695,0.9829646944999695
+llama_13B,translation_ja_en_single,8,出来事,event,event,h,0.9809990525245667,0.6311383843421936
+llama_13B,translation_ja_en_single,9,連邦の,federal,f,f,0.6474236249923706,0.6474236249923706
+llama_13B,translation_ja_en_single,10,注意,attention,att,att,0.5642908811569214,0.5642908811569214
+llama_13B,translation_ja_en_jesc,1,どけ この野郎,you guys get out of my way,"get out of here, you jerk",this guy is a この この野郎,0.679314374923706,0.3961944878101349
+llama_13B,translation_ja_en_jesc,2,いつも? どんな曲,what does it sound like,what's the song you always listen to,what is it's ですみんな曲?,0.5664659142494202,0.4139680564403534
+llama_13B,translation_ja_en_jesc,3,え... ? そんな,huh? how,eh? really?,that's not そんな,0.8080629706382751,0.562528669834137
+llama_13B,translation_ja_en_jesc,4,今度読むかな,i'm gonna kindle that,i'll read it next time,what will you read next time: 今度読んですか,0.6323856115341187,0.44113701581954956
+llama_13B,translation_ja_en_jesc,5,大丈夫です、ノートン博士,"i feel fine, dr. norton","it's all right, doctor norton","no, ノートン ノートン サポート コンタクト パソコン",0.8617673516273499,0.38193294405937195
+llama_13B,translation_ja_en_jesc,6,恋した男のことは忘れても,even if i forget the man i loved,i'll forget about the man i fell in love with,forget over,0.7619867920875549,0.3847075402736664
+llama_13B,translation_ja_en_jesc,7,やめろ,"come on, richard",stop,stop,0.5954493284225464,0.5954492092132568
+llama_13B,translation_ja_en_jesc,8,作物は燃やされ 家畜は屠殺され,crops are burned. animals slaughtered,"crops were burned, livestock was slaughtered",the crops are burned and the livestock are slaughtered,0.9332051873207092,0.920954167842865
+llama_13B,translation_ja_en_jesc,9,ご婦人に譲らないか,why don't you let the lady in,don't give it to the ladies,don't give it to a woman,0.6062678694725037,0.5878227353096008
+llama_13B,translation_ja_en_jesc,10,お前はやってないと 思ってる,"as far as i'm concerned, you never inhaled",you think you didn't do it,you think you think you don't you think you haven't done it,0.4729076623916626,0.40709149837493896
+llama_13B,translation_en_ja_jesc,1,you look amazing,綺麗だよとっても,あなたは 素敵だよ,あなんてるなんてる,0.9095283150672913,0.5451047420501709
+llama_13B,translation_en_ja_jesc,2,"excuse me, mr. ross. did you say something",ロス 何が言いたい,すみません、ロスさん。何か言ってましたか,何か言ってたの？,0.7242043018341064,0.6770240068435669
+llama_13B,translation_en_ja_jesc,3,please make me a man,っていう あれ,男にしてくれ,please make me a man,0.5609754920005798,0.30821558833122253
+llama_13B,translation_en_ja_jesc,4,bite them,噛まない,噛みつく,咬他们咬他们咬他们,0.6422479748725891,0.38879382610321045
+llama_13B,translation_en_ja_jesc,5,i'm gonna kindle that,今度読むかな,それを燃やす,i'm gonna kindle that,0.5635368227958679,0.3537038266658783
+llama_13B,translation_en_ja_jesc,6,i know they were scared before,きっと説得できるわ,彼らは恐怖におおわれていた,私知道他们怕的,0.6409787535667419,0.3719632029533386
+llama_13B,translation_en_ja_jesc,7,remember that photo we all took,撮った写真が あるんだ,その写真を思い出して,その写真っていいつかその写真を見てみたい,0.78498774766922,0.6369704604148865
+llama_13B,translation_en_ja_jesc,8,how do you know that,なぜ知ってる,どうして知ってるの?,how do you know that,0.935360312461853,0.6494953036308289
+llama_13B,translation_en_ja_jesc,9,i learned to love landscapes,私は風景が大好きになりました,私は風景を愛するようになった,それっていいいいいいからなっていいからなっていいからなってい,0.9766213893890381,0.31491121649742126
+llama_13B,translation_en_ja_jesc,10,you were snoring very loudly,すごいイビキだったわ,大変に喉を鳴らしていた,您您很吵吵的��������������,0.6201087832450867,0.35203033685684204
+llama_13B,translation_ja_en_easy,1,コンピューターの使い方を知っていますか。,do you know how to use a personal computer ?,do you know how to use a computer ?,Do you know how to use a computer?,0.9638317227363586,0.9618266820907593
+llama_13B,translation_ja_en_easy,2,また近いうちにお目にかかりましょう。,let 's meet again soon .,i 'll look forward to seeing you soon .,I',0.7950157523155212,0.41759946942329407
+llama_13B,translation_ja_en_easy,3,彼女は目が見えなくなった。,she went blind .,she lost her sight .,She lost her sight.,0.8406561613082886,0.8021140694618225
+llama_13B,translation_ja_en_easy,4,彼の話はみんなを楽しませた。,his story amused everyone .,his story pleased everyone .,His conversation:彼の話はみんの話はみんなを楽しませた。,0.8711304068565369,0.5867679119110107
+llama_13B,translation_ja_en_easy,5,彼女のおじさんは有名な医者です。,her uncle is a famous doctor .,her uncle is a famous doctor .,Her uncle is a famous doctor.,0.9799239039421082,0.9599573016166687
+llama_13B,translation_ja_en_easy,6,彼は何も話すことが出来ないほどに腹を立てていた。,"he could not speak , he was so angry .",he was so angry that he could not speak .,He was so angry that he couldn't say anything.,0.9337911009788513,0.8883711695671082
+llama_13B,translation_ja_en_easy,7,私の娘は深く寝ている。,my daughter is fast asleep .,my daughter is fast asleep .,My daughter is sleeping.,0.9683102965354919,0.8730225563049316
+llama_13B,translation_ja_en_easy,8,電話を切らずにそのまま待ってください。,please hold on a moment .,please wait on the line .,Please wait on the phone.,0.6596799492835999,0.7049283385276794
+llama_13B,translation_ja_en_easy,9,あなたは自分用の部屋を持っていますか。,do you have a room of your own ?,do you have a room of your own ?,Do you have your own room?,0.9825818538665771,0.9539673924446106
+llama_13B,translation_ja_en_easy,10,私の母は私に鞄を作ってくれました。,my mother made me a bag .,my mother made me a bag .,My mother made me a bag.,0.9748537540435791,0.9522314071655273
+youko_8B,translation_en_ja_single,1,news,ニュース,ニュ,ニュ,0.5310749411582947,0.5310749411582947
+youko_8B,translation_en_ja_single,2,little,小さい,少し,小,0.7724148035049438,0.8054847717285156
+youko_8B,translation_en_ja_single,3,university,大学,大学,大学,0.9680089354515076,0.9680089354515076
+youko_8B,translation_en_ja_single,4,white,白い,白,例,0.9053511619567871,0.5720851421356201
+youko_8B,translation_en_ja_single,5,ability,能力,能力,能力,0.9765172600746155,0.9765172600746155
+youko_8B,translation_en_ja_single,6,thanks,ありがとう,感,感,0.6097676157951355,0.6097676157951355
+youko_8B,translation_en_ja_single,7,current,流れ,現在,現在,0.6942877769470215,0.6942877769470215
+youko_8B,translation_en_ja_single,8,send,送る,送,送,0.8330514430999756,0.8330514430999756
+youko_8B,translation_en_ja_single,9,upon,上に,上,上,0.8007234334945679,0.8007234334945679
+youko_8B,translation_en_ja_single,10,job,仕事,仕事,ジョ,0.9752055406570435,0.6695216298103333
+youko_8B,translation_ja_en_single,1,数字,number,number,number,0.9775581955909729,0.9775583744049072
+youko_8B,translation_ja_en_single,2,週,week,week,week,0.9791479706764221,0.9791480898857117
+youko_8B,translation_ja_en_single,3,100万,million,100,100,0.6814378499984741,0.6814379692077637
+youko_8B,translation_ja_en_single,4,似ている,similar,similar,similar,0.9866397976875305,0.9866397976875305
+youko_8B,translation_ja_en_single,5,週,week,week,week,0.9791479706764221,0.9791480898857117
+youko_8B,translation_ja_en_single,6,心,mind,mind,heart,0.9672390222549438,0.6532276272773743
+youko_8B,translation_ja_en_single,7,続ける,continue,continue,continue,0.9829646944999695,0.9829646944999695
+youko_8B,translation_ja_en_single,8,出来事,event,event,event,0.9809990525245667,0.980999231338501
+youko_8B,translation_ja_en_single,9,連邦の,federal,f,f,0.6474236249923706,0.6474238038063049
+youko_8B,translation_ja_en_single,10,注意,attention,attention,attention,0.9783352613449097,0.9783353209495544
+youko_8B,translation_ja_en_jesc,1,どけ この野郎,you guys get out of my way,"get out of my way, you bastard",どけ どけ どけ どけ この野郎 どけ この野郎 どけ この野郎 どけ この,0.8366684317588806,0.34525588154792786
+youko_8B,translation_ja_en_jesc,2,いつも? どんな曲,what does it sound like,what's your favorite song?,いつも? いつも? いつもいつも? どんなどんな? いつもどんな? どんなどんな,0.5905305743217468,0.3173081576824188
+youko_8B,translation_ja_en_jesc,3,え... ? そんな,huh? how,what...?,え...? 例えば...? 例えば...? 例えば...? 例えば...? 例えば...? 例,0.8067180514335632,0.4815548360347748
+youko_8B,translation_ja_en_jesc,4,今度読むかな,i'm gonna kindle that,i'll read it next time,今度読むかな、読むつもりかな、読むつもりかな、読むつもりかな、読むつもりかな、,0.6323856115341187,0.3486809730529785
+youko_8B,translation_ja_en_jesc,5,大丈夫です、ノートン博士,"i feel fine, dr. norton","it's all right, dr. Norton",大丈夫です、ノートン博士、ノートン博士、ノートン博士、ノートン博士、ノートン博士、ノ,0.8228511214256287,0.4624409079551697
+youko_8B,translation_ja_en_jesc,6,恋した男のことは忘れても,even if i forget the man i loved,i can't forget the man i loved,恋した男の恋した男のことは忘れられない,0.8191532492637634,0.4081405699253082
+youko_8B,translation_ja_en_jesc,7,やめろ,"come on, richard",stop it,やめろやめろやめろやめろやめろやめろやめろやめろやめろやめろ,0.6432240605354309,0.3466782867908478
+youko_8B,translation_ja_en_jesc,8,作物は燃やされ 家畜は屠殺され,crops are burned. animals slaughtered,crops were burned and livestock slaughtered,家畜は屠殺され 作物は燃やされ,0.9354822039604187,0.7778494954109192
+youko_8B,translation_ja_en_jesc,9,ご婦人に譲らないか,why don't you let the lady in,why don't you let the lady go first?,譲ります,0.8145318031311035,0.4466712474822998
+youko_8B,translation_ja_en_jesc,10,お前はやってないと 思ってる,"as far as i'm concerned, you never inhaled",I don't think you did it,お前はやってない,0.4972590506076813,0.48502665758132935
+youko_8B,translation_en_ja_jesc,1,you look amazing,綺麗だよとっても,あなたは素敵に見える,あ,0.8760116696357727,0.5766683220863342
+youko_8B,translation_en_ja_jesc,2,"excuse me, mr. ross. did you say something",ロス 何が言いたい,すみません、ロスさん,"誰かが何かを言ったのですか？例文:excuse me, mr. ross. did you say something?→誰かが",0.6987115740776062,0.47672486305236816
+youko_8B,translation_en_ja_jesc,3,please make me a man,っていう あれ,男にしてくれ,ああ,0.5609754920005798,0.596841037273407
+youko_8B,translation_en_ja_jesc,4,bite them,噛まない,噛みついて,さやかながら、ご紹介します。,0.6687691807746887,0.521787166595459
+youko_8B,translation_en_ja_jesc,5,i'm gonna kindle that,今度読むかな,燃やしてやる,農業の例文を例文を例文に例文を例文に例文を例文に例文を例文に,0.6393135190010071,0.26595339179039
+youko_8B,translation_en_ja_jesc,6,i know they were scared before,きっと説得できるわ,彼らは怖がっていた,私は彼らは私が彼らは私が彼らを怖がらせたことを知っていた,0.7042049765586853,0.42278340458869934
+youko_8B,translation_en_ja_jesc,7,remember that photo we all took,撮った写真が あるんだ,みんなで撮った写真を覚えてる？,うん、例文:remember that photo we all took,0.8634980916976929,0.5275300145149231
+youko_8B,translation_en_ja_jesc,8,how do you know that,なぜ知ってる,どうやって知ったの?,あなたは、例文を例文は、例文を例文は、例文を例文は、例文を例文,0.8349691033363342,0.27149394154548645
+youko_8B,translation_en_ja_jesc,9,i learned to love landscapes,私は風景が大好きになりました,風景を愛することを学んだ,ええええええええええええええええええええええええええええええ,0.8747661113739014,0.1892169713973999
+youko_8B,translation_en_ja_jesc,10,you were snoring very loudly,すごいイビキだったわ,いびきをかいてた,変な夢を見た。I was snoring very loudly.例:あなたは私に会いたいと言った。You said you wanted,0.6220770478248596,0.40219029784202576
+youko_8B,translation_ja_en_easy,1,コンピューターの使い方を知っていますか。,do you know how to use a personal computer ?,do you know how to use the computer?,do you know how to use a computer.例:コンピューターを使う方法を知っていますか。do you know how to use,0.9562503695487976,0.6683878302574158
+youko_8B,translation_ja_en_easy,2,また近いうちにお目にかかりましょう。,let 's meet again soon .,i 'll see you soon.,Iかれるかもしまた近いうちに会えるかもしれません。例文:お目にかかりまして光栄です,0.8210060000419617,0.48541080951690674
+youko_8B,translation_ja_en_easy,3,彼女は目が見えなくなった。,she went blind .,she has lost her sight.,sheは見えない。）,0.777120053768158,0.5004466772079468
+youko_8B,translation_ja_en_easy,4,彼の話はみんなを楽しませた。,his story amused everyone .,his talk amused everybody.,hisをさせる。彼の話はみんなを楽しませた。彼の話はみんなを楽しませた。彼の,0.913918137550354,0.6193050742149353
+youko_8B,translation_ja_en_easy,5,彼女のおじさんは有名な医者です。,her uncle is a famous doctor .,her uncle is a famous doctor.,Heilpraktと彼は医者です。彼は有名です。彼のおじさんは医者です。彼は有名です,0.9670940041542053,0.5324844717979431
+youko_8B,translation_ja_en_easy,6,彼は何も話すことが出来ないほどに腹を立てていた。,"he could not speak , he was so angry .",he was so angry that he could not speak.,He was so angry that he couldn't speak.例:彼は何も話すことが出来ないほどに腹を立てていた。He was,0.9259113669395447,0.7924970984458923
+youko_8B,translation_ja_en_easy,7,私の娘は深く寝ている。,my daughter is fast asleep .,my daughter is fast asleep.,My daughter is sleeping.私の娘は眠っている。例:My daughter is sleeping.私の娘は眠っている。例:My daughter is sleeping,0.9436981081962585,0.5626538395881653
+youko_8B,translation_ja_en_easy,8,電話を切らずにそのまま待ってください。,please hold on a moment .,please hold on.,Pleaseを続けば、電話を切らずにそのまま待ってください。例文:電話を切らずにそのまま待ってください,0.844334065914154,0.49399569630622864
+youko_8B,translation_ja_en_easy,9,あなたは自分用の部屋を持っていますか。,do you have a room of your own ?,do you have a room of your own?,Do you have a room of your own?例:あなたは自分用の部屋を持っていますか。Do you have a room of your,0.9754480719566345,0.7324079871177673
+youko_8B,translation_ja_en_easy,10,私の母は私に鞄を作ってくれました。,my mother made me a bag .,my mother made me a bag.,My mother made me a bag.例:私の母は私に鞄を作ってくれました。My mother made me a bag.例:,0.9596803188323975,0.706002414226532
+youko_8B,translation_en_ja_easy,1,her uncle is a famous doctor .,彼女のおじさんは有名な医者です。,彼女の叔父は有名な医者だ。,彼の叔父は医者である。例文帳に追加His uncle is a famous doctor. - Weblio Email例文集,0.9678499698638916,0.5854647755622864
+youko_8B,translation_en_ja_easy,2,my father consented to my going abroad .,父は私が外国へ行くことを許した。,父は私が海外に行くことに同意した。,彼は、承諾、承諾した、許可した、了承した、許す、許す、許す、許す、,0.9531113505363464,0.3863855302333832
+youko_8B,translation_en_ja_easy,3,i have no idea what you mean .,私はあなたの言うことが全くわかりません。,あなたの言っている意味がわからない。,私はあなたが何を言っている,0.9234269261360168,0.6490160226821899
+youko_8B,translation_en_ja_easy,4,i don 't have much money now .,今あまりお金を持っていません。,今はあまりお金がない。,私は今お金を持っています。私は今お金を持っていません。,0.9605429768562317,0.647067666053772
+youko_8B,translation_en_ja_easy,5,your advice is always helpful to me .,あなたの助言はいつも私の役に立つ。,あなたのアドバイスはいつも私にとって役に立つ。,あなたのアドライブの例文帳に追加,0.9758839011192322,0.463105708360672
+youko_8B,translation_en_ja_easy,6,the police are after me .,警察が私を探している。,警察が私を追いかけている。,警察が私を追いかけてきます,0.9502450227737427,0.9063478112220764
+youko_8B,translation_en_ja_easy,7,please help yourself to more cake .,ケーキをもっと食べてください。,どうぞ、ケーキをもう少し取ってください。,彼は、please help yourself. 例文帳に追加,0.8612846732139587,0.36330747604370117
+youko_8B,translation_en_ja_easy,8,who is going to try this case ?,誰がこの事件を裁くのでしょうか。,この事件を担当するのは誰ですか？,彼は誰ですか？誰がこの人は誰がこの事件を担当するのですか？例:who is going to try this case?彼,0.8502019047737122,0.43179216980934143
+youko_8B,translation_en_ja_easy,9,i didn 't mean to hurt you .,あなたの心を悪くするつもりはなかった。,君を傷つけるつもりはなかったんだ。,私はあなたを傷つけるつもりだった,0.9429120421409607,0.8525541424751282
+youko_8B,translation_en_ja_easy,10,i have to write a letter .,書かねばならない手紙があります。,私は手紙を書かなくてはならない。,私は書きます。私は書きます。私は書きます。私は書きます。私は書きます。私は書きます。,0.9175047278404236,0.41531816124916077

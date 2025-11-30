@@ -1,0 +1,224 @@
+====================================================================================================
+Translation Examples: translation_en_ja_single
+====================================================================================================
+
+Example 1
+----------------------------------------------------------------------------------------------------
+Source:     private
+Reference:  個人の
+
+[swallow_7B]
+  ICL Prediction: 私 (COMET: 0.6203)
+  TV Prediction:  プライベート (COMET: 0.7882)
+
+[llama_7B]
+  ICL Prediction: ニ (COMET: 0.6692)
+  TV Prediction:  ニ (COMET: 0.6692)
+
+[llama_13B]
+  ICL Prediction: ニ (COMET: 0.6692)
+  TV Prediction:  ニ (COMET: 0.6692)
+
+[youko_8B]
+  ICL Prediction: ニュ (COMET: 0.5311)
+  TV Prediction:  ニュ (COMET: 0.5311)
+
+
+Example 2
+----------------------------------------------------------------------------------------------------
+Source:     little
+Reference:  小さい
+
+[swallow_7B]
+  ICL Prediction: 小さい (COMET: 0.9822)
+  TV Prediction:  l (COMET: 0.6388)
+
+[llama_7B]
+  ICL Prediction: ち (COMET: 0.6353)
+  TV Prediction:  小 (COMET: 0.8055)
+
+[llama_13B]
+  ICL Prediction: 少 (COMET: 0.7533)
+  TV Prediction:  l (COMET: 0.6388)
+
+[youko_8B]
+  ICL Prediction: 少し (COMET: 0.7724)
+  TV Prediction:  小 (COMET: 0.8055)
+
+
+Example 3
+----------------------------------------------------------------------------------------------------
+Source:     evidence
+Reference:  根拠
+
+[swallow_7B]
+  ICL Prediction: 証拠 (COMET: 0.8071)
+  TV Prediction:  証拠 (COMET: 0.8071)
+
+[llama_7B]
+  ICL Prediction: 大 (COMET: 0.5830)
+  TV Prediction:  大 (COMET: 0.5830)
+
+[llama_13B]
+  ICL Prediction: 大 (COMET: 0.5830)
+  TV Prediction:  univers (COMET: 0.5620)
+
+[youko_8B]
+  ICL Prediction: 大学 (COMET: 0.9680)
+  TV Prediction:  大学 (COMET: 0.9680)
+
+
+Example 4
+----------------------------------------------------------------------------------------------------
+Source:     office
+Reference:  オフィス
+
+[swallow_7B]
+  ICL Prediction: 事務 (COMET: 0.7338)
+  TV Prediction:  オフィス (COMET: 0.9732)
+
+[llama_7B]
+  ICL Prediction: 白 (COMET: 0.9054)
+  TV Prediction:  白 (COMET: 0.9054)
+
+[llama_13B]
+  ICL Prediction: 白 (COMET: 0.9054)
+  TV Prediction:  白 (COMET: 0.9054)
+
+[youko_8B]
+  ICL Prediction: 白 (COMET: 0.9054)
+  TV Prediction:  例 (COMET: 0.5721)
+
+
+Example 5
+----------------------------------------------------------------------------------------------------
+Source:     relationship
+Reference:  関係
+
+[swallow_7B]
+  ICL Prediction: 関係 (COMET: 0.9719)
+  TV Prediction:  関係 (COMET: 0.9719)
+
+[llama_7B]
+  ICL Prediction: 能 (COMET: 0.7491)
+  TV Prediction:  能 (COMET: 0.7491)
+
+[llama_13B]
+  ICL Prediction: 能 (COMET: 0.7491)
+  TV Prediction:  能 (COMET: 0.7491)
+
+[youko_8B]
+  ICL Prediction: 能力 (COMET: 0.9765)
+  TV Prediction:  能力 (COMET: 0.9765)
+
+
+Example 6
+----------------------------------------------------------------------------------------------------
+Source:     memory
+Reference:  記憶
+
+[swallow_7B]
+  ICL Prediction: 記憶 (COMET: 0.9698)
+  TV Prediction:  記憶 (COMET: 0.9698)
+
+[llama_7B]
+  ICL Prediction: あ (COMET: 0.7217)
+  TV Prediction:  あ (COMET: 0.7217)
+
+[llama_13B]
+  ICL Prediction: あ (COMET: 0.7217)
+  TV Prediction:  th (COMET: 0.5956)
+
+[youko_8B]
+  ICL Prediction: 感 (COMET: 0.6098)
+  TV Prediction:  感 (COMET: 0.6098)
+
+
+Example 7
+----------------------------------------------------------------------------------------------------
+Source:     accept
+Reference:  受け取る
+
+[swallow_7B]
+  ICL Prediction: 受け入れる (COMET: 0.9061)
+  TV Prediction:  受け入れる (COMET: 0.9061)
+
+[llama_7B]
+  ICL Prediction: 現 (COMET: 0.6837)
+  TV Prediction:  現 (COMET: 0.6837)
+
+[llama_13B]
+  ICL Prediction: 現 (COMET: 0.6837)
+  TV Prediction:  現 (COMET: 0.6837)
+
+[youko_8B]
+  ICL Prediction: 現在 (COMET: 0.6943)
+  TV Prediction:  現在 (COMET: 0.6943)
+
+
+Example 8
+----------------------------------------------------------------------------------------------------
+Source:     effort
+Reference:  努力すること
+
+[swallow_7B]
+  ICL Prediction: 努力 (COMET: 0.8935)
+  TV Prediction:  eff (COMET: 0.5517)
+
+[llama_7B]
+  ICL Prediction: 送 (COMET: 0.8331)
+  TV Prediction:  送 (COMET: 0.8331)
+
+[llama_13B]
+  ICL Prediction: 送 (COMET: 0.8331)
+  TV Prediction:  メ (COMET: 0.6024)
+
+[youko_8B]
+  ICL Prediction: 送 (COMET: 0.8331)
+  TV Prediction:  送 (COMET: 0.8331)
+
+
+Example 9
+----------------------------------------------------------------------------------------------------
+Source:     whole
+Reference:  全体の
+
+[swallow_7B]
+  ICL Prediction: 全体 (COMET: 0.8712)
+  TV Prediction:  全体 (COMET: 0.8712)
+
+[llama_7B]
+  ICL Prediction: 上 (COMET: 0.8007)
+  TV Prediction:  up (COMET: 0.6153)
+
+[llama_13B]
+  ICL Prediction: 上 (COMET: 0.8007)
+  TV Prediction:  up (COMET: 0.6153)
+
+[youko_8B]
+  ICL Prediction: 上 (COMET: 0.8007)
+  TV Prediction:  上 (COMET: 0.8007)
+
+
+Example 10
+----------------------------------------------------------------------------------------------------
+Source:     drive
+Reference:  運転する
+
+[swallow_7B]
+  ICL Prediction: 運転 (COMET: 0.8737)
+  TV Prediction:  ドライブ (COMET: 0.7671)
+
+[llama_7B]
+  ICL Prediction: � (COMET: 0.7455)
+  TV Prediction:  � (COMET: 0.7455)
+
+[llama_13B]
+  ICL Prediction: � (COMET: 0.7455)
+  TV Prediction:  job (COMET: 0.8607)
+
+[youko_8B]
+  ICL Prediction: 仕事 (COMET: 0.9752)
+  TV Prediction:  ジョ (COMET: 0.6695)
+
+

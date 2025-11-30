@@ -1,0 +1,720 @@
+====================================================================================================
+BIDIRECTIONAL AVERAGED TASK VECTOR - DETAILED PREDICTIONS
+====================================================================================================
+
+
+====================================================================================================
+TASK: translation_en_ja_easy
+====================================================================================================
+
+
+----------------------------------------------------------------------------------------------------
+TOP 10 PREDICTIONS (Highest Averaged TV COMET Scores)
+----------------------------------------------------------------------------------------------------
+
+[Rank 1] Example 23
+  Source:     traffic is busy here .
+  Reference:  ここは交通量が多い。
+  
+  ICL Prediction:        ここでは交通が混雑しています。
+  ICL COMET:             0.9362
+  ICL chrF:              0.1898
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: traffic is busy here
+  Averaged TV COMET:      0.7850
+  Averaged TV chrF:       0.0000
+
+[Rank 2] Example 43
+  Source:     bob is my friend .
+  Reference:  ボブは私の友達です。
+  
+  ICL Prediction:        ボブは私の友だちです。
+  ICL COMET:             0.9744
+  ICL chrF:              0.5308
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: example:bob is my friend
+  Averaged TV COMET:      0.7742
+  Averaged TV chrF:       0.0000
+
+[Rank 3] Example 41
+  Source:     what a beautiful flower this is !
+  Reference:  これは何と美しい花でしょう。
+  
+  ICL Prediction:        これは素晴らしい花だ！
+  ICL COMET:             0.9612
+  ICL chrF:              0.1576
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: what a beautiful flower !
+  Averaged TV COMET:      0.7513
+  Averaged TV chrF:       0.0000
+
+[Rank 4] Example 7
+  Source:     he did not know where to go .
+  Reference:  彼はどこへ行ったらいいか分からなかった。
+  
+  ICL Prediction:        彼はどこへ行くべきかわからなかった。
+  ICL COMET:             0.9691
+  ICL chrF:              0.4608
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: he did not know where to go.
+  Averaged TV COMET:      0.7438
+  Averaged TV chrF:       0.0000
+
+[Rank 5] Example 3
+  Source:     we got to know each other in london .
+  Reference:  私たちはロンドンでお互いを知った。
+  
+  ICL Prediction:        ロンドンで知り合った。
+  ICL COMET:             0.9310
+  ICL chrF:              0.2511
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: we got to know each other in london .
+  Averaged TV COMET:      0.7366
+  Averaged TV chrF:       0.0000
+
+[Rank 6] Example 27
+  Source:     we got to know each other in london .
+  Reference:  私たちはロンドンでお互いを知った。
+  
+  ICL Prediction:        ロンドンで知り合いました。
+  ICL COMET:             0.9188
+  ICL chrF:              0.2216
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: we got to know each other in london .
+  Averaged TV COMET:      0.7366
+  Averaged TV chrF:       0.0000
+
+[Rank 7] Example 28
+  Source:     we got to know each other in london .
+  Reference:  私たちはロンドンでお互いを知った。
+  
+  ICL Prediction:        ロンドンで知り合った。
+  ICL COMET:             0.9310
+  ICL chrF:              0.2511
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: we got to know each other in london .
+  Averaged TV COMET:      0.7366
+  Averaged TV chrF:       0.0000
+
+[Rank 8] Example 36
+  Source:     he is the most valuable player in our team .
+  Reference:  彼は私たちのチームで最も価値のある選手です。
+  
+  ICL Prediction:        彼は我々のチームの最も有用な選手です。
+  ICL COMET:             0.9536
+  ICL chrF:              0.2623
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: he is the most valuable player in our team .
+  Averaged TV COMET:      0.7092
+  Averaged TV chrF:       0.0000
+
+[Rank 9] Example 15
+  Source:     i have just finished reading the book .
+  Reference:  私はその本を読み終わったところです。
+  
+  ICL Prediction:        私はその本を読破したばかりです。
+  ICL COMET:             0.9465
+  ICL chrF:              0.3575
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: i have just finished reading the book.
+  Averaged TV COMET:      0.7004
+  Averaged TV chrF:       0.0000
+
+[Rank 10] Example 2
+  Source:     here comes the train .
+  Reference:  列車が入ってくるよ。
+  
+  ICL Prediction:        列車が来ます。
+  ICL COMET:             0.9281
+  ICL chrF:              0.1332
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: here comes the train.
+  Averaged TV COMET:      0.6807
+  Averaged TV chrF:       0.0000
+
+
+----------------------------------------------------------------------------------------------------
+BOTTOM 10 PREDICTIONS (Lowest Averaged TV COMET Scores)
+----------------------------------------------------------------------------------------------------
+
+[Rank 50 from bottom] Example 11
+  Source:     he begrudges you your success .
+  Reference:  彼はあなたの成功を見て自分もそうなりたいと思っている。
+  
+  ICL Prediction:        彼はあなたの成功を嫉妬している。
+  ICL COMET:             0.8414
+  ICL chrF:              0.3575
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: he begrudge you are you jealous of his success.
+  Averaged TV COMET:      0.2648
+  Averaged TV chrF:       0.0000
+
+[Rank 49 from bottom] Example 19
+  Source:     you had better have your hair cut .
+  Reference:  髪を切ってもらった方がいいよ。
+  
+  ICL Prediction:        髪を切っておくほうがいい。
+  ICL COMET:             0.9260
+  ICL chrF:              0.2736
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: you had better have your hair cut your hair.
+  Averaged TV COMET:      0.3199
+  Averaged TV chrF:       0.0000
+
+[Rank 48 from bottom] Example 50
+  Source:     everybody speaks well of her .
+  Reference:  誰もが彼女のことを褒める。
+  
+  ICL Prediction:        彼女はみんなから評判が良い。
+  ICL COMET:             0.8948
+  ICL chrF:              0.0642
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: everybody speaks
+  Averaged TV COMET:      0.3486
+  Averaged TV chrF:       0.0000
+
+[Rank 47 from bottom] Example 6
+  Source:     what time is it ?
+  Reference:  何時でしょうか。
+  
+  ICL Prediction:        何時ですか？
+  ICL COMET:             0.9330
+  ICL chrF:              0.1680
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: what time is it is it is 109:00
+  Averaged TV COMET:      0.3679
+  Averaged TV chrF:       0.0000
+
+[Rank 46 from bottom] Example 13
+  Source:     they feared you .
+  Reference:  彼らはあなたを怖がっていた。
+  
+  ICL Prediction:        彼らはあなたを恐れていた。
+  ICL COMET:             0.9665
+  ICL chrF:              0.5150
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: they feared you feared you.
+  Averaged TV COMET:      0.3695
+  Averaged TV chrF:       0.0000
+
+[Rank 45 from bottom] Example 9
+  Source:     there was a tremble in her voice .
+  Reference:  彼女の声は震えていた。
+  
+  ICL Prediction:        彼女の声には揺れがあった。
+  ICL COMET:             0.9114
+  ICL chrF:              0.2218
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: there was a tremble in her voice trembled.
+  Averaged TV COMET:      0.3720
+  Averaged TV chrF:       0.0000
+
+[Rank 44 from bottom] Example 35
+  Source:     stop inhaling your food . you 'd better eat more slowly .
+  Reference:  そんな急いで食べないで、もうちょっとゆっくり食べようよ。
+  
+  ICL Prediction:        食べるのを飲み込んではいけない。食べるのをゆっくりし
+  ICL COMET:             0.6452
+  ICL chrF:              0.1419
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: example:stop inhaling your food . you 'd better eat more slowly .
+  Averaged TV COMET:      0.3823
+  Averaged TV chrF:       0.0000
+
+[Rank 43 from bottom] Example 31
+  Source:     i stopped to smoke .
+  Reference:  私は煙草を吸うために歩くのをやめた。
+  
+  ICL Prediction:        私はたばこを吸って休んだ。
+  ICL COMET:             0.7772
+  ICL chrF:              0.0797
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: i stopped to smoke.
+  Averaged TV COMET:      0.3928
+  Averaged TV chrF:       0.0000
+
+[Rank 42 from bottom] Example 26
+  Source:     you look happy today .
+  Reference:  あなたは今日明るい顔をしている。
+  
+  ICL Prediction:        今日は元気ですね。
+  ICL COMET:             0.7351
+  ICL chrF:              0.0579
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: you look happy today you look happy today.
+  Averaged TV COMET:      0.4073
+  Averaged TV chrF:       0.0000
+
+[Rank 41 from bottom] Example 29
+  Source:     what time do you get up every morning ?
+  Reference:  毎日朝、何時に起きますか。
+  
+  ICL Prediction:        毎朝何時に起きますか。
+  ICL COMET:             0.9782
+  ICL chrF:              0.6594
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: what time do you get up every morning do you get up what time ?
+  Averaged TV COMET:      0.4266
+  Averaged TV chrF:       0.0000
+
+
+----------------------------------------------------------------------------------------------------
+STATISTICS
+----------------------------------------------------------------------------------------------------
+
+  Average ICL COMET:        0.8994
+  Average Original TV COMET: 0.0000
+  Average Averaged TV COMET: 0.5720
+  
+  Average ICL chrF:         0.3019
+  Average Original TV chrF:  0.0000
+  Average Averaged TV chrF:  0.0000
+  
+  COMET Retention:
+    Original TV:  0.0%
+    Averaged TV:  63.6%
+  
+  chrF Retention:
+    Original TV:  0.0%
+    Averaged TV:  0.0%
+  
+  Number of examples:        50
+
+
+====================================================================================================
+TASK: translation_ja_en_easy
+====================================================================================================
+
+
+----------------------------------------------------------------------------------------------------
+TOP 10 PREDICTIONS (Highest Averaged TV COMET Scores)
+----------------------------------------------------------------------------------------------------
+
+[Rank 1] Example 9
+  Source:     あなたの助言はいつも私の役に立つ。
+  Reference:  your advice is always helpful to me .
+  
+  ICL Prediction:        your advice is always helpful to me .
+  ICL COMET:             0.9837
+  ICL chrF:              1.0000
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: Your advice is always helpful to me.
+  Averaged TV COMET:      0.9653
+  Averaged TV chrF:       0.9635
+
+[Rank 2] Example 38
+  Source:     あなたの助言はいつも私の役に立つ。
+  Reference:  your advice is always helpful to me .
+  
+  ICL Prediction:        your advice is always helpful to me .
+  ICL COMET:             0.9837
+  ICL chrF:              1.0000
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: Your advice is always helpful to me.
+  Averaged TV COMET:      0.9653
+  Averaged TV chrF:       0.9635
+
+[Rank 3] Example 12
+  Source:     この本はここで売られています。
+  Reference:  this book is sold here .
+  
+  ICL Prediction:        this book is sold here .
+  ICL COMET:             0.9852
+  ICL chrF:              1.0000
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: This book is sold here.
+  Averaged TV COMET:      0.9635
+  Averaged TV chrF:       0.9387
+
+[Rank 4] Example 6
+  Source:     涙が私の顔を流れて落ちた。
+  Reference:  tears ran down my face .
+  
+  ICL Prediction:        my tears fell down my cheeks .
+  ICL COMET:             0.8947
+  ICL chrF:              0.3602
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: tears flowed down my face.
+  Averaged TV COMET:      0.9532
+  Averaged TV chrF:       0.6295
+
+[Rank 5] Example 47
+  Source:     ボブは私の友達です。
+  Reference:  bob is my friend .
+  
+  ICL Prediction:        bob is my friend .
+  ICL COMET:             0.9873
+  ICL chrF:              1.0000
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: Bob is my friend.
+  Averaged TV COMET:      0.9523
+  Averaged TV chrF:       0.9110
+
+[Rank 6] Example 10
+  Source:     どうぞ午後に私の家へ来てください。
+  Reference:  please come to my house in the afternoon .
+  
+  ICL Prediction:        please come to my house in the afternoon .
+  ICL COMET:             0.9701
+  ICL chrF:              1.0000
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: Please come to my house in the afternoon.
+  Averaged TV COMET:      0.9404
+  Averaged TV chrF:       0.9682
+
+[Rank 7] Example 42
+  Source:     順番をお待ちください。
+  Reference:  wait for your turn , please .
+  
+  ICL Prediction:        please wait in turn .
+  ICL COMET:             0.8935
+  ICL chrF:              0.3432
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: Please wait for your turn.
+  Averaged TV COMET:      0.9344
+  Averaged TV chrF:       0.7372
+
+[Rank 8] Example 14
+  Source:     この辞書はすごく役に立つ。
+  Reference:  this dictionary is of great use .
+  
+  ICL Prediction:        this dictionary is very useful .
+  ICL COMET:             0.9436
+  ICL chrF:              0.6115
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: This dictionary is very useful.
+  Averaged TV COMET:      0.9294
+  Averaged TV chrF:       0.5705
+
+[Rank 9] Example 32
+  Source:     この事実を覚えておいてください。
+  Reference:  please bear this fact in mind .
+  
+  ICL Prediction:        remember this fact .
+  ICL COMET:             0.8796
+  ICL chrF:              0.3566
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: Please remember this fact.
+  Averaged TV COMET:      0.9137
+  Averaged TV chrF:       0.4318
+
+[Rank 10] Example 31
+  Source:     彼は自分でフランス語を学んだ。
+  Reference:  he taught himself french .
+  
+  ICL Prediction:        he learned French by himself .
+  ICL COMET:             0.9052
+  ICL chrF:              0.3734
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: He learned French by himself.
+  Averaged TV COMET:      0.8872
+  Averaged TV chrF:       0.3583
+
+
+----------------------------------------------------------------------------------------------------
+BOTTOM 10 PREDICTIONS (Lowest Averaged TV COMET Scores)
+----------------------------------------------------------------------------------------------------
+
+[Rank 50 from bottom] Example 4
+  Source:     そんな急いで食べないで、もうちょっとゆっくり食べようよ。
+  Reference:  stop inhaling your food . you 'd better eat more slowly .
+  
+  ICL Prediction:        don't eat in a hurry , take your time .
+  ICL COMET:             0.6166
+  ICL chrF:              0.1495
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: Sonna yasui de tabenai de, mōchotto yukkuri tabeyō yo.
+  Averaged TV COMET:      0.2441
+  Averaged TV chrF:       0.1345
+
+[Rank 49 from bottom] Example 1
+  Source:     実を言うと、二人は夫婦でないのです。
+  Reference:  to tell the truth , they are not husband and wife .
+  
+  ICL Prediction:        to tell the truth , they are not married .
+  ICL COMET:             0.8697
+  ICL chrF:              0.6440
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: 
+  Averaged TV COMET:      0.3529
+  Averaged TV chrF:       0.0000
+
+[Rank 48 from bottom] Example 11
+  Source:     道路を渡る時は車に注意しなさい。
+  Reference:  when you cross the street , watch out for cars .
+  
+  ICL Prediction:        be careful when crossing the street .
+  ICL COMET:             0.8498
+  ICL chrF:              0.3479
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: 
+  Averaged TV COMET:      0.3535
+  Averaged TV chrF:       0.0000
+
+[Rank 47 from bottom] Example 3
+  Source:     道路を渡る時は車に注意しなさい。
+  Reference:  when you cross the street , watch out for cars .
+  
+  ICL Prediction:        be careful when crossing the road .
+  ICL COMET:             0.8439
+  ICL chrF:              0.2171
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: 
+  Averaged TV COMET:      0.3535
+  Averaged TV chrF:       0.0000
+
+[Rank 46 from bottom] Example 41
+  Source:     ここでは自由にしていいですよ。
+  Reference:  you may be free to do what you like .
+  
+  ICL Prediction:        you can do as you like here .
+  ICL COMET:             0.8495
+  ICL chrF:              0.2948
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: ここここここここここここここここでは自由にしていいですよ。
+  Averaged TV COMET:      0.3948
+  Averaged TV chrF:       0.0000
+
+[Rank 45 from bottom] Example 40
+  Source:     それはこっちの言葉ですよ。
+  Reference:  that 's what i want to say !
+  
+  ICL Prediction:        that 's my word .
+  ICL COMET:             0.7233
+  ICL chrF:              0.2247
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: それはこっちょっていまただれはこっちのことばですよ。
+  Averaged TV COMET:      0.3994
+  Averaged TV chrF:       0.0000
+
+[Rank 44 from bottom] Example 27
+  Source:     ケーキをもっと食べてください。
+  Reference:  please help yourself to more cake .
+  
+  ICL Prediction:        please eat more cake .
+  ICL COMET:             0.7909
+  ICL chrF:              0.4161
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: Please eat more cakekikekikekikekikekikeki o motto tabeketekudasai.
+  Averaged TV COMET:      0.4080
+  Averaged TV chrF:       0.2908
+
+[Rank 43 from bottom] Example 43
+  Source:     行きたい学校に入れてよかったね。
+  Reference:  congratulations on being accepted to the school you 've always wanted to go to .
+  
+  ICL Prediction:        it was a good thing that you got into the school you wanted to go to .
+  ICL COMET:             0.7718
+  ICL chrF:              0.4299
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: I wish I wish I wish I wish I wish I wish I wish I had entered the school I wanted to go to.
+  Averaged TV COMET:      0.4525
+  Averaged TV chrF:       0.3067
+
+[Rank 42 from bottom] Example 33
+  Source:     猫は木を走って登った。
+  Reference:  the cat ran up the tree .
+  
+  ICL Prediction:        the cat ran up the tree .
+  ICL COMET:             0.9615
+  ICL chrF:              1.0000
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: ��������������������木登。
+  Averaged TV COMET:      0.4590
+  Averaged TV chrF:       0.0000
+
+[Rank 41 from bottom] Example 28
+  Source:     ケーキをもう少しどうですか。
+  Reference:  would you care for some more cake ?
+  
+  ICL Prediction:        may i have some more cake ?
+  ICL COMET:             0.8612
+  ICL chrF:              0.4517
+  
+  Original TV Prediction: N/A
+  Original TV COMET:      0.0000
+  Original TV chrF:       0.0000
+  
+  Averaged TV Prediction: How much more_?
+  Averaged TV COMET:      0.4834
+  Averaged TV chrF:       0.1165
+
+
+----------------------------------------------------------------------------------------------------
+STATISTICS
+----------------------------------------------------------------------------------------------------
+
+  Average ICL COMET:        0.8470
+  Average Original TV COMET: 0.0000
+  Average Averaged TV COMET: 0.6785
+  
+  Average ICL chrF:         0.5049
+  Average Original TV chrF:  0.0000
+  Average Averaged TV chrF:  0.3244
+  
+  COMET Retention:
+    Original TV:  0.0%
+    Averaged TV:  80.1%
+  
+  chrF Retention:
+    Original TV:  0.0%
+    Averaged TV:  64.3%
+  
+  Number of examples:        50
+

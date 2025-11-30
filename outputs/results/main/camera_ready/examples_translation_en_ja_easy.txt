@@ -1,0 +1,184 @@
+====================================================================================================
+Translation Examples: translation_en_ja_easy
+====================================================================================================
+
+Example 1
+----------------------------------------------------------------------------------------------------
+Source:     i cannot follow you .
+Reference:  あなたの言う事が理解できません。
+
+[swallow_7B]
+  ICL Prediction: 私はあなたについていけない。 (COMET: 0.6578)
+  TV Prediction:  私は、私はあなたの意味は、私はあなたについていけない。 (COMET: 0.4866)
+
+[llama_7B]
+  ICL Prediction: 彼女のおじは有名な医者です。 (COMET: 0.9804)
+  TV Prediction:  ��������������的叔叔是一位名人。 (COMET: 0.7831)
+
+[youko_8B]
+  ICL Prediction: 彼女の叔父は有名な医者だ。 (COMET: 0.9678)
+  TV Prediction:  彼の叔父は医者である。例文帳に追加His uncle is a famous doctor. - Weblio Email例文集 (COMET: 0.5855)
+
+
+Example 2
+----------------------------------------------------------------------------------------------------
+Source:     he pretends to know everything .
+Reference:  彼は何でも、知っているように見せる。
+
+[swallow_7B]
+  ICL Prediction: 彼は何でも知っているふりをする。 (COMET: 0.9488)
+  TV Prediction:  彼は「彼は「彼は何でも知っているふりをする」 (COMET: 0.7760)
+
+[llama_7B]
+  ICL Prediction: 父は私の海外留学を許可した。 (COMET: 0.9191)
+  TV Prediction:  父父父父は私の海外出張を許可した。 (COMET: 0.7597)
+
+[youko_8B]
+  ICL Prediction: 父は私が海外に行くことに同意した。 (COMET: 0.9531)
+  TV Prediction:  彼は、承諾、承諾した、許可した、了承した、許す、許す、許す、許す、 (COMET: 0.3864)
+
+
+Example 3
+----------------------------------------------------------------------------------------------------
+Source:     my father is always busy .
+Reference:  私の父はいつも忙しい。
+
+[swallow_7B]
+  ICL Prediction: 私の父はいつも忙しい。 (COMET: 0.9902)
+  TV Prediction:  父は「父は「父はいつも忙しい (COMET: 0.7572)
+
+[llama_7B]
+  ICL Prediction: 私は何とも知らない。 (COMET: 0.8226)
+  TV Prediction:  翻 (COMET: 0.3499)
+
+[youko_8B]
+  ICL Prediction: あなたの言っている意味がわからない。 (COMET: 0.9234)
+  TV Prediction:  私はあなたが何を言っている (COMET: 0.6490)
+
+
+Example 4
+----------------------------------------------------------------------------------------------------
+Source:     i have no idea why it is so .
+Reference:  僕にはまるでその理由がわからない。
+
+[swallow_7B]
+  ICL Prediction: なぜそれがそんなになのか私にはわからない。 (COMET: 0.9028)
+  TV Prediction:  私にはなぜかわからないの意味です。 (COMET: 0.8702)
+
+[llama_7B]
+  ICL Prediction: 今は金がない。 (COMET: 0.8663)
+  TV Prediction:  現在現在現在現在的意思是現在的意思。 (COMET: 0.3346)
+
+[youko_8B]
+  ICL Prediction: 今はあまりお金がない。 (COMET: 0.9605)
+  TV Prediction:  私は今お金を持っています。私は今お金を持っていません。 (COMET: 0.6471)
+
+
+Example 5
+----------------------------------------------------------------------------------------------------
+Source:     youth comes but once in life .
+Reference:  一生のうちで若く元気な時代なんて１度しかない。
+
+[swallow_7B]
+  ICL Prediction: 人生において若さは一度しかない。 (COMET: 0.9166)
+  TV Prediction:  人生は、人生は一度きりの、一生に一度の、一期一会の、一度きりの、一期一 (COMET: 0.4445)
+
+[llama_7B]
+  ICL Prediction: 私にとってあなたの助言は常に有効である。 (COMET: 0.9582)
+  TV Prediction:  翻秘她的建议总是帮助我。 (COMET: 0.6826)
+
+[youko_8B]
+  ICL Prediction: あなたのアドバイスはいつも私にとって役に立つ。 (COMET: 0.9759)
+  TV Prediction:  あなたのアドライブの例文帳に追加 (COMET: 0.4631)
+
+
+Example 6
+----------------------------------------------------------------------------------------------------
+Source:     here comes the train .
+Reference:  列車が入ってくるよ。
+
+[swallow_7B]
+  ICL Prediction: 電車が来ます。 (COMET: 0.9033)
+  TV Prediction:  列車が「列車がやって感じで「列車がやってくる」 (COMET: 0.5016)
+
+[llama_7B]
+  ICL Prediction: 警察は私を追っている。 (COMET: 0.9567)
+  TV Prediction:  私秘她她她她她她她她 (COMET: 0.2747)
+
+[youko_8B]
+  ICL Prediction: 警察が私を追いかけている。 (COMET: 0.9502)
+  TV Prediction:  警察が私を追いかけてきます (COMET: 0.9063)
+
+
+Example 7
+----------------------------------------------------------------------------------------------------
+Source:     how will you travel to osaka ?
+Reference:  大阪にはどうやって行くんですか。
+
+[swallow_7B]
+  ICL Prediction: どうやって大阪に行くの? (COMET: 0.9540)
+  TV Prediction:  大阪からのようにはどうやってどうやって大阪に行くの? (COMET: 0.6709)
+
+[llama_7B]
+  ICL Prediction: お菓子を何枚でも食べてください。 (COMET: 0.8506)
+  TV Prediction:  ケーケーキャックッケーキをもっと食べてください。 (COMET: 0.8124)
+
+[youko_8B]
+  ICL Prediction: どうぞ、ケーキをもう少し取ってください。 (COMET: 0.8613)
+  TV Prediction:  彼は、please help yourself. 例文帳に追加 (COMET: 0.3633)
+
+
+Example 8
+----------------------------------------------------------------------------------------------------
+Source:     what do you say to playing tennis with me ?
+Reference:  私とテニスをしませんか。
+
+[swallow_7B]
+  ICL Prediction: 私とテニスをしませんか? (COMET: 0.9759)
+  TV Prediction:  私ということわざということをテニスをすることについて私に何と言いますか? (COMET: 0.5316)
+
+[llama_7B]
+  ICL Prediction: この裁判を考えるのは誰ですか？ (COMET: 0.9023)
+  TV Prediction:  她 (COMET: 0.4125)
+
+[youko_8B]
+  ICL Prediction: この事件を担当するのは誰ですか？ (COMET: 0.8502)
+  TV Prediction:  彼は誰ですか？誰がこの人は誰がこの事件を担当するのですか？例:who is going to try this case?彼 (COMET: 0.4318)
+
+
+Example 9
+----------------------------------------------------------------------------------------------------
+Source:     he should have taken the examination .
+Reference:  彼は試験を受けるべきであったのに。
+
+[swallow_7B]
+  ICL Prediction: 彼は試験を受けるべきだった。 (COMET: 0.9621)
+  TV Prediction:  彼は、彼は、彼は試験を受けるべきだった。 (COMET: 0.7990)
+
+[llama_7B]
+  ICL Prediction: 私は君を傷つけたくない。 (COMET: 0.8477)
+  TV Prediction:  君は君がんばかわたしは君を傷つけたくないと思っていません (COMET: 0.5767)
+
+[youko_8B]
+  ICL Prediction: 君を傷つけるつもりはなかったんだ。 (COMET: 0.9429)
+  TV Prediction:  私はあなたを傷つけるつもりだった (COMET: 0.8526)
+
+
+Example 10
+----------------------------------------------------------------------------------------------------
+Source:     let 's play catch .
+Reference:  ボールを互いに投げよう。
+
+[swallow_7B]
+  ICL Prediction: キャッチボールをしよう。 (COMET: 0.7843)
+  TV Prediction:  キャッチボールを使っていう風船長文の意味:ボールで遊ぼう。 (COMET: 0.5311)
+
+[llama_7B]
+  ICL Prediction: 私は手紙を書く必要がある。 (COMET: 0.9021)
+  TV Prediction:  翻秘〉翘翉翉翉翉翉翉 (COMET: 0.4034)
+
+[youko_8B]
+  ICL Prediction: 私は手紙を書かなくてはならない。 (COMET: 0.9175)
+  TV Prediction:  私は書きます。私は書きます。私は書きます。私は書きます。私は書きます。私は書きます。 (COMET: 0.4153)
+
+

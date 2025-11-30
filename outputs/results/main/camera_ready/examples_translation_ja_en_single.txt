@@ -1,0 +1,224 @@
+====================================================================================================
+Translation Examples: translation_ja_en_single
+====================================================================================================
+
+Example 1
+----------------------------------------------------------------------------------------------------
+Source:     の下に
+Reference:  under
+
+[swallow_7B]
+  ICL Prediction: under (COMET: 0.9793)
+  TV Prediction:  below (COMET: 0.7390)
+
+[llama_7B]
+  ICL Prediction: number (COMET: 0.9776)
+  TV Prediction:  number (COMET: 0.9776)
+
+[llama_13B]
+  ICL Prediction: number (COMET: 0.9776)
+  TV Prediction:  dig (COMET: 0.5731)
+
+[youko_8B]
+  ICL Prediction: number (COMET: 0.9776)
+  TV Prediction:  number (COMET: 0.9776)
+
+
+Example 2
+----------------------------------------------------------------------------------------------------
+Source:     兄弟
+Reference:  brother
+
+[swallow_7B]
+  ICL Prediction: bro (COMET: 0.7428)
+  TV Prediction:  bro (COMET: 0.7428)
+
+[llama_7B]
+  ICL Prediction: week (COMET: 0.9791)
+  TV Prediction:  week (COMET: 0.9791)
+
+[llama_13B]
+  ICL Prediction: week (COMET: 0.9791)
+  TV Prediction:  week (COMET: 0.9791)
+
+[youko_8B]
+  ICL Prediction: week (COMET: 0.9791)
+  TV Prediction:  week (COMET: 0.9791)
+
+
+Example 3
+----------------------------------------------------------------------------------------------------
+Source:     確認する
+Reference:  identify
+
+[swallow_7B]
+  ICL Prediction: confirm (COMET: 0.7526)
+  TV Prediction:  confirm (COMET: 0.7526)
+
+[llama_7B]
+  ICL Prediction: 1 (COMET: 0.5883)
+  TV Prediction:  1 (COMET: 0.5883)
+
+[llama_13B]
+  ICL Prediction: 1 (COMET: 0.5883)
+  TV Prediction:  1 (COMET: 0.5883)
+
+[youko_8B]
+  ICL Prediction: 100 (COMET: 0.6814)
+  TV Prediction:  100 (COMET: 0.6814)
+
+
+Example 4
+----------------------------------------------------------------------------------------------------
+Source:     引く
+Reference:  pull
+
+[swallow_7B]
+  ICL Prediction: draw (COMET: 0.6562)
+  TV Prediction:  draw (COMET: 0.6562)
+
+[llama_7B]
+  ICL Prediction: look (COMET: 0.5504)
+  TV Prediction:  look (COMET: 0.5504)
+
+[llama_13B]
+  ICL Prediction: res (COMET: 0.5478)
+  TV Prediction:  similar (COMET: 0.9866)
+
+[youko_8B]
+  ICL Prediction: similar (COMET: 0.9866)
+  TV Prediction:  similar (COMET: 0.9866)
+
+
+Example 5
+----------------------------------------------------------------------------------------------------
+Source:     兄弟
+Reference:  brother
+
+[swallow_7B]
+  ICL Prediction: bro (COMET: 0.7428)
+  TV Prediction:  bro (COMET: 0.7428)
+
+[llama_7B]
+  ICL Prediction: week (COMET: 0.9791)
+  TV Prediction:  week (COMET: 0.9791)
+
+[llama_13B]
+  ICL Prediction: week (COMET: 0.9791)
+  TV Prediction:  week (COMET: 0.9791)
+
+[youko_8B]
+  ICL Prediction: week (COMET: 0.9791)
+  TV Prediction:  week (COMET: 0.9791)
+
+
+Example 6
+----------------------------------------------------------------------------------------------------
+Source:     女の子
+Reference:  girl
+
+[swallow_7B]
+  ICL Prediction: g (COMET: 0.6706)
+  TV Prediction:  g (COMET: 0.6706)
+
+[llama_7B]
+  ICL Prediction: heart (COMET: 0.6532)
+  TV Prediction:  heart (COMET: 0.6532)
+
+[llama_13B]
+  ICL Prediction: heart (COMET: 0.6532)
+  TV Prediction:  heart (COMET: 0.6532)
+
+[youko_8B]
+  ICL Prediction: mind (COMET: 0.9672)
+  TV Prediction:  heart (COMET: 0.6532)
+
+
+Example 7
+----------------------------------------------------------------------------------------------------
+Source:     身体の
+Reference:  physical
+
+[swallow_7B]
+  ICL Prediction: body (COMET: 0.6449)
+  TV Prediction:  body (COMET: 0.6449)
+
+[llama_7B]
+  ICL Prediction: continue (COMET: 0.9830)
+  TV Prediction:  continue (COMET: 0.9830)
+
+[llama_13B]
+  ICL Prediction: continue (COMET: 0.9830)
+  TV Prediction:  continue (COMET: 0.9830)
+
+[youko_8B]
+  ICL Prediction: continue (COMET: 0.9830)
+  TV Prediction:  continue (COMET: 0.9830)
+
+
+Example 8
+----------------------------------------------------------------------------------------------------
+Source:     取る
+Reference:  take
+
+[swallow_7B]
+  ICL Prediction: take (COMET: 0.9784)
+  TV Prediction:  take (COMET: 0.9784)
+
+[llama_7B]
+  ICL Prediction: event (COMET: 0.9810)
+  TV Prediction:  event (COMET: 0.9810)
+
+[llama_13B]
+  ICL Prediction: event (COMET: 0.9810)
+  TV Prediction:  h (COMET: 0.6311)
+
+[youko_8B]
+  ICL Prediction: event (COMET: 0.9810)
+  TV Prediction:  event (COMET: 0.9810)
+
+
+Example 9
+----------------------------------------------------------------------------------------------------
+Source:     真実
+Reference:  truth
+
+[swallow_7B]
+  ICL Prediction: tr (COMET: 0.5832)
+  TV Prediction:  tr (COMET: 0.5832)
+
+[llama_7B]
+  ICL Prediction: f (COMET: 0.6474)
+  TV Prediction:  f (COMET: 0.6474)
+
+[llama_13B]
+  ICL Prediction: f (COMET: 0.6474)
+  TV Prediction:  f (COMET: 0.6474)
+
+[youko_8B]
+  ICL Prediction: f (COMET: 0.6474)
+  TV Prediction:  f (COMET: 0.6474)
+
+
+Example 10
+----------------------------------------------------------------------------------------------------
+Source:     夜
+Reference:  night
+
+[swallow_7B]
+  ICL Prediction: night (COMET: 0.9797)
+  TV Prediction:  night (COMET: 0.9797)
+
+[llama_7B]
+  ICL Prediction: att (COMET: 0.5643)
+  TV Prediction:  att (COMET: 0.5643)
+
+[llama_13B]
+  ICL Prediction: att (COMET: 0.5643)
+  TV Prediction:  att (COMET: 0.5643)
+
+[youko_8B]
+  ICL Prediction: attention (COMET: 0.9783)
+  TV Prediction:  attention (COMET: 0.9783)
+
+
