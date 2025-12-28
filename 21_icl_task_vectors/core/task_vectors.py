@@ -3,6 +3,7 @@ from typing import Dict, List, Optional, Tuple, Union, Iterable
 import torch
 from transformers import PreTrainedModel, PreTrainedTokenizer
 from transformers.modeling_outputs import CausalLMOutputWithPast
+from sacrebleu.metrics import CHRF
 
 from core.analysis.evaluation import calculate_accuracy_on_datasets
 from core.data.datasets.few_shot_dataset import FewShotDataset
@@ -59,7 +60,9 @@ def run_task_vector(
         max_new_tokens=max_new_tokens,
     )
     best_intermediate_layer = int(max(dev_accuracy_by_layer, key=dev_accuracy_by_layer.get))
-    print("ベストレイヤー：",best_intermediate_layer)
+    selection_criterion = "COMET" if (hasattr(task, 'evaluate_with_comet') and generation_mode == "multi") else "Accuracy"
+    best_score = dev_accuracy_by_layer[best_intermediate_layer]
+    print(f"ベストレイヤー： {best_intermediate_layer} ({selection_criterion}: {best_score:.4f})")
     task_hiddens = get_task_hiddens(model, tokenizer, task, test_datasets, multi_context=multi_context)
     predictions = modulated_generate(
         model,
@@ -442,7 +445,13 @@ def task_vector_accuracy_by_layer(
     inputs["input_ids"] = inputs["input_ids"][:, -1].unsqueeze(1)
 
     # Find best intermediate layer using dev set
-    accuracies = []
+    # Use COMET for translation tasks with multi-token generation, Accuracy for others
+    use_comet = (
+        hasattr(task, 'evaluate_with_comet') and
+        generation_mode == "multi"
+    )
+
+    scores = []
     for layer_num in layers_to_test:
         answers = modulated_generate(
             model,
@@ -456,9 +465,33 @@ def task_vector_accuracy_by_layer(
             max_new_tokens=max_new_tokens,
         )
 
-        accuracy = calculate_accuracy_on_datasets(task, answers, datasets)
-        accuracies.append(accuracy)
-    accuracy_by_layer = {layer: accuracy for layer, accuracy in zip(layers_to_test, accuracies)}
+        if use_comet:
+            # Use COMET score for translation tasks
+            sources = [ds.test_input for ds in datasets]
+            references = [ds.test_output for ds in datasets]
+
+            # First check chrF - if it's 0 or near 0, force COMET to 0
+            chrf_metric = CHRF()
+            chrf_result = chrf_metric.corpus_score(answers, [references])
+            chrf_score = chrf_result.score / 100.0  # Convert to 0-1 range
+
+            if chrf_score < 0.001:  # If chrF is effectively 0
+                score = 0.0
+                print(f"Layer {layer_num}: chrF={chrf_score:.6f}, forcing COMET=0")
+            else:
+                try:
+                    result = task.evaluate_with_comet(sources, answers, references)
+                    score = result.get('comet', 0.0)
+                except Exception as e:
+                    print(f"Warning: COMET calculation failed for layer {layer_num}: {e}")
+                    score = 0.0
+        else:
+            # Use Accuracy for non-translation tasks
+            score = calculate_accuracy_on_datasets(task, answers, datasets)
+
+        scores.append(score)
+
+    accuracy_by_layer = {layer: score for layer, score in zip(layers_to_test, scores)}
 
     return accuracy_by_layer
 

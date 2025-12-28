@@ -12,6 +12,10 @@ mkdir -p $logs_dir
 
 echo "Starting $script_full_path"
 
+# Activate conda environment
+source /opt/conda/etc/profile.d/conda.sh
+conda activate icl_task_vectors
+
 nohup python -u -m $script_full_path > $log_file 2>&1 &
 
 echo "Watch the log file with:"

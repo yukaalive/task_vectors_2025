@@ -1,0 +1,9 @@
+task,token_range,icl_accuracy,tv_accuracy,icl_chrf,tv_chrf,icl_comet,tv_comet,num_datasets
+translation_en_ja,0-5tokens,0.205,0.19,0.228,0.1464,0.7686,0.3874,50.0
+translation_en_ja,10-15tokens,0.01,0.0,0.2987,0.1336,0.8937,0.3524,50.0
+translation_en_ja,15-20tokens,0.0,0.0,0.1591,0.0975,0.8431,0.3951,17.5
+translation_en_ja,5-10tokens,0.025,0.0,0.3361,0.1387,0.9013,0.306,50.0
+translation_ja_en,0-5tokens,0.66,0.6,0.527,0.468,0.8664,0.8414,50.0
+translation_ja_en,10-15tokens,0.1,0.0,0.5058,0.3582,0.8572,0.7217,50.0
+translation_ja_en,15-20tokens,0.075,0.0,0.5071,0.3999,0.8442,0.7736,50.0
+translation_ja_en,5-10tokens,0.1848,0.0,0.5653,0.2868,0.8489,0.6212,37.25

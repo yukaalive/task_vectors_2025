@@ -1,0 +1,7 @@
+,icl_accuracy,icl_accuracy,icl_accuracy,icl_accuracy,tv_accuracy,tv_accuracy,tv_accuracy,tv_accuracy,num_datasets
+,mean,std,min,max,mean,std,min,max,sum
+token_range,,,,,,,,,
+0-5tokens,0.1686,0.2464,0.0,0.6939,0.1645,0.2372,0.0,0.6122,345
+10-15tokens,0.0362,0.0746,0.0,0.2222,0.0,0.0,0.0,0.0,161
+15-20tokens,0.0456,0.0871,0.0,0.2222,0.0,0.0,0.0,0.0,47
+5-10tokens,0.1487,0.2846,0.0,1.0,0.1119,0.2949,0.0,1.0,319
